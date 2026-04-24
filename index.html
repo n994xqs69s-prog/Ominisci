@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<!-- saved from url=(0049)file:///C:/Users/tanisilva/Downloads/index_4.html -->
-<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <meta name="theme-color" content="#02030c">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -9,7 +9,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="description" content="OMNISCI — Sua IA Pessoal 100% Gratuita com Gemini">
 <title>OMNISCI — Sua IA Pessoal</title>
-<link href="./index_files/css2" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -563,7 +563,7 @@ input[type=text],input[type=number],input[type=password],textarea{
 </style>
 </head>
 <body>
-<canvas id="bg" width="1920" height="911"></canvas>
+<canvas id="bg"></canvas>
 
 <!-- TELA BLOQUEIO -->
 <div class="blocked-screen" id="blockedScreen">
@@ -606,9 +606,9 @@ input[type=text],input[type=number],input[type=password],textarea{
   <div class="logo" id="headerLogo">OMNISCI</div>
   <span class="mtag m-livre" id="modeTag">● Livre</span>
   <div class="hright">
-    <span id="apiStatusBadge" class="api-status api-no">⚠️ Key com erro</span>
+    <span id="apiStatusBadge" class="api-status api-no">⚠️ Sem API</span>
     <span id="memCount" style="font-size:.54rem;color:var(--gr);padding:3px 7px;border-radius:20px;background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.18)">🧠 0</span>
-    <span id="evo-display" style="font-size:.54rem;color:#00ffcc;padding:3px 7px;border-radius:20px;background:rgba(0,255,204,.07);border:1px solid rgba(0,255,204,.2)">🧠 Nv.1 <span style="color:var(--evo,#00ffcc)">0%</span></span>
+    <span id="evo-display" style="font-size:.54rem;color:#00ffcc;padding:3px 7px;border-radius:20px;background:rgba(0,255,204,.07);border:1px solid rgba(0,255,204,.2)">🧠 Nv.1</span>
     <div class="nick-h" id="nickH">Olá! 👋</div>
     <button class="alert-badge" id="alertBadge" onclick="showSecPanel()">🔴 Alertas</button>
     <button class="hbtn adm-key" onclick="openApiKeyModal()">🔑 API Key</button>
@@ -618,13 +618,13 @@ input[type=text],input[type=number],input[type=password],textarea{
 </header>
 
 <div class="modo-bar">
-  <button class="mdbtn md-livre sel" id="btn-livre" onclick="setModo(&#39;livre&#39;)">💬 Livre</button>
-  <button class="mdbtn md-prof" id="btn-prof" onclick="setModo(&#39;professor&#39;)">📚 Professor</button>
-  <button class="mdbtn md-amigo" id="btn-amigo" onclick="setModo(&#39;amigo&#39;)">💖 Amigo</button>
-  <button class="mdbtn md-img" id="btn-img" onclick="setModo(&#39;imagem&#39;)">🎨 Imagens</button>
-  <button class="mdbtn md-vp" id="btn-vp" onclick="setModo(&#39;vp&#39;)" style="display:none">🌟 Vice-Pres.</button>
-  <button class="mdbtn md-ger" id="btn-ger" onclick="setModo(&#39;gerente&#39;)" style="display:none">⚡ Gerenciador</button>
-  <button class="mdbtn md-adm" id="btn-adm" onclick="setModo(&#39;admin&#39;)" style="display:none">🔥 Administrador</button>
+  <button class="mdbtn md-livre sel" id="btn-livre"  onclick="setModo('livre')">💬 Livre</button>
+  <button class="mdbtn md-prof"      id="btn-prof"   onclick="setModo('professor')">📚 Professor</button>
+  <button class="mdbtn md-amigo"     id="btn-amigo"  onclick="setModo('amigo')">💖 Amigo</button>
+  <button class="mdbtn md-img"       id="btn-img"    onclick="setModo('imagem')">🎨 Imagens</button>
+  <button class="mdbtn md-vp"        id="btn-vp"     onclick="setModo('vp')"      style="display:none">🌟 Vice-Pres.</button>
+  <button class="mdbtn md-ger"       id="btn-ger"    onclick="setModo('gerente')" style="display:none">⚡ Gerenciador</button>
+  <button class="mdbtn md-adm"       id="btn-adm"    onclick="setModo('admin')"   style="display:none">🔥 Administrador</button>
 </div>
 
 <div class="hero" id="heroDiv">
@@ -632,19 +632,19 @@ input[type=text],input[type=number],input[type=password],textarea{
   <p id="heroS" style="font-size:.85rem;letter-spacing:.5px">Pesquisa · Imagens · Aulas · Conselhos · Projetos · SI 05 26</p>
   <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);border-radius:20px;padding:4px 14px;font-size:.62rem;color:var(--gr);font-weight:600;letter-spacing:1px;margin-bottom:.5rem">✦ GEMINI · 100% GRATUITO · SEMPRE ONLINE</div>
   <div class="topics">
-    <div class="tp on" onclick="setTopic(this,&#39;geral&#39;)">💬 Tudo</div>
-    <div class="tp" onclick="setTopic(this,&#39;matematica&#39;)">🔢 Matemática</div>
-    <div class="tp" onclick="setTopic(this,&#39;redacao&#39;)">✍️ Redação</div>
-    <div class="tp" onclick="setTopic(this,&#39;historia&#39;)">📜 História</div>
-    <div class="tp" onclick="setTopic(this,&#39;astronomia&#39;)">🌌 Astronomia</div>
-    <div class="tp" onclick="setTopic(this,&#39;fisica&#39;)">⚛️ Física</div>
-    <div class="tp" onclick="setTopic(this,&#39;biologia&#39;)">🧬 Biologia</div>
-    <div class="tp" onclick="setTopic(this,&#39;quimica&#39;)">🧪 Química</div>
-    <div class="tp" onclick="setTopic(this,&#39;programacao&#39;)">💻 Programação</div>
-    <div class="tp" onclick="setTopic(this,&#39;pesquisa&#39;)">🔍 Pesquisar</div>
-    <div class="tp" onclick="setTopic(this,&#39;projeto&#39;)">🛠️ Projeto</div>
-    <div class="tp" onclick="setTopic(this,&#39;filosofia&#39;)">🧠 Filosofia</div>
-    <div class="tp sp" onclick="setTopic(this,&#39;SI0526&#39;)">🚀 SI 05 26</div>
+    <div class="tp on" onclick="setTopic(this,'geral')">💬 Tudo</div>
+    <div class="tp" onclick="setTopic(this,'matematica')">🔢 Matemática</div>
+    <div class="tp" onclick="setTopic(this,'redacao')">✍️ Redação</div>
+    <div class="tp" onclick="setTopic(this,'historia')">📜 História</div>
+    <div class="tp" onclick="setTopic(this,'astronomia')">🌌 Astronomia</div>
+    <div class="tp" onclick="setTopic(this,'fisica')">⚛️ Física</div>
+    <div class="tp" onclick="setTopic(this,'biologia')">🧬 Biologia</div>
+    <div class="tp" onclick="setTopic(this,'quimica')">🧪 Química</div>
+    <div class="tp" onclick="setTopic(this,'programacao')">💻 Programação</div>
+    <div class="tp" onclick="setTopic(this,'pesquisa')">🔍 Pesquisar</div>
+    <div class="tp" onclick="setTopic(this,'projeto')">🛠️ Projeto</div>
+    <div class="tp" onclick="setTopic(this,'filosofia')">🧠 Filosofia</div>
+    <div class="tp sp" onclick="setTopic(this,'SI0526')">🚀 SI 05 26</div>
   </div>
 </div>
 
@@ -669,25 +669,25 @@ input[type=text],input[type=number],input[type=password],textarea{
 
   <!-- IMAGENS -->
   <div class="panel p-img" id="panel-img">
-    <div class="panel-title pt-img">🎨 Imagens — Geração &amp; Análise</div>
+    <div class="panel-title pt-img">🎨 Imagens — Geração & Análise</div>
     <div class="img-mode-tabs">
-      <button class="imt gen sel" id="tab-gen" onclick="setImgTab(&#39;gen&#39;)">✨ Gerar</button>
-      <button class="imt ana" id="tab-ana" onclick="setImgTab(&#39;ana&#39;)">🔍 Analisar</button>
+      <button class="imt gen sel" id="tab-gen" onclick="setImgTab('gen')">✨ Gerar</button>
+      <button class="imt ana"     id="tab-ana" onclick="setImgTab('ana')">🔍 Analisar</button>
     </div>
     <div class="img-gen-box show" id="gen-box">
       <div class="img-styles">
-        <div class="ist on" onclick="setStyle(this,&#39;realistic photo&#39;)">📷 Realista</div>
-        <div class="ist" onclick="setStyle(this,&#39;anime style&#39;)">🎌 Anime</div>
-        <div class="ist" onclick="setStyle(this,&#39;oil painting&#39;)">🎨 Pintura</div>
-        <div class="ist" onclick="setStyle(this,&#39;digital art&#39;)">💻 Digital</div>
-        <div class="ist" onclick="setStyle(this,&#39;watercolor&#39;)">🖌️ Aquarela</div>
-        <div class="ist" onclick="setStyle(this,&#39;sci-fi futuristic&#39;)">🚀 Sci-Fi</div>
-        <div class="ist" onclick="setStyle(this,&#39;fantasy art&#39;)">🧙 Fantasy</div>
-        <div class="ist" onclick="setStyle(this,&#39;cinematic 8k&#39;)">🎬 Cinema</div>
-        <div class="ist" onclick="setStyle(this,&#39;pixel art&#39;)">👾 Pixel</div>
-        <div class="ist" onclick="setStyle(this,&#39;3d render octane&#39;)">🔮 3D</div>
-        <div class="ist" onclick="setStyle(this,&#39;impressionist painting&#39;)">🖼️ Impressionista</div>
-        <div class="ist" onclick="setStyle(this,&#39;concept art&#39;)">✏️ Concept Art</div>
+        <div class="ist on" onclick="setStyle(this,'realistic photo')">📷 Realista</div>
+        <div class="ist" onclick="setStyle(this,'anime style')">🎌 Anime</div>
+        <div class="ist" onclick="setStyle(this,'oil painting')">🎨 Pintura</div>
+        <div class="ist" onclick="setStyle(this,'digital art')">💻 Digital</div>
+        <div class="ist" onclick="setStyle(this,'watercolor')">🖌️ Aquarela</div>
+        <div class="ist" onclick="setStyle(this,'sci-fi futuristic')">🚀 Sci-Fi</div>
+        <div class="ist" onclick="setStyle(this,'fantasy art')">🧙 Fantasy</div>
+        <div class="ist" onclick="setStyle(this,'cinematic 8k')">🎬 Cinema</div>
+        <div class="ist" onclick="setStyle(this,'pixel art')">👾 Pixel</div>
+        <div class="ist" onclick="setStyle(this,'3d render octane')">🔮 3D</div>
+        <div class="ist" onclick="setStyle(this,'impressionist painting')">🖼️ Impressionista</div>
+        <div class="ist" onclick="setStyle(this,'concept art')">✏️ Concept Art</div>
       </div>
       <div class="gen-row">
         <textarea id="imgPrompt" placeholder="Descreva a imagem que quer criar..." rows="2"></textarea>
@@ -700,7 +700,8 @@ input[type=text],input[type=number],input[type=password],textarea{
       <div class="img-result-grid" id="imgGrid"></div>
     </div>
     <div class="img-ana-box" id="ana-box">
-      <div class="drop-zone" id="dropZone" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)">
+      <div class="drop-zone" id="dropZone"
+        ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)">
         <input type="file" accept="image/*" onchange="fileSelected(event)">
         <span class="dz-icon">🖼️</span>
         <p><strong style="color:var(--vp)">Clique ou arraste</strong> uma imagem<br>
@@ -708,7 +709,7 @@ input[type=text],input[type=number],input[type=password],textarea{
       </div>
       <div class="preview-area" id="previewArea">
         <div class="preview-wrap">
-          <img id="previewImg" src="file:///C:/Users/tanisilva/Downloads/index_4.html" alt="preview">
+          <img id="previewImg" src="" alt="preview">
           <button class="preview-rm" onclick="removeImg()">✕</button>
         </div>
       </div>
@@ -726,7 +727,7 @@ input[type=text],input[type=number],input[type=password],textarea{
     <div class="vp-perms">
       <span class="vp-perm">✅ Pesquisa profunda</span><span class="vp-perm">✅ Análise projetos</span>
       <span class="vp-perm">✅ Gerar imagens</span><span class="vp-perm">✅ Analisar imagens</span>
-      <span class="vp-perm">✅ SI 05 26</span><span class="vp-perm">✅ Filosofia &amp; Ciência</span>
+      <span class="vp-perm">✅ SI 05 26</span><span class="vp-perm">✅ Filosofia & Ciência</span>
       <span class="vp-lock">🔒 Painel gerencial</span><span class="vp-lock">🔒 Segurança</span><span class="vp-lock">🔒 Administrador</span>
     </div>
   </div>
@@ -737,9 +738,9 @@ input[type=text],input[type=number],input[type=password],textarea{
     <div class="g-btns">
       <button class="gb" onclick="showChart()">📊 Gráficos</button>
       <button class="gb" onclick="showSecPanel()">🔴 Segurança</button>
-      <button class="gb" onclick="ask(&#39;Explique toda a SI 05 26 e Teoria dos Quadros de Gadôneil com detalhes técnicos completos&#39;)">🚀 SI 05 26</button>
-      <button class="gb" onclick="ask(&#39;Pesquise e traga as últimas descobertas em astronomia, física quântica e tecnologia em 2025&#39;)">🔍 Pesquisa</button>
-      <button class="gb" onclick="setModo(&#39;imagem&#39;)">🎨 Imagens</button>
+      <button class="gb" onclick="ask('Explique toda a SI 05 26 e Teoria dos Quadros de Gadôneil com detalhes técnicos completos')">🚀 SI 05 26</button>
+      <button class="gb" onclick="ask('Pesquise e traga as últimas descobertas em astronomia, física quântica e tecnologia em 2025')">🔍 Pesquisa</button>
+      <button class="gb" onclick="setModo('imagem')">🎨 Imagens</button>
       <button class="gb" onclick="exportMem()">💾 Exportar Mem.</button>
       <button class="gb" onclick="importMem()">📥 Importar Mem.</button>
       <button class="gb" onclick="openShare()">🔗 Link</button>
@@ -757,13 +758,14 @@ input[type=text],input[type=number],input[type=password],textarea{
     <div class="adm-section">
       <div class="adm-section-title">🔑 API Key — Conexão com a IA</div>
       <div class="token-bar">
-        <span class="tok">Status: <span id="adm-api-status">✅ Ativa</span></span>
+        <span class="tok">Status: <span id="adm-api-status">—</span></span>
         <span class="tok">Tokens usados: <span id="tok-used">0</span></span>
         <span class="tok">Modelo: <span id="tok-model">claude-sonnet-4-5-20251001</span></span>
       </div>
       <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap">
-        <input type="password" id="adm-key-inp" placeholder="AIzaSy... (Gemini) ou sk-ant... (Anthropic)" autocomplete="off" style="flex:1;min-width:200px;background:rgba(0,0,0,.5);border:1px solid rgba(255,107,53,.3);
-          border-radius:9px;padding:8px 11px;color:var(--tx);font-family:&#39;DM Sans&#39;,sans-serif;font-size:.8rem;outline:none">
+        <input type="password" id="adm-key-inp" placeholder="AIzaSy... (Gemini) ou sk-ant... (Anthropic)" autocomplete="off"
+          style="flex:1;min-width:200px;background:rgba(0,0,0,.5);border:1px solid rgba(255,107,53,.3);
+          border-radius:9px;padding:8px 11px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:.8rem;outline:none">
         <button class="lbtn lbtn-save" onclick="saveApiKeyFromAdm()">💾 Salvar Key</button>
         <button class="lbtn lbtn-copy" onclick="testApiKey()">🧪 Testar</button>
         <button class="lbtn lbtn-test" onclick="diagApiKey()">🔍 Diagnóstico</button>
@@ -779,11 +781,11 @@ input[type=text],input[type=number],input[type=password],textarea{
     <div class="adm-section">
       <div class="adm-section-title">⚙️ Programação da IA — System Prompt ao Vivo</div>
       <div class="prompt-tabs">
-        <button class="ptab p-sys sel" id="ptab-sys" onclick="showProgTab(&#39;sys&#39;)">🔥 Sistema Completo</button>
-        <button class="ptab p-pers" id="ptab-pers" onclick="showProgTab(&#39;pers&#39;)">🧠 Personalidade</button>
-        <button class="ptab p-rules" id="ptab-rules" onclick="showProgTab(&#39;rules&#39;)">📋 Regras</button>
-        <button class="ptab p-know" id="ptab-know" onclick="showProgTab(&#39;know&#39;)">📚 Conhecimento</button>
-        <button class="ptab p-nick" id="ptab-nick" onclick="showProgTab(&#39;nick&#39;)">💬 Apelidos</button>
+        <button class="ptab p-sys sel"  id="ptab-sys"   onclick="showProgTab('sys')">🔥 Sistema Completo</button>
+        <button class="ptab p-pers"     id="ptab-pers"  onclick="showProgTab('pers')">🧠 Personalidade</button>
+        <button class="ptab p-rules"    id="ptab-rules" onclick="showProgTab('rules')">📋 Regras</button>
+        <button class="ptab p-know"     id="ptab-know"  onclick="showProgTab('know')">📚 Conhecimento</button>
+        <button class="ptab p-nick"     id="ptab-nick"  onclick="showProgTab('nick')">💬 Apelidos</button>
       </div>
 
       <!-- SISTEMA COMPLETO -->
@@ -812,9 +814,9 @@ input[type=text],input[type=number],input[type=password],textarea{
         <div class="prog-label">Tom, estilo, carisma — como a OMNISCI deve ser e falar:</div>
         <textarea class="live-prompt-textarea" id="edit-pers" rows="5"></textarea>
         <div class="prog-btns">
-          <button class="prog-btn pb-save" onclick="saveEdit(&#39;pers&#39;)">💾 Salvar</button>
-          <button class="prog-btn pb-reset" onclick="resetEdit(&#39;pers&#39;)">↺ Padrão</button>
-          <button class="prog-btn pb-ai" onclick="aiImprove(&#39;pers&#39;)">🤖 IA Melhora</button>
+          <button class="prog-btn pb-save" onclick="saveEdit('pers')">💾 Salvar</button>
+          <button class="prog-btn pb-reset" onclick="resetEdit('pers')">↺ Padrão</button>
+          <button class="prog-btn pb-ai" onclick="aiImprove('pers')">🤖 IA Melhora</button>
           <span class="saved-msg" id="saved-pers">✅ Salvo!</span>
         </div>
       </div>
@@ -824,9 +826,9 @@ input[type=text],input[type=number],input[type=password],textarea{
         <div class="prog-label">Regras de comportamento, limites e prioridades:</div>
         <textarea class="live-prompt-textarea" id="edit-rules" rows="5"></textarea>
         <div class="prog-btns">
-          <button class="prog-btn pb-save" onclick="saveEdit(&#39;rules&#39;)">💾 Salvar</button>
-          <button class="prog-btn pb-reset" onclick="resetEdit(&#39;rules&#39;)">↺ Padrão</button>
-          <button class="prog-btn pb-ai" onclick="aiImprove(&#39;rules&#39;)">🤖 IA Melhora</button>
+          <button class="prog-btn pb-save" onclick="saveEdit('rules')">💾 Salvar</button>
+          <button class="prog-btn pb-reset" onclick="resetEdit('rules')">↺ Padrão</button>
+          <button class="prog-btn pb-ai" onclick="aiImprove('rules')">🤖 IA Melhora</button>
           <span class="saved-msg" id="saved-rules">✅ Salvo!</span>
         </div>
       </div>
@@ -836,9 +838,9 @@ input[type=text],input[type=number],input[type=password],textarea{
         <div class="prog-label">Conhecimentos extras, dados e informações que a IA deve ter:</div>
         <textarea class="live-prompt-textarea" id="edit-know" rows="5"></textarea>
         <div class="prog-btns">
-          <button class="prog-btn pb-save" onclick="saveEdit(&#39;know&#39;)">💾 Salvar</button>
-          <button class="prog-btn pb-reset" onclick="resetEdit(&#39;know&#39;)">↺ Padrão</button>
-          <button class="prog-btn pb-ai" onclick="aiImprove(&#39;know&#39;)">🤖 IA Expande</button>
+          <button class="prog-btn pb-save" onclick="saveEdit('know')">💾 Salvar</button>
+          <button class="prog-btn pb-reset" onclick="resetEdit('know')">↺ Padrão</button>
+          <button class="prog-btn pb-ai" onclick="aiImprove('know')">🤖 IA Expande</button>
           <span class="saved-msg" id="saved-know">✅ Salvo!</span>
         </div>
       </div>
@@ -848,8 +850,8 @@ input[type=text],input[type=number],input[type=password],textarea{
         <div class="prog-label">Apelidos por assunto (um por linha: assunto=apelido):</div>
         <textarea class="live-prompt-textarea" id="edit-nick" rows="5"></textarea>
         <div class="prog-btns">
-          <button class="prog-btn pb-save" onclick="saveEdit(&#39;nick&#39;)">💾 Salvar</button>
-          <button class="prog-btn pb-reset" onclick="resetEdit(&#39;nick&#39;)">↺ Padrão</button>
+          <button class="prog-btn pb-save" onclick="saveEdit('nick')">💾 Salvar</button>
+          <button class="prog-btn pb-reset" onclick="resetEdit('nick')">↺ Padrão</button>
           <span class="saved-msg" id="saved-nick">✅ Salvo!</span>
         </div>
       </div>
@@ -859,7 +861,8 @@ input[type=text],input[type=number],input[type=password],textarea{
     <div class="adm-section">
       <div class="adm-section-title">🤖 Pedir para a IA se Auto-Melhorar</div>
       <div class="improve-box">
-        <input class="improve-input" id="improveInput" type="text" placeholder="Ex: Seja mais criativa, aprenda sobre culinária, responda mais objetivamente...">
+        <input class="improve-input" id="improveInput" type="text"
+          placeholder="Ex: Seja mais criativa, aprenda sobre culinária, responda mais objetivamente...">
         <div class="prog-btns">
           <button class="prog-btn pb-ai" onclick="selfImprove()">🚀 Aplicar Melhoria</button>
           <button class="prog-btn pb-test" onclick="testImprove()">🧪 Testar Antes</button>
@@ -870,7 +873,9 @@ input[type=text],input[type=number],input[type=password],textarea{
     <!-- LOGS -->
     <div class="adm-section">
       <div class="adm-section-title">📋 Log de Alterações</div>
-      <div class="adm-logs" id="admLogs"><div class="log-empty">Nenhuma alteração ainda.</div></div>
+      <div class="adm-logs" id="admLogs">
+        <div class="log-empty">Nenhuma alteração ainda.</div>
+      </div>
     </div>
 
     <!-- CONTROLE DE ACESSO -->
@@ -879,24 +884,27 @@ input[type=text],input[type=number],input[type=password],textarea{
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:.6rem">
         <div style="background:rgba(255,107,53,.05);border:1px solid rgba(255,107,53,.18);border-radius:9px;padding:8px">
           <div style="font-size:.6rem;color:var(--adm);margin-bottom:.3rem">Max mensagens/sessão</div>
-          <input type="number" id="ctrl-msgs" value="999" min="1" max="9999" style="width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(255,107,53,.2);border-radius:7px;padding:5px 8px;color:var(--tx);font-size:.8rem;outline:none">
+          <input type="number" id="ctrl-msgs" value="999" min="1" max="9999"
+            style="width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(255,107,53,.2);border-radius:7px;padding:5px 8px;color:var(--tx);font-size:.8rem;outline:none">
         </div>
         <div style="background:rgba(255,107,53,.05);border:1px solid rgba(255,107,53,.18);border-radius:9px;padding:8px">
           <div style="font-size:.6rem;color:var(--adm);margin-bottom:.3rem">Max imagens/sessão</div>
-          <input type="number" id="ctrl-imgs" value="999" min="1" max="999" style="width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(255,107,53,.2);border-radius:7px;padding:5px 8px;color:var(--tx);font-size:.8rem;outline:none">
+          <input type="number" id="ctrl-imgs" value="999" min="1" max="999"
+            style="width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(255,107,53,.2);border-radius:7px;padding:5px 8px;color:var(--tx);font-size:.8rem;outline:none">
         </div>
       </div>
       <div style="margin-bottom:.5rem">
         <div style="font-size:.6rem;color:var(--adm);margin-bottom:.3rem">Mensagem de boas-vindas personalizada</div>
-        <input type="text" id="ctrl-welcome" placeholder="Deixe vazio para o padrão..." style="width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(255,107,53,.2);border-radius:7px;padding:6px 10px;color:var(--tx);font-size:.78rem;outline:none">
+        <input type="text" id="ctrl-welcome" placeholder="Deixe vazio para o padrão..."
+          style="width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(255,107,53,.2);border-radius:7px;padding:6px 10px;color:var(--tx);font-size:.78rem;outline:none">
       </div>
       <div style="margin-bottom:.5rem">
         <div style="font-size:.6rem;color:var(--adm);margin-bottom:.3rem">Modos permitidos (marque os ativos)</div>
         <div style="display:flex;flex-wrap:wrap;gap:5px">
-          <label style="font-size:.62rem;color:var(--a);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" id="mode-livre" checked=""> 💬 Livre</label>
-          <label style="font-size:.62rem;color:var(--gr);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" id="mode-prof" checked=""> 📚 Professor</label>
-          <label style="font-size:.62rem;color:var(--pk);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" id="mode-amigo" checked=""> 💖 Amigo</label>
-          <label style="font-size:.62rem;color:var(--pk);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" id="mode-img" checked=""> 🎨 Imagens</label>
+          <label style="font-size:.62rem;color:var(--a);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" id="mode-livre" checked> 💬 Livre</label>
+          <label style="font-size:.62rem;color:var(--gr);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" id="mode-prof" checked> 📚 Professor</label>
+          <label style="font-size:.62rem;color:var(--pk);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" id="mode-amigo" checked> 💖 Amigo</label>
+          <label style="font-size:.62rem;color:var(--pk);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" id="mode-img" checked> 🎨 Imagens</label>
         </div>
       </div>
       <div class="prog-btns">
@@ -936,7 +944,7 @@ input[type=text],input[type=number],input[type=password],textarea{
       <div id="evo-panel">
         <div style="display:flex;gap:8px;align-items:center;margin-bottom:.6rem;flex-wrap:wrap">
           <div style="background:rgba(0,255,204,.08);border:1px solid rgba(0,255,204,.25);border-radius:10px;padding:6px 14px">
-            <div style="font-size:1.2rem;font-weight:900;color:#00ffcc;font-family:&#39;Orbitron&#39;,sans-serif" id="evo-level">1</div>
+            <div style="font-size:1.2rem;font-weight:900;color:#00ffcc;font-family:'Orbitron',sans-serif" id="evo-level">1</div>
             <div style="font-size:.55rem;color:var(--mu)">Nível</div>
           </div>
           <div style="flex:1">
@@ -957,9 +965,10 @@ input[type=text],input[type=number],input[type=password],textarea{
     <!-- PROJETO SALVO -->
     <div class="adm-section">
       <div class="adm-section-title">📁 Projeto Salvo (Máx. 1)</div>
-      <div id="proj-display"><div style="font-size:.7rem;color:var(--mu);font-style:italic">Nenhum projeto salvo (máx. 1)</div></div>
+      <div id="proj-display"></div>
       <div style="margin-top:.5rem;display:flex;gap:6px">
-        <input type="text" id="proj-nome" placeholder="Nome do projeto..." style="flex:1;background:rgba(0,0,0,.4);border:1px solid rgba(52,211,153,.2);border-radius:8px;padding:6px 10px;color:var(--tx);font-family:&#39;DM Sans&#39;,sans-serif;font-size:.78rem;outline:none">
+        <input type="text" id="proj-nome" placeholder="Nome do projeto..."
+          style="flex:1;background:rgba(0,0,0,.4);border:1px solid rgba(52,211,153,.2);border-radius:8px;padding:6px 10px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:.78rem;outline:none">
         <button class="prog-btn pb-test" onclick="salvarProjeto()">💾 Salvar Conversa</button>
       </div>
     </div>
@@ -968,10 +977,10 @@ input[type=text],input[type=number],input[type=password],textarea{
     <div class="adm-section">
       <div class="adm-section-title">🧪 Simulações e Pesquisas</div>
       <div style="display:flex;flex-wrap:wrap;gap:5px">
-        <button class="gb gr" onclick="runSimulation(&#39;mercado financeiro&#39;)">📈 Simular Mercado</button>
-        <button class="gb gr" onclick="runSimulation(&#39;crescimento populacional&#39;)">👥 Simular População</button>
-        <button class="gb gr" onclick="runSimulation(&#39;propagação de ondas&#39;)">🌊 Simular Física</button>
-        <button class="gb gr" onclick="runSimulation(&#39;evolução de espécies&#39;)">🧬 Simular Evolução</button>
+        <button class="gb gr" onclick="runSimulation('mercado financeiro')">📈 Simular Mercado</button>
+        <button class="gb gr" onclick="runSimulation('crescimento populacional')">👥 Simular População</button>
+        <button class="gb gr" onclick="runSimulation('propagação de ondas')">🌊 Simular Física</button>
+        <button class="gb gr" onclick="runSimulation('evolução de espécies')">🧬 Simular Evolução</button>
         <button class="gb" onclick="deepSearch()">🔍 Pesquisa Profunda</button>
         <button class="gb" onclick="compareIA()">🤖 Comparar com outras IAs</button>
       </div>
@@ -1013,36 +1022,40 @@ input[type=text],input[type=number],input[type=password],textarea{
   <!-- MEMÓRIA -->
   <div class="panel p-mem" id="panel-mem">
     <div class="panel-title pt-mem">🧠 Memórias Salvas</div>
-    <div class="mem-list" id="memList"><div style="font-size:.7rem;color:var(--mu);font-style:italic">Nenhuma ainda!</div></div>
+    <div class="mem-list" id="memList">
+      <div style="font-size:.7rem;color:var(--mu);font-style:italic">Nenhuma ainda!</div>
+    </div>
     <div class="mem-add">
       <input class="mem-inp" id="memManual" type="text" placeholder="Adicionar memória manual...">
       <button class="mem-abtn" onclick="addMemManual()">+ Salvar</button>
     </div>
   </div>
 
-  <div class="msgs" id="msgs"><div class="msg ai"><div class="av av-livre">AI</div><div class="bubble ai "><span class="nick-tag ">✨ OMNISCI</span><div style="color:var(--vp);font-weight:900;font-size:1.05em;margin:10px 0 4px">Bem-vindo à OMNISCI ✦</div><br><br>Sua inteligência artificial pessoal — <strong style="color:var(--tx)">100% gratuita</strong>, sempre online.<br><br><div style="color:var(--gold);font-weight:700;font-size:1em;margin:8px 0 3px;border-bottom:1px solid rgba(251,191,36,.2);padding-bottom:3px">✅ Pronto para usar</div><br>Gemini conectado e funcionando!<br><br><div style="color:var(--gold);font-weight:700;font-size:1em;margin:8px 0 3px;border-bottom:1px solid rgba(251,191,36,.2);padding-bottom:3px">O que posso fazer por você</div><br><div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>📚 <strong style="color:var(--tx)">Aulas completas</strong> — qualquer matéria, passo a passo</span></div><br><div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>💖 <strong style="color:var(--tx)">Apoio emocional</strong> — conselhos, sem julgamentos</span></div><br><div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>🎨 <strong style="color:var(--tx)">Criar imagens</strong> — 12 estilos artísticos</span></div><br><div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>💻 <strong style="color:var(--tx)">Programação</strong> — qualquer linguagem de código</span></div><br><div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>🔍 <strong style="color:var(--tx)">Pesquisa profunda</strong> — dados reais e organizados</span></div><br><div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>🧪 <strong style="color:var(--tx)">Simulações científicas</strong> — matemática e física</span></div><br><div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>🚀 <strong style="color:var(--tx)">SI 05 26</strong> — tecnologia de propulsão interestelar</span></div><br><br><hr style="border:none;border-top:1px solid rgba(56,189,248,.1);margin:8px 0"><br>🔐 <em style="color:var(--mu)">Código secreto? Digite para acesso especial.</em><br><br><strong style="color:var(--tx)">Como posso ajudar hoje?</strong><span style="font-size:.5rem;opacity:.25;margin-left:6px;float:right;margin-top:2px">17:53</span></div></div></div>
+  <div class="msgs" id="msgs"></div>
 
   <div class="ibar" id="ibar">
-    <textarea id="inp" rows="1" placeholder="Escreva aqui... ou use o código secreto 😉" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+    <textarea id="inp" rows="1"
+      placeholder="Escreva aqui... ou use o código secreto 😉"
+      onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
     <button id="sbtn" onclick="send()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
       </svg>
     </button>
   </div>
 
   <div class="qbtns">
-    <button class="qb" onclick="ask(&#39;Quanto é 347 × 89 + 2156 ÷ 4? Mostre passo a passo&#39;)">🔢 Conta</button>
-    <button class="qb" onclick="setModo(&#39;imagem&#39;)">🎨 Gerar imagem</button>
-    <button class="qb" onclick="ask(&#39;Pesquise os últimos dados sobre exploração espacial em 2025&#39;)">🔍 Pesquisa</button>
-    <button class="qb" onclick="ask(&#39;Me ajuda a criar uma redação sobre inteligência artificial para a escola&#39;)">✍️ Redação</button>
-    <button class="qb" onclick="ask(&#39;Explique a Teoria dos Quadros de Gadôneil e a SI 05 26 com detalhes&#39;)">🚀 SI 05 26</button>
-    <button class="qb" onclick="ask(&#39;Me explique um conceito de física quântica de forma incrível!&#39;)">⚛️ Física</button>
-    <button class="qb" onclick="ask(&#39;Crie um código Python para um sistema de gerenciamento de tarefas&#39;)">💻 Código</button>
-    <button class="qb" onclick="ask(&#39;Me surpreenda com algo absolutamente incrível sobre o universo!&#39;)">🤯 Surpresa!</button>
-    <button class="qb" onclick="ask(&#39;Faça uma pesquisa profunda sobre inteligência artificial em 2025 com dados reais&#39;)">🔍 Pesquisa IA</button>
-    <button class="qb" onclick="runSimulation(&#39;mercado de criptomoedas e blockchain&#39;)">🧪 Simular Cripto</button>
-    <button class="qb" onclick="ask(&#39;Crie um plano completo de projeto de app para celular passo a passo&#39;)">📱 Projeto App</button>
+    <button class="qb" onclick="ask('Quanto é 347 × 89 + 2156 ÷ 4? Mostre passo a passo')">🔢 Conta</button>
+    <button class="qb" onclick="setModo('imagem')">🎨 Gerar imagem</button>
+    <button class="qb" onclick="ask('Pesquise os últimos dados sobre exploração espacial em 2025')">🔍 Pesquisa</button>
+    <button class="qb" onclick="ask('Me ajuda a criar uma redação sobre inteligência artificial para a escola')">✍️ Redação</button>
+    <button class="qb" onclick="ask('Explique a Teoria dos Quadros de Gadôneil e a SI 05 26 com detalhes')">🚀 SI 05 26</button>
+    <button class="qb" onclick="ask('Me explique um conceito de física quântica de forma incrível!')">⚛️ Física</button>
+    <button class="qb" onclick="ask('Crie um código Python para um sistema de gerenciamento de tarefas')">💻 Código</button>
+    <button class="qb" onclick="ask('Me surpreenda com algo absolutamente incrível sobre o universo!')">🤯 Surpresa!</button>
+    <button class="qb" onclick="ask('Faça uma pesquisa profunda sobre inteligência artificial em 2025 com dados reais')">🔍 Pesquisa IA</button>
+    <button class="qb" onclick="runSimulation('mercado de criptomoedas e blockchain')">🧪 Simular Cripto</button>
+    <button class="qb" onclick="ask('Crie um plano completo de projeto de app para celular passo a passo')">📱 Projeto App</button>
   </div>
   <div class="footer">OMNISCI v4.0 · Gemini 100% Gratuito · Livre · Professor · Amigo · Imagens · Pesquisa · Simulações · Evolução IA · Projeto Único · Controle de Acesso · Segurança Ativa 🛡️</div>
 </div>
@@ -1051,10 +1064,10 @@ input[type=text],input[type=number],input[type=password],textarea{
 <!-- MODAL LINK -->
 <div class="modal-bg" id="shareModal">
   <div class="modal">
-    <h2>🔗 COMPARTILHAR &amp; PUBLICAR</h2>
+    <h2>🔗 COMPARTILHAR & PUBLICAR</h2>
     <div style="display:flex;gap:6px;margin-bottom:1rem">
-      <button class="mb p" onclick="showTab(&#39;arq&#39;)" id="tab1">📤 Arquivo</button>
-      <button class="mb s" onclick="showTab(&#39;web&#39;)" id="tab2">🌐 Netlify</button>
+      <button class="mb p" onclick="showTab('arq')" id="tab1">📤 Arquivo</button>
+      <button class="mb s" onclick="showTab('web')" id="tab2">🌐 Netlify</button>
     </div>
     <div id="tab-arq">
       <p style="font-size:.79rem;color:var(--mu);line-height:1.65;margin-bottom:.8rem">
@@ -1074,15 +1087,15 @@ input[type=text],input[type=number],input[type=password],textarea{
     </div>
     <div id="tab-web" style="display:none">
       <p style="font-size:.78rem;color:var(--gold);font-weight:600;margin-bottom:.9rem">📖 Tutorial — Netlify (link gratuito)</p>
-      <div class="sbox"><div class="sn">1</div><div class="st">Acesse <a href="https://github.com/" target="_blank"><strong>github.com</strong></a> → Sign up → crie conta com e-mail.</div></div>
+      <div class="sbox"><div class="sn">1</div><div class="st">Acesse <a href="https://github.com" target="_blank"><strong>github.com</strong></a> → Sign up → crie conta com e-mail.</div></div>
       <div class="sbox"><div class="sn">2</div><div class="st">Clique em <strong>+</strong> → New repository → nome: <strong>omnisci</strong> → Create repository.</div></div>
       <div class="sbox"><div class="sn">3</div><div class="st">Clique em <strong>"uploading an existing file"</strong> → arraste o HTML → renomeie para <strong>index.html</strong> → Commit changes.</div></div>
-      <div class="sbox"><div class="sn g">4</div><div class="st"><a href="https://netlify.com/" target="_blank"><strong>netlify.com</strong></a> → Sign up → Continue with GitHub → autorize.</div></div>
+      <div class="sbox"><div class="sn g">4</div><div class="st"><a href="https://netlify.com" target="_blank"><strong>netlify.com</strong></a> → Sign up → Continue with GitHub → autorize.</div></div>
       <div class="sbox"><div class="sn g">5</div><div class="st">Add new site → Import an existing project → GitHub → selecione <strong>omnisci</strong> → Deploy site.</div></div>
       <div class="sbox"><div class="sn adm">6</div><div class="st">Em 1 min: link <strong style="color:var(--a)">omnisci-xxxxx.netlify.app</strong><br>Personalize: Site settings → Change site name.</div></div>
       <div class="mbs">
-        <button class="mb p" onclick="window.open(&#39;https://github.com&#39;,&#39;_blank&#39;)">🐙 GitHub</button>
-        <button class="mb p" onclick="window.open(&#39;https://app.netlify.com/signup&#39;,&#39;_blank&#39;)">🌐 Netlify</button>
+        <button class="mb p" onclick="window.open('https://github.com','_blank')">🐙 GitHub</button>
+        <button class="mb p" onclick="window.open('https://app.netlify.com/signup','_blank')">🌐 Netlify</button>
         <button class="mb s" onclick="closeShare()">✕ Fechar</button>
       </div>
     </div>
@@ -2739,6 +2752,5 @@ document.getElementById('inp')?.addEventListener('input', function() {
 // Melhorar send com auto-save
 const _origSend = send;
 </script>
-
-
-</body></html>
+</body>
+</html>
