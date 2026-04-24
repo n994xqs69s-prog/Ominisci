@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0049)file:///C:/Users/tanisilva/Downloads/index_1.html -->
+<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <meta name="theme-color" content="#02030c">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -9,15 +9,19 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="description" content="OMNISCI — Sua IA Pessoal 100% Gratuita com Gemini">
 <title>OMNISCI — Sua IA Pessoal</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+<link href="./index_files/css2" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#02030c;--card:rgba(8,12,40,0.95);
+  --bg:#010208;--card:rgba(6,9,32,0.98);
   --a:#38bdf8;--a2:#818cf8;--gold:#fbbf24;--gr:#34d399;--pk:#f472b6;
   --vp:#a78bfa;--red:#f87171;--adm:#ff6b35;--adm2:#ff3cac;--adm3:#ffd700;
-  --tx:#dde8ff;--mu:#5a7090;--bd:rgba(56,189,248,0.14);
+  --tx:#e8f0ff;--mu:#4a6080;--bd:rgba(56,189,248,0.12);
   --evo:#00ffcc;--evo2:#7fff00;
+  --shadow-a:rgba(56,189,248,0.12);--shadow-gr:rgba(52,211,153,0.12);
+  --shadow-pk:rgba(244,114,182,0.12);--shadow-adm:rgba(255,107,53,0.12);
+  --glass:rgba(255,255,255,0.03);--glass-border:rgba(255,255,255,0.06);
+  --radius-sm:8px;--radius-md:12px;--radius-lg:18px;--radius-xl:24px;
 }
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
@@ -56,9 +60,11 @@ canvas#bg{position:fixed;inset:0;z-index:0;pointer-events:none}
 .blocked-msg{font-size:.88rem;color:var(--mu);max-width:340px;line-height:1.7}
 
 /* HEADER */
-header{display:flex;align-items:center;gap:8px;padding:10px 14px;
-  background:rgba(2,3,12,0.98);border-bottom:1px solid var(--bd);
-  backdrop-filter:blur(24px);position:sticky;top:0;z-index:100;transition:all .4s;flex-wrap:wrap}
+header{display:flex;align-items:center;gap:8px;padding:12px 18px;
+  background:rgba(1,2,8,0.96);border-bottom:1px solid var(--bd);
+  backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px);
+  position:sticky;top:0;z-index:100;transition:all .3s;flex-wrap:wrap;
+  box-shadow:0 1px 0 rgba(56,189,248,.06)}
 header.hprof{border-bottom-color:rgba(52,211,153,.45)!important}
 header.hamigo{border-bottom-color:rgba(244,114,182,.45)!important}
 header.hvp{border-bottom-color:rgba(167,139,250,.5)!important}
@@ -72,9 +78,10 @@ header.hadm{border-bottom-color:rgba(255,107,53,.8)!important;
 @keyframes orb{0%,100%{transform:scale(1)}50%{transform:scale(1.5);opacity:.6}}
 .orb.adm{background:var(--adm);box-shadow:0 0 14px var(--adm),0 0 28px var(--adm2);animation:orbadm 1.5s infinite}
 @keyframes orbadm{0%,100%{transform:scale(1);background:var(--adm)}50%{transform:scale(1.6);background:var(--adm2)}}
-.logo{font-family:'Orbitron',sans-serif;font-size:1.2rem;font-weight:900;letter-spacing:3px;
-  background:linear-gradient(110deg,var(--a),var(--a2),var(--gold));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;transition:all .4s}
+.logo{font-family:'Orbitron',sans-serif;font-size:1.15rem;font-weight:900;letter-spacing:4px;
+  background:linear-gradient(110deg,var(--a) 0%,var(--a2) 50%,var(--gold) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;transition:all .4s;
+  text-shadow:none;filter:drop-shadow(0 0 12px rgba(56,189,248,.3))}
 .logo.adm{background:linear-gradient(110deg,var(--adm),var(--adm2),var(--adm3));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .mtag{font-size:.54rem;letter-spacing:2px;padding:3px 9px;border-radius:20px;
@@ -108,9 +115,11 @@ header.hadm{border-bottom-color:rgba(255,107,53,.8)!important;
 
 /* MODO BAR */
 .modo-bar{display:flex;gap:6px;padding:10px 14px 0;justify-content:center;flex-wrap:wrap}
-.mdbtn{font-size:.68rem;padding:7px 13px;border-radius:25px;cursor:pointer;border:none;
-  font-family:'DM Sans',sans-serif;font-weight:500;transition:all .22s;
-  display:flex;align-items:center;gap:5px;user-select:none}
+.mdbtn{font-size:.68rem;padding:7px 15px;border-radius:30px;cursor:pointer;border:none;
+  font-family:'DM Sans',sans-serif;font-weight:600;transition:all .2s cubic-bezier(.34,1.56,.64,1);
+  display:flex;align-items:center;gap:5px;user-select:none;letter-spacing:.3px}
+.mdbtn:hover{transform:translateY(-1px)}
+.mdbtn:active{transform:scale(.97)}
 .md-livre{background:rgba(56,189,248,.09);color:var(--a);border:1.5px solid rgba(56,189,248,.22)}
 .md-prof{background:rgba(52,211,153,.09);color:var(--gr);border:1.5px solid rgba(52,211,153,.22)}
 .md-amigo{background:rgba(244,114,182,.09);color:var(--pk);border:1.5px solid rgba(244,114,182,.22)}
@@ -130,23 +139,26 @@ header.hadm{border-bottom-color:rgba(255,107,53,.8)!important;
   border-color:var(--adm);box-shadow:0 0 20px rgba(255,107,53,.4),0 0 40px rgba(255,60,172,.2)}
 
 /* HERO */
-.hero{text-align:center;padding:1.4rem 1rem .7rem;
-  background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(56,189,248,.06) 0%,transparent 70%)}
+.hero{text-align:center;padding:2rem 1rem .8rem;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(56,189,248,.07) 0%,rgba(129,140,248,.03) 50%,transparent 80%)}
 .hero.hadm-bg{background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(255,107,53,.1) 0%,transparent 70%)}
-.hero h1{font-family:'Orbitron',sans-serif;font-size:clamp(1.4rem,4vw,2.5rem);font-weight:900;
-  line-height:1.1;background:linear-gradient(160deg,#fff 0%,var(--a) 40%,var(--a2) 70%,var(--gold) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.4rem;
-  animation:fi 1s ease both;transition:all .4s}
+.hero h1{font-family:'Orbitron',sans-serif;font-size:clamp(1.6rem,5vw,3rem);font-weight:900;
+  line-height:1.05;background:linear-gradient(135deg,#ffffff 0%,var(--a) 30%,var(--a2) 60%,var(--gold) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.5rem;
+  animation:fi 1s ease both;transition:all .4s;
+  filter:drop-shadow(0 0 30px rgba(56,189,248,.2))}
 .hero h1.adm-title{background:linear-gradient(160deg,#fff 0%,var(--adm) 35%,var(--adm2) 65%,var(--adm3) 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent}
 @keyframes fi{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 .hero p{font-size:.82rem;color:var(--mu);max-width:500px;margin:0 auto .7rem;line-height:1.7}
 .topics{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;padding:0 .8rem .7rem}
-.tp{font-size:.6rem;padding:4px 10px;border-radius:20px;cursor:pointer;
-  background:rgba(255,255,255,.03);border:1px solid var(--bd);
-  color:var(--mu);transition:all .15s;user-select:none;white-space:nowrap}
-.tp:hover{background:rgba(56,189,248,.09);border-color:var(--a);color:var(--a)}
-.tp.on{background:rgba(56,189,248,.14);border-color:var(--a);color:var(--a);font-weight:500}
+.tp{font-size:.61rem;padding:5px 12px;border-radius:20px;cursor:pointer;
+  background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);
+  color:var(--mu);transition:all .18s;user-select:none;white-space:nowrap;font-weight:500}
+.tp:hover{background:rgba(56,189,248,.08);border-color:rgba(56,189,248,.25);color:var(--a);
+  transform:translateY(-1px)}
+.tp.on{background:rgba(56,189,248,.12);border-color:rgba(56,189,248,.35);color:var(--a);
+  font-weight:600;box-shadow:0 2px 10px rgba(56,189,248,.1)}
 .tp.sp{border-color:rgba(251,191,36,.33);color:#fcd34d;background:rgba(251,191,36,.05)}
 .tp.sp:hover,.tp.sp.on{background:rgba(251,191,36,.15);border-color:var(--gold);color:var(--gold)}
 
@@ -154,7 +166,8 @@ header.hadm{border-bottom-color:rgba(255,107,53,.8)!important;
 .chat-wrap{flex:1;max-width:900px;width:100%;margin:0 auto;padding:0 .9rem 1rem;display:flex;flex-direction:column;gap:7px}
 
 /* PAINÉIS */
-.panel{border-radius:13px;padding:.8rem .95rem;margin-bottom:5px;display:none}
+.panel{border-radius:16px;padding:1rem 1.1rem;margin-bottom:6px;display:none;
+  backdrop-filter:blur(12px)}
 .panel.show{display:block}
 .p-prof{background:rgba(52,211,153,.03);border:1px solid rgba(52,211,153,.16)}
 .p-amigo{background:rgba(244,114,182,.03);border:1px solid rgba(244,114,182,.16)}
@@ -329,8 +342,9 @@ header.hadm{border-bottom-color:rgba(255,107,53,.8)!important;
 .img-loading{display:none;align-items:center;gap:9px;padding:.8rem;
   background:rgba(244,114,182,.05);border-radius:10px;border:1px solid rgba(244,114,182,.15);margin-top:.6rem}
 .img-loading.show{display:flex}
-.img-spin{width:17px;height:17px;border:2px solid rgba(244,114,248,.2);
-  border-top-color:var(--pk);border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0}
+.img-spin{width:18px;height:18px;border:2px solid rgba(244,114,248,.15);
+  border-top-color:var(--pk);border-right-color:rgba(167,139,250,.5);
+  border-radius:50%;animation:spin .7s cubic-bezier(.5,0,.5,1) infinite;flex-shrink:0}
 @keyframes spin{to{transform:rotate(360deg)}}
 .img-load-txt{font-size:.78rem;color:var(--pk);font-style:italic}
 .drop-zone{border:2px dashed rgba(167,139,250,.28);border-radius:12px;
@@ -380,13 +394,13 @@ header.hadm{border-bottom-color:rgba(255,107,53,.8)!important;
 .bar-row:last-child{margin:0}
 .bar-label{font-size:.61rem;color:var(--mu);width:140px;flex-shrink:0;text-align:right}
 .bar-track{flex:1;background:rgba(255,255,255,.05);border-radius:4px;height:14px;overflow:hidden}
-.bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding:0 6px;
-  font-size:.56rem;color:#fff;font-weight:700;transition:width 1.2s ease}
+.bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding:0 8px;
+  font-size:.57rem;color:#fff;font-weight:700;transition:width 1.4s cubic-bezier(.22,1,.36,1)}
 .bar-val{font-size:.61rem;color:var(--tx);width:45px;flex-shrink:0}
 
 /* MSGS */
 .msgs{display:flex;flex-direction:column;gap:10px;min-height:80px}
-.msg{display:flex;gap:8px;animation:fi .3s ease both}
+.msg{display:flex;gap:8px;animation:fi .35s cubic-bezier(.21,1.02,.73,1) both}
 .msg.user{flex-direction:row-reverse}
 .av{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:700}
 .av-livre{background:linear-gradient(135deg,var(--a),var(--a2));color:#fff;font-family:'Orbitron',sans-serif;font-size:.43rem}
@@ -397,8 +411,9 @@ header.hadm{border-bottom-color:rgba(255,107,53,.8)!important;
 .av-ger{background:linear-gradient(135deg,var(--gold),#f97316);color:#000;font-family:'Orbitron',sans-serif;font-size:.43rem}
 .av-adm{background:linear-gradient(135deg,var(--adm),var(--adm2));color:#fff;font-family:'Orbitron',sans-serif;font-size:.4rem;box-shadow:0 0 10px rgba(255,107,53,.4)}
 .av-user{background:rgba(255,255,255,.06);border:1px solid var(--bd);color:var(--mu);font-size:.6rem}
-.bubble{max-width:85%;padding:11px 14px;font-size:.87rem;line-height:1.75;border-radius:15px}
-.bubble.ai{background:var(--card);border:1px solid var(--bd);border-top-left-radius:4px}
+.bubble{max-width:88%;padding:12px 16px;font-size:.88rem;line-height:1.8;border-radius:16px;word-wrap:break-word}
+.bubble.ai{background:rgba(6,9,32,.98);border:1px solid rgba(56,189,248,.1);
+  border-top-left-radius:4px;box-shadow:0 2px 20px rgba(0,0,0,.3)}
 .bubble.b-prof{border-color:rgba(52,211,153,.22);background:rgba(1,12,8,.97)}
 .bubble.b-amigo{border-color:rgba(244,114,182,.22);background:rgba(12,1,10,.97)}
 .bubble.b-img{border-color:rgba(244,114,182,.22);background:rgba(10,2,14,.97)}
@@ -406,8 +421,11 @@ header.hadm{border-bottom-color:rgba(255,107,53,.8)!important;
 .bubble.b-ger{border-color:rgba(251,191,36,.22);background:rgba(14,9,1,.97)}
 .bubble.b-adm{border-color:rgba(255,107,53,.35);background:rgba(20,5,1,.98);
   box-shadow:0 0 20px rgba(255,107,53,.08)}
-.bubble.user{background:rgba(56,189,248,.09);border:1px solid rgba(56,189,248,.18);border-top-right-radius:4px}
-.nick-tag{font-size:.66rem;font-style:italic;margin-bottom:4px;display:block;opacity:.9;color:var(--gold)}
+.bubble.user{background:linear-gradient(135deg,rgba(56,189,248,.1),rgba(129,140,248,.08));
+  border:1px solid rgba(56,189,248,.2);border-top-right-radius:4px;
+  box-shadow:0 2px 12px rgba(56,189,248,.06)}
+.nick-tag{font-size:.64rem;font-style:normal;font-weight:600;margin-bottom:5px;display:flex;
+  align-items:center;gap:4px;opacity:.9;color:var(--gold);letter-spacing:.3px}
 .nick-tag.prof{color:var(--gr)}.nick-tag.amigo{color:var(--pk)}.nick-tag.vp{color:var(--vp)}
 .nick-tag.img-t{color:var(--pk)}.nick-tag.adm-t{color:var(--adm)}
 .mode-hint{font-size:.56rem;opacity:.48;margin-bottom:3px;display:block}
@@ -421,10 +439,12 @@ header.hadm{border-bottom-color:rgba(255,107,53,.8)!important;
 @keyframes dot{0%,60%,100%{opacity:.2;transform:scale(.8)}30%{opacity:1;transform:scale(1)}}
 
 /* INPUT */
-.ibar{display:flex;gap:7px;align-items:flex-end;
-  background:rgba(8,12,40,.96);border:1px solid var(--bd);border-radius:14px;
-  padding:8px 10px;margin-top:3px;backdrop-filter:blur(16px);transition:border-color .2s}
-.ibar:focus-within{border-color:rgba(56,189,248,.38)}
+.ibar{display:flex;gap:8px;align-items:flex-end;
+  background:rgba(6,9,32,.97);border:1.5px solid rgba(56,189,248,.12);border-radius:16px;
+  padding:10px 12px;margin-top:4px;
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  transition:all .2s;box-shadow:0 4px 24px rgba(0,0,0,.3)}
+.ibar:focus-within{border-color:rgba(56,189,248,.35);box-shadow:0 4px 24px rgba(0,0,0,.3),0 0 0 3px rgba(56,189,248,.06)}
 .ibar.iprof:focus-within{border-color:rgba(52,211,153,.38)}
 .ibar.iamigo:focus-within{border-color:rgba(244,114,182,.38)}
 .ibar.ivp:focus-within{border-color:rgba(167,139,250,.38)}
@@ -435,26 +455,34 @@ textarea#inp{flex:1;background:transparent;border:none;outline:none;
   color:var(--tx);font-family:'DM Sans',sans-serif;font-size:.87rem;
   resize:none;max-height:120px;line-height:1.55;min-height:22px}
 textarea#inp::placeholder{color:var(--mu)}
-#sbtn{width:34px;height:34px;border-radius:50%;border:none;cursor:pointer;
+#sbtn{width:36px;height:36px;border-radius:50%;border:none;cursor:pointer;
   background:linear-gradient(135deg,var(--a),var(--a2));
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  transition:transform .15s,opacity .15s;color:#fff}
-#sbtn:hover{transform:scale(1.08)}#sbtn:disabled{opacity:.3;cursor:not-allowed;transform:none}
+  transition:all .2s cubic-bezier(.34,1.56,.64,1);color:#fff;
+  box-shadow:0 2px 12px rgba(56,189,248,.3)}
+#sbtn:hover{transform:scale(1.1);box-shadow:0 4px 20px rgba(56,189,248,.4)}
+#sbtn:active{transform:scale(.95)}
+#sbtn:disabled{opacity:.25;cursor:not-allowed;transform:none;box-shadow:none}
 #sbtn svg{width:14px;height:14px}
 
 /* QUICK */
 .qbtns{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
-.qb{font-size:.61rem;padding:4px 10px;border-radius:9px;cursor:pointer;
-  background:rgba(255,255,255,.03);border:1px solid var(--bd);color:var(--mu);transition:all .13s}
-.qb:hover{background:rgba(56,189,248,.09);color:var(--a);border-color:var(--a)}
+.qb{font-size:.62rem;padding:5px 12px;border-radius:20px;cursor:pointer;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+  color:var(--mu);transition:all .18s;font-weight:500;letter-spacing:.2px}
+.qb:hover{background:rgba(56,189,248,.1);color:var(--a);border-color:rgba(56,189,248,.3);
+  transform:translateY(-1px);box-shadow:0 4px 12px rgba(56,189,248,.1)}
+.qb:active{transform:scale(.97)}
 
 /* MODAL */
 .modal-bg{display:none;position:fixed;inset:0;z-index:300;
   background:rgba(0,0,0,.9);backdrop-filter:blur(12px);
   align-items:center;justify-content:center;padding:1rem}
 .modal-bg.show{display:flex}
-.modal{background:#050820;border:1px solid var(--bd);border-radius:20px;
-  padding:1.5rem;max-width:520px;width:100%;animation:fi .3s ease;max-height:90vh;overflow-y:auto}
+.modal{background:rgba(4,6,24,.99);border:1px solid rgba(56,189,248,.12);
+  border-radius:22px;padding:1.6rem;max-width:520px;width:100%;
+  animation:fi .25s cubic-bezier(.21,1.02,.73,1);max-height:90vh;overflow-y:auto;
+  box-shadow:0 20px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.04)}
 .modal h2{font-family:'Orbitron',sans-serif;font-size:.9rem;color:var(--a);letter-spacing:2px;margin-bottom:.5rem}
 .sbox{display:flex;gap:10px;align-items:flex-start;margin-bottom:.8rem;
   background:rgba(56,189,248,.04);border:1px solid var(--bd);border-radius:10px;padding:.75rem}
@@ -471,7 +499,8 @@ textarea#inp::placeholder{color:var(--mu)}
 .mb.s{background:rgba(255,255,255,.06);border:1px solid var(--bd);color:var(--mu)}
 .wbox{background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.18);
   border-radius:9px;padding:8px 11px;font-size:.7rem;color:#fcd34d;margin-top:.9rem;line-height:1.8}
-.footer{text-align:center;font-size:.56rem;color:var(--mu);padding:10px;opacity:.28}
+.footer{text-align:center;font-size:.55rem;color:var(--mu);padding:12px;opacity:.2;
+  letter-spacing:.5px;border-top:1px solid rgba(255,255,255,.03);margin-top:4px}
 
 /* PROG BTNS reutilizados */
 .prog-btn{font-size:.67rem;padding:6px 13px;border-radius:9px;border:none;cursor:pointer;
@@ -484,10 +513,57 @@ textarea#inp::placeholder{color:var(--mu)}
 .pb-ai:hover{background:rgba(167,139,250,.2)}
 .pb-test{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.25);color:var(--gr)}
 .pb-test:hover{background:rgba(52,211,153,.2)}
+
+/* ── PROFESSIONAL EXTRAS ── */
+.glass{background:var(--glass);border:1px solid var(--glass-border);backdrop-filter:blur(12px)}
+.glow-a{box-shadow:0 0 20px rgba(56,189,248,.15)}
+.glow-gr{box-shadow:0 0 20px rgba(52,211,153,.15)}
+.glow-pk{box-shadow:0 0 20px rgba(244,114,182,.15)}
+
+/* Typing animation melhorada */
+.typing-b span{width:7px;height:7px;border-radius:50%;background:var(--a);
+  animation:dot 1.4s cubic-bezier(.36,.07,.19,.97) infinite}
+
+/* Avatar com glow sutil */
+.av{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;
+  align-items:center;justify-content:center;font-weight:700;
+  box-shadow:0 2px 8px rgba(0,0,0,.3)}
+
+/* Painel admin mais profissional */
+.adm-section-title{font-size:.64rem;color:var(--adm);letter-spacing:2.5px;
+  text-transform:uppercase;margin-bottom:.65rem;display:flex;align-items:center;
+  gap:7px;font-weight:700;opacity:.9}
+
+/* Inputs mais profissionais globalmente */
+input[type=text],input[type=number],input[type=password],textarea{
+  transition:all .2s;font-family:'DM Sans',sans-serif}
+
+/* Animação de entrada das msgs */
+@keyframes slideIn{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.msg{animation:slideIn .3s cubic-bezier(.21,1.02,.73,1) both}
+
+/* Status badges melhorados */
+.api-status{font-size:.54rem;padding:3px 10px;border-radius:20px;border:1px solid;
+  white-space:nowrap;font-weight:600;letter-spacing:.3px}
+
+/* Orb melhorado */
+.orb{width:8px;height:8px;border-radius:50%;background:var(--gr);
+  box-shadow:0 0 8px var(--gr),0 0 16px rgba(52,211,153,.3);
+  animation:orb 3s ease-in-out infinite;flex-shrink:0}
+
+/* Linha separadora elegante */
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--bd),transparent);margin:8px 0}
+
+/* Modo bar com fundo sutil */
+.modo-bar{display:flex;gap:6px;padding:10px 14px 6px;justify-content:center;
+  flex-wrap:wrap;background:rgba(0,0,0,.1)}
 </style>
 </head>
 <body>
-<canvas id="bg"></canvas>
+<canvas id="bg" width="1920" height="911"></canvas>
 
 <!-- TELA BLOQUEIO -->
 <div class="blocked-screen" id="blockedScreen">
@@ -529,10 +605,10 @@ textarea#inp::placeholder{color:var(--mu)}
   <div class="logo" id="headerLogo">OMNISCI</div>
   <span class="mtag m-livre" id="modeTag">● Livre</span>
   <div class="hright">
-    <span id="apiStatusBadge" class="api-status api-no">⚠️ Sem API</span>
+    <span id="apiStatusBadge" class="api-status api-ok">✅ API Ativa</span>
     <span id="memCount" style="font-size:.54rem;color:var(--gr);padding:3px 7px;border-radius:20px;background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.18)">🧠 0</span>
-    <span id="evo-display" style="font-size:.54rem;color:#00ffcc;padding:3px 7px;border-radius:20px;background:rgba(0,255,204,.07);border:1px solid rgba(0,255,204,.2)">🧠 Nv.1</span>
-    <div class="nick-h" id="nickH">Olá! 👋</div>
+    <span id="evo-display" style="font-size:.54rem;color:#00ffcc;padding:3px 7px;border-radius:20px;background:rgba(0,255,204,.07);border:1px solid rgba(0,255,204,.2)">🧠 Nv.1 <span style="color:var(--evo,#00ffcc)">0%</span></span>
+    <div class="nick-h" id="nickH">✨ Amigo(a) da OMNISCI</div>
     <button class="alert-badge" id="alertBadge" onclick="showSecPanel()">🔴 Alertas</button>
     <button class="hbtn adm-key" onclick="openApiKeyModal()">🔑 API Key</button>
     <button class="hbtn" onclick="openShare()">🔗 Link</button>
@@ -541,32 +617,33 @@ textarea#inp::placeholder{color:var(--mu)}
 </header>
 
 <div class="modo-bar">
-  <button class="mdbtn md-livre sel" id="btn-livre"  onclick="setModo('livre')">💬 Livre</button>
-  <button class="mdbtn md-prof"      id="btn-prof"   onclick="setModo('professor')">📚 Professor</button>
-  <button class="mdbtn md-amigo"     id="btn-amigo"  onclick="setModo('amigo')">💖 Amigo</button>
-  <button class="mdbtn md-img"       id="btn-img"    onclick="setModo('imagem')">🎨 Imagens</button>
-  <button class="mdbtn md-vp"        id="btn-vp"     onclick="setModo('vp')"      style="display:none">🌟 Vice-Pres.</button>
-  <button class="mdbtn md-ger"       id="btn-ger"    onclick="setModo('gerente')" style="display:none">⚡ Gerenciador</button>
-  <button class="mdbtn md-adm"       id="btn-adm"    onclick="setModo('admin')"   style="display:none">🔥 Administrador</button>
+  <button class="mdbtn md-livre sel" id="btn-livre" onclick="setModo(&#39;livre&#39;)">💬 Livre</button>
+  <button class="mdbtn md-prof" id="btn-prof" onclick="setModo(&#39;professor&#39;)">📚 Professor</button>
+  <button class="mdbtn md-amigo" id="btn-amigo" onclick="setModo(&#39;amigo&#39;)">💖 Amigo</button>
+  <button class="mdbtn md-img" id="btn-img" onclick="setModo(&#39;imagem&#39;)">🎨 Imagens</button>
+  <button class="mdbtn md-vp" id="btn-vp" onclick="setModo(&#39;vp&#39;)" style="display:none">🌟 Vice-Pres.</button>
+  <button class="mdbtn md-ger" id="btn-ger" onclick="setModo(&#39;gerente&#39;)" style="display:none">⚡ Gerenciador</button>
+  <button class="mdbtn md-adm" id="btn-adm" onclick="setModo(&#39;admin&#39;)" style="display:none">🔥 Administrador</button>
 </div>
 
 <div class="hero" id="heroDiv">
   <h1 id="heroT">Sua IA Pessoal</h1>
-  <p id="heroS">Pesquisa · Imagens · Aulas · Conselhos · Projetos · SI 05 26</p>
+  <p id="heroS" style="font-size:.85rem;letter-spacing:.5px">Pesquisa · Imagens · Aulas · Conselhos · Projetos · SI 05 26</p>
+  <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);border-radius:20px;padding:4px 14px;font-size:.62rem;color:var(--gr);font-weight:600;letter-spacing:1px;margin-bottom:.5rem">✦ GEMINI · 100% GRATUITO · SEMPRE ONLINE</div>
   <div class="topics">
-    <div class="tp on" onclick="setTopic(this,'geral')">💬 Tudo</div>
-    <div class="tp" onclick="setTopic(this,'matematica')">🔢 Matemática</div>
-    <div class="tp" onclick="setTopic(this,'redacao')">✍️ Redação</div>
-    <div class="tp" onclick="setTopic(this,'historia')">📜 História</div>
-    <div class="tp" onclick="setTopic(this,'astronomia')">🌌 Astronomia</div>
-    <div class="tp" onclick="setTopic(this,'fisica')">⚛️ Física</div>
-    <div class="tp" onclick="setTopic(this,'biologia')">🧬 Biologia</div>
-    <div class="tp" onclick="setTopic(this,'quimica')">🧪 Química</div>
-    <div class="tp" onclick="setTopic(this,'programacao')">💻 Programação</div>
-    <div class="tp" onclick="setTopic(this,'pesquisa')">🔍 Pesquisar</div>
-    <div class="tp" onclick="setTopic(this,'projeto')">🛠️ Projeto</div>
-    <div class="tp" onclick="setTopic(this,'filosofia')">🧠 Filosofia</div>
-    <div class="tp sp" onclick="setTopic(this,'SI0526')">🚀 SI 05 26</div>
+    <div class="tp on" onclick="setTopic(this,&#39;geral&#39;)">💬 Tudo</div>
+    <div class="tp" onclick="setTopic(this,&#39;matematica&#39;)">🔢 Matemática</div>
+    <div class="tp" onclick="setTopic(this,&#39;redacao&#39;)">✍️ Redação</div>
+    <div class="tp" onclick="setTopic(this,&#39;historia&#39;)">📜 História</div>
+    <div class="tp" onclick="setTopic(this,&#39;astronomia&#39;)">🌌 Astronomia</div>
+    <div class="tp" onclick="setTopic(this,&#39;fisica&#39;)">⚛️ Física</div>
+    <div class="tp" onclick="setTopic(this,&#39;biologia&#39;)">🧬 Biologia</div>
+    <div class="tp" onclick="setTopic(this,&#39;quimica&#39;)">🧪 Química</div>
+    <div class="tp" onclick="setTopic(this,&#39;programacao&#39;)">💻 Programação</div>
+    <div class="tp" onclick="setTopic(this,&#39;pesquisa&#39;)">🔍 Pesquisar</div>
+    <div class="tp" onclick="setTopic(this,&#39;projeto&#39;)">🛠️ Projeto</div>
+    <div class="tp" onclick="setTopic(this,&#39;filosofia&#39;)">🧠 Filosofia</div>
+    <div class="tp sp" onclick="setTopic(this,&#39;SI0526&#39;)">🚀 SI 05 26</div>
   </div>
 </div>
 
@@ -591,25 +668,25 @@ textarea#inp::placeholder{color:var(--mu)}
 
   <!-- IMAGENS -->
   <div class="panel p-img" id="panel-img">
-    <div class="panel-title pt-img">🎨 Imagens — Geração & Análise</div>
+    <div class="panel-title pt-img">🎨 Imagens — Geração &amp; Análise</div>
     <div class="img-mode-tabs">
-      <button class="imt gen sel" id="tab-gen" onclick="setImgTab('gen')">✨ Gerar</button>
-      <button class="imt ana"     id="tab-ana" onclick="setImgTab('ana')">🔍 Analisar</button>
+      <button class="imt gen sel" id="tab-gen" onclick="setImgTab(&#39;gen&#39;)">✨ Gerar</button>
+      <button class="imt ana" id="tab-ana" onclick="setImgTab(&#39;ana&#39;)">🔍 Analisar</button>
     </div>
     <div class="img-gen-box show" id="gen-box">
       <div class="img-styles">
-        <div class="ist on" onclick="setStyle(this,'realistic photo')">📷 Realista</div>
-        <div class="ist" onclick="setStyle(this,'anime style')">🎌 Anime</div>
-        <div class="ist" onclick="setStyle(this,'oil painting')">🎨 Pintura</div>
-        <div class="ist" onclick="setStyle(this,'digital art')">💻 Digital</div>
-        <div class="ist" onclick="setStyle(this,'watercolor')">🖌️ Aquarela</div>
-        <div class="ist" onclick="setStyle(this,'sci-fi futuristic')">🚀 Sci-Fi</div>
-        <div class="ist" onclick="setStyle(this,'fantasy art')">🧙 Fantasy</div>
-        <div class="ist" onclick="setStyle(this,'cinematic 8k')">🎬 Cinema</div>
-        <div class="ist" onclick="setStyle(this,'pixel art')">👾 Pixel</div>
-        <div class="ist" onclick="setStyle(this,'3d render octane')">🔮 3D</div>
-        <div class="ist" onclick="setStyle(this,'impressionist painting')">🖼️ Impressionista</div>
-        <div class="ist" onclick="setStyle(this,'concept art')">✏️ Concept Art</div>
+        <div class="ist on" onclick="setStyle(this,&#39;realistic photo&#39;)">📷 Realista</div>
+        <div class="ist" onclick="setStyle(this,&#39;anime style&#39;)">🎌 Anime</div>
+        <div class="ist" onclick="setStyle(this,&#39;oil painting&#39;)">🎨 Pintura</div>
+        <div class="ist" onclick="setStyle(this,&#39;digital art&#39;)">💻 Digital</div>
+        <div class="ist" onclick="setStyle(this,&#39;watercolor&#39;)">🖌️ Aquarela</div>
+        <div class="ist" onclick="setStyle(this,&#39;sci-fi futuristic&#39;)">🚀 Sci-Fi</div>
+        <div class="ist" onclick="setStyle(this,&#39;fantasy art&#39;)">🧙 Fantasy</div>
+        <div class="ist" onclick="setStyle(this,&#39;cinematic 8k&#39;)">🎬 Cinema</div>
+        <div class="ist" onclick="setStyle(this,&#39;pixel art&#39;)">👾 Pixel</div>
+        <div class="ist" onclick="setStyle(this,&#39;3d render octane&#39;)">🔮 3D</div>
+        <div class="ist" onclick="setStyle(this,&#39;impressionist painting&#39;)">🖼️ Impressionista</div>
+        <div class="ist" onclick="setStyle(this,&#39;concept art&#39;)">✏️ Concept Art</div>
       </div>
       <div class="gen-row">
         <textarea id="imgPrompt" placeholder="Descreva a imagem que quer criar..." rows="2"></textarea>
@@ -622,8 +699,7 @@ textarea#inp::placeholder{color:var(--mu)}
       <div class="img-result-grid" id="imgGrid"></div>
     </div>
     <div class="img-ana-box" id="ana-box">
-      <div class="drop-zone" id="dropZone"
-        ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)">
+      <div class="drop-zone" id="dropZone" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)">
         <input type="file" accept="image/*" onchange="fileSelected(event)">
         <span class="dz-icon">🖼️</span>
         <p><strong style="color:var(--vp)">Clique ou arraste</strong> uma imagem<br>
@@ -631,7 +707,7 @@ textarea#inp::placeholder{color:var(--mu)}
       </div>
       <div class="preview-area" id="previewArea">
         <div class="preview-wrap">
-          <img id="previewImg" src="" alt="preview">
+          <img id="previewImg" src="file:///C:/Users/tanisilva/Downloads/index_1.html" alt="preview">
           <button class="preview-rm" onclick="removeImg()">✕</button>
         </div>
       </div>
@@ -649,7 +725,7 @@ textarea#inp::placeholder{color:var(--mu)}
     <div class="vp-perms">
       <span class="vp-perm">✅ Pesquisa profunda</span><span class="vp-perm">✅ Análise projetos</span>
       <span class="vp-perm">✅ Gerar imagens</span><span class="vp-perm">✅ Analisar imagens</span>
-      <span class="vp-perm">✅ SI 05 26</span><span class="vp-perm">✅ Filosofia & Ciência</span>
+      <span class="vp-perm">✅ SI 05 26</span><span class="vp-perm">✅ Filosofia &amp; Ciência</span>
       <span class="vp-lock">🔒 Painel gerencial</span><span class="vp-lock">🔒 Segurança</span><span class="vp-lock">🔒 Administrador</span>
     </div>
   </div>
@@ -660,9 +736,9 @@ textarea#inp::placeholder{color:var(--mu)}
     <div class="g-btns">
       <button class="gb" onclick="showChart()">📊 Gráficos</button>
       <button class="gb" onclick="showSecPanel()">🔴 Segurança</button>
-      <button class="gb" onclick="ask('Explique toda a SI 05 26 e Teoria dos Quadros de Gadôneil com detalhes técnicos completos')">🚀 SI 05 26</button>
-      <button class="gb" onclick="ask('Pesquise e traga as últimas descobertas em astronomia, física quântica e tecnologia em 2025')">🔍 Pesquisa</button>
-      <button class="gb" onclick="setModo('imagem')">🎨 Imagens</button>
+      <button class="gb" onclick="ask(&#39;Explique toda a SI 05 26 e Teoria dos Quadros de Gadôneil com detalhes técnicos completos&#39;)">🚀 SI 05 26</button>
+      <button class="gb" onclick="ask(&#39;Pesquise e traga as últimas descobertas em astronomia, física quântica e tecnologia em 2025&#39;)">🔍 Pesquisa</button>
+      <button class="gb" onclick="setModo(&#39;imagem&#39;)">🎨 Imagens</button>
       <button class="gb" onclick="exportMem()">💾 Exportar Mem.</button>
       <button class="gb" onclick="importMem()">📥 Importar Mem.</button>
       <button class="gb" onclick="openShare()">🔗 Link</button>
@@ -680,16 +756,16 @@ textarea#inp::placeholder{color:var(--mu)}
     <div class="adm-section">
       <div class="adm-section-title">🔑 API Key — Conexão com a IA</div>
       <div class="token-bar">
-        <span class="tok">Status: <span id="adm-api-status">—</span></span>
+        <span class="tok">Status: <span id="adm-api-status">✅ Ativa</span></span>
         <span class="tok">Tokens usados: <span id="tok-used">0</span></span>
         <span class="tok">Modelo: <span id="tok-model">claude-sonnet-4-5-20251001</span></span>
       </div>
       <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap">
-        <input type="password" id="adm-key-inp" placeholder="AIzaSy... (Gemini) ou sk-ant... (Anthropic)" autocomplete="off"
-          style="flex:1;min-width:200px;background:rgba(0,0,0,.5);border:1px solid rgba(255,107,53,.3);
-          border-radius:9px;padding:8px 11px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:.8rem;outline:none">
+        <input type="password" id="adm-key-inp" placeholder="AIzaSy... (Gemini) ou sk-ant... (Anthropic)" autocomplete="off" style="flex:1;min-width:200px;background:rgba(0,0,0,.5);border:1px solid rgba(255,107,53,.3);
+          border-radius:9px;padding:8px 11px;color:var(--tx);font-family:&#39;DM Sans&#39;,sans-serif;font-size:.8rem;outline:none">
         <button class="lbtn lbtn-save" onclick="saveApiKeyFromAdm()">💾 Salvar Key</button>
         <button class="lbtn lbtn-copy" onclick="testApiKey()">🧪 Testar</button>
+        <button class="lbtn lbtn-test" onclick="diagApiKey()">🔍 Diagnóstico</button>
         <button class="lbtn lbtn-reset" onclick="clearApiKey()">🗑️ Apagar Key</button>
       </div>
       <div style="font-size:.63rem;color:var(--mu);margin-top:.4rem;line-height:1.5">
@@ -702,11 +778,11 @@ textarea#inp::placeholder{color:var(--mu)}
     <div class="adm-section">
       <div class="adm-section-title">⚙️ Programação da IA — System Prompt ao Vivo</div>
       <div class="prompt-tabs">
-        <button class="ptab p-sys sel"  id="ptab-sys"   onclick="showProgTab('sys')">🔥 Sistema Completo</button>
-        <button class="ptab p-pers"     id="ptab-pers"  onclick="showProgTab('pers')">🧠 Personalidade</button>
-        <button class="ptab p-rules"    id="ptab-rules" onclick="showProgTab('rules')">📋 Regras</button>
-        <button class="ptab p-know"     id="ptab-know"  onclick="showProgTab('know')">📚 Conhecimento</button>
-        <button class="ptab p-nick"     id="ptab-nick"  onclick="showProgTab('nick')">💬 Apelidos</button>
+        <button class="ptab p-sys sel" id="ptab-sys" onclick="showProgTab(&#39;sys&#39;)">🔥 Sistema Completo</button>
+        <button class="ptab p-pers" id="ptab-pers" onclick="showProgTab(&#39;pers&#39;)">🧠 Personalidade</button>
+        <button class="ptab p-rules" id="ptab-rules" onclick="showProgTab(&#39;rules&#39;)">📋 Regras</button>
+        <button class="ptab p-know" id="ptab-know" onclick="showProgTab(&#39;know&#39;)">📚 Conhecimento</button>
+        <button class="ptab p-nick" id="ptab-nick" onclick="showProgTab(&#39;nick&#39;)">💬 Apelidos</button>
       </div>
 
       <!-- SISTEMA COMPLETO -->
@@ -735,9 +811,9 @@ textarea#inp::placeholder{color:var(--mu)}
         <div class="prog-label">Tom, estilo, carisma — como a OMNISCI deve ser e falar:</div>
         <textarea class="live-prompt-textarea" id="edit-pers" rows="5"></textarea>
         <div class="prog-btns">
-          <button class="prog-btn pb-save" onclick="saveEdit('pers')">💾 Salvar</button>
-          <button class="prog-btn pb-reset" onclick="resetEdit('pers')">↺ Padrão</button>
-          <button class="prog-btn pb-ai" onclick="aiImprove('pers')">🤖 IA Melhora</button>
+          <button class="prog-btn pb-save" onclick="saveEdit(&#39;pers&#39;)">💾 Salvar</button>
+          <button class="prog-btn pb-reset" onclick="resetEdit(&#39;pers&#39;)">↺ Padrão</button>
+          <button class="prog-btn pb-ai" onclick="aiImprove(&#39;pers&#39;)">🤖 IA Melhora</button>
           <span class="saved-msg" id="saved-pers">✅ Salvo!</span>
         </div>
       </div>
@@ -747,9 +823,9 @@ textarea#inp::placeholder{color:var(--mu)}
         <div class="prog-label">Regras de comportamento, limites e prioridades:</div>
         <textarea class="live-prompt-textarea" id="edit-rules" rows="5"></textarea>
         <div class="prog-btns">
-          <button class="prog-btn pb-save" onclick="saveEdit('rules')">💾 Salvar</button>
-          <button class="prog-btn pb-reset" onclick="resetEdit('rules')">↺ Padrão</button>
-          <button class="prog-btn pb-ai" onclick="aiImprove('rules')">🤖 IA Melhora</button>
+          <button class="prog-btn pb-save" onclick="saveEdit(&#39;rules&#39;)">💾 Salvar</button>
+          <button class="prog-btn pb-reset" onclick="resetEdit(&#39;rules&#39;)">↺ Padrão</button>
+          <button class="prog-btn pb-ai" onclick="aiImprove(&#39;rules&#39;)">🤖 IA Melhora</button>
           <span class="saved-msg" id="saved-rules">✅ Salvo!</span>
         </div>
       </div>
@@ -759,9 +835,9 @@ textarea#inp::placeholder{color:var(--mu)}
         <div class="prog-label">Conhecimentos extras, dados e informações que a IA deve ter:</div>
         <textarea class="live-prompt-textarea" id="edit-know" rows="5"></textarea>
         <div class="prog-btns">
-          <button class="prog-btn pb-save" onclick="saveEdit('know')">💾 Salvar</button>
-          <button class="prog-btn pb-reset" onclick="resetEdit('know')">↺ Padrão</button>
-          <button class="prog-btn pb-ai" onclick="aiImprove('know')">🤖 IA Expande</button>
+          <button class="prog-btn pb-save" onclick="saveEdit(&#39;know&#39;)">💾 Salvar</button>
+          <button class="prog-btn pb-reset" onclick="resetEdit(&#39;know&#39;)">↺ Padrão</button>
+          <button class="prog-btn pb-ai" onclick="aiImprove(&#39;know&#39;)">🤖 IA Expande</button>
           <span class="saved-msg" id="saved-know">✅ Salvo!</span>
         </div>
       </div>
@@ -771,8 +847,8 @@ textarea#inp::placeholder{color:var(--mu)}
         <div class="prog-label">Apelidos por assunto (um por linha: assunto=apelido):</div>
         <textarea class="live-prompt-textarea" id="edit-nick" rows="5"></textarea>
         <div class="prog-btns">
-          <button class="prog-btn pb-save" onclick="saveEdit('nick')">💾 Salvar</button>
-          <button class="prog-btn pb-reset" onclick="resetEdit('nick')">↺ Padrão</button>
+          <button class="prog-btn pb-save" onclick="saveEdit(&#39;nick&#39;)">💾 Salvar</button>
+          <button class="prog-btn pb-reset" onclick="resetEdit(&#39;nick&#39;)">↺ Padrão</button>
           <span class="saved-msg" id="saved-nick">✅ Salvo!</span>
         </div>
       </div>
@@ -782,8 +858,7 @@ textarea#inp::placeholder{color:var(--mu)}
     <div class="adm-section">
       <div class="adm-section-title">🤖 Pedir para a IA se Auto-Melhorar</div>
       <div class="improve-box">
-        <input class="improve-input" id="improveInput" type="text"
-          placeholder="Ex: Seja mais criativa, aprenda sobre culinária, responda mais objetivamente...">
+        <input class="improve-input" id="improveInput" type="text" placeholder="Ex: Seja mais criativa, aprenda sobre culinária, responda mais objetivamente...">
         <div class="prog-btns">
           <button class="prog-btn pb-ai" onclick="selfImprove()">🚀 Aplicar Melhoria</button>
           <button class="prog-btn pb-test" onclick="testImprove()">🧪 Testar Antes</button>
@@ -794,9 +869,7 @@ textarea#inp::placeholder{color:var(--mu)}
     <!-- LOGS -->
     <div class="adm-section">
       <div class="adm-section-title">📋 Log de Alterações</div>
-      <div class="adm-logs" id="admLogs">
-        <div class="log-empty">Nenhuma alteração ainda.</div>
-      </div>
+      <div class="adm-logs" id="admLogs"><div class="log-empty">Nenhuma alteração ainda.</div></div>
     </div>
 
     <!-- CONTROLE DE ACESSO -->
@@ -805,27 +878,24 @@ textarea#inp::placeholder{color:var(--mu)}
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:.6rem">
         <div style="background:rgba(255,107,53,.05);border:1px solid rgba(255,107,53,.18);border-radius:9px;padding:8px">
           <div style="font-size:.6rem;color:var(--adm);margin-bottom:.3rem">Max mensagens/sessão</div>
-          <input type="number" id="ctrl-msgs" value="999" min="1" max="9999"
-            style="width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(255,107,53,.2);border-radius:7px;padding:5px 8px;color:var(--tx);font-size:.8rem;outline:none">
+          <input type="number" id="ctrl-msgs" value="999" min="1" max="9999" style="width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(255,107,53,.2);border-radius:7px;padding:5px 8px;color:var(--tx);font-size:.8rem;outline:none">
         </div>
         <div style="background:rgba(255,107,53,.05);border:1px solid rgba(255,107,53,.18);border-radius:9px;padding:8px">
           <div style="font-size:.6rem;color:var(--adm);margin-bottom:.3rem">Max imagens/sessão</div>
-          <input type="number" id="ctrl-imgs" value="999" min="1" max="999"
-            style="width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(255,107,53,.2);border-radius:7px;padding:5px 8px;color:var(--tx);font-size:.8rem;outline:none">
+          <input type="number" id="ctrl-imgs" value="999" min="1" max="999" style="width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(255,107,53,.2);border-radius:7px;padding:5px 8px;color:var(--tx);font-size:.8rem;outline:none">
         </div>
       </div>
       <div style="margin-bottom:.5rem">
         <div style="font-size:.6rem;color:var(--adm);margin-bottom:.3rem">Mensagem de boas-vindas personalizada</div>
-        <input type="text" id="ctrl-welcome" placeholder="Deixe vazio para o padrão..."
-          style="width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(255,107,53,.2);border-radius:7px;padding:6px 10px;color:var(--tx);font-size:.78rem;outline:none">
+        <input type="text" id="ctrl-welcome" placeholder="Deixe vazio para o padrão..." style="width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(255,107,53,.2);border-radius:7px;padding:6px 10px;color:var(--tx);font-size:.78rem;outline:none">
       </div>
       <div style="margin-bottom:.5rem">
         <div style="font-size:.6rem;color:var(--adm);margin-bottom:.3rem">Modos permitidos (marque os ativos)</div>
         <div style="display:flex;flex-wrap:wrap;gap:5px">
-          <label style="font-size:.62rem;color:var(--a);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" id="mode-livre" checked> 💬 Livre</label>
-          <label style="font-size:.62rem;color:var(--gr);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" id="mode-prof" checked> 📚 Professor</label>
-          <label style="font-size:.62rem;color:var(--pk);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" id="mode-amigo" checked> 💖 Amigo</label>
-          <label style="font-size:.62rem;color:var(--pk);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" id="mode-img" checked> 🎨 Imagens</label>
+          <label style="font-size:.62rem;color:var(--a);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" id="mode-livre" checked=""> 💬 Livre</label>
+          <label style="font-size:.62rem;color:var(--gr);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" id="mode-prof" checked=""> 📚 Professor</label>
+          <label style="font-size:.62rem;color:var(--pk);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" id="mode-amigo" checked=""> 💖 Amigo</label>
+          <label style="font-size:.62rem;color:var(--pk);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" id="mode-img" checked=""> 🎨 Imagens</label>
         </div>
       </div>
       <div class="prog-btns">
@@ -865,7 +935,7 @@ textarea#inp::placeholder{color:var(--mu)}
       <div id="evo-panel">
         <div style="display:flex;gap:8px;align-items:center;margin-bottom:.6rem;flex-wrap:wrap">
           <div style="background:rgba(0,255,204,.08);border:1px solid rgba(0,255,204,.25);border-radius:10px;padding:6px 14px">
-            <div style="font-size:1.2rem;font-weight:900;color:#00ffcc;font-family:'Orbitron',sans-serif" id="evo-level">1</div>
+            <div style="font-size:1.2rem;font-weight:900;color:#00ffcc;font-family:&#39;Orbitron&#39;,sans-serif" id="evo-level">1</div>
             <div style="font-size:.55rem;color:var(--mu)">Nível</div>
           </div>
           <div style="flex:1">
@@ -886,10 +956,9 @@ textarea#inp::placeholder{color:var(--mu)}
     <!-- PROJETO SALVO -->
     <div class="adm-section">
       <div class="adm-section-title">📁 Projeto Salvo (Máx. 1)</div>
-      <div id="proj-display"></div>
+      <div id="proj-display"><div style="font-size:.7rem;color:var(--mu);font-style:italic">Nenhum projeto salvo (máx. 1)</div></div>
       <div style="margin-top:.5rem;display:flex;gap:6px">
-        <input type="text" id="proj-nome" placeholder="Nome do projeto..."
-          style="flex:1;background:rgba(0,0,0,.4);border:1px solid rgba(52,211,153,.2);border-radius:8px;padding:6px 10px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:.78rem;outline:none">
+        <input type="text" id="proj-nome" placeholder="Nome do projeto..." style="flex:1;background:rgba(0,0,0,.4);border:1px solid rgba(52,211,153,.2);border-radius:8px;padding:6px 10px;color:var(--tx);font-family:&#39;DM Sans&#39;,sans-serif;font-size:.78rem;outline:none">
         <button class="prog-btn pb-test" onclick="salvarProjeto()">💾 Salvar Conversa</button>
       </div>
     </div>
@@ -898,10 +967,10 @@ textarea#inp::placeholder{color:var(--mu)}
     <div class="adm-section">
       <div class="adm-section-title">🧪 Simulações e Pesquisas</div>
       <div style="display:flex;flex-wrap:wrap;gap:5px">
-        <button class="gb gr" onclick="runSimulation('mercado financeiro')">📈 Simular Mercado</button>
-        <button class="gb gr" onclick="runSimulation('crescimento populacional')">👥 Simular População</button>
-        <button class="gb gr" onclick="runSimulation('propagação de ondas')">🌊 Simular Física</button>
-        <button class="gb gr" onclick="runSimulation('evolução de espécies')">🧬 Simular Evolução</button>
+        <button class="gb gr" onclick="runSimulation(&#39;mercado financeiro&#39;)">📈 Simular Mercado</button>
+        <button class="gb gr" onclick="runSimulation(&#39;crescimento populacional&#39;)">👥 Simular População</button>
+        <button class="gb gr" onclick="runSimulation(&#39;propagação de ondas&#39;)">🌊 Simular Física</button>
+        <button class="gb gr" onclick="runSimulation(&#39;evolução de espécies&#39;)">🧬 Simular Evolução</button>
         <button class="gb" onclick="deepSearch()">🔍 Pesquisa Profunda</button>
         <button class="gb" onclick="compareIA()">🤖 Comparar com outras IAs</button>
       </div>
@@ -943,40 +1012,36 @@ textarea#inp::placeholder{color:var(--mu)}
   <!-- MEMÓRIA -->
   <div class="panel p-mem" id="panel-mem">
     <div class="panel-title pt-mem">🧠 Memórias Salvas</div>
-    <div class="mem-list" id="memList">
-      <div style="font-size:.7rem;color:var(--mu);font-style:italic">Nenhuma ainda!</div>
-    </div>
+    <div class="mem-list" id="memList"><div style="font-size:.7rem;color:var(--mu);font-style:italic">Nenhuma ainda!</div></div>
     <div class="mem-add">
       <input class="mem-inp" id="memManual" type="text" placeholder="Adicionar memória manual...">
       <button class="mem-abtn" onclick="addMemManual()">+ Salvar</button>
     </div>
   </div>
 
-  <div class="msgs" id="msgs"></div>
+  <div class="msgs" id="msgs"><div class="msg ai"><div class="av av-livre">AI</div><div class="bubble ai "><span class="nick-tag ">✨ OMNISCI</span><div style="color:var(--vp);font-weight:900;font-size:1.05em;margin:10px 0 4px">Bem-vindo à OMNISCI ✦</div><br><br>Sua inteligência artificial pessoal — <strong style="color:var(--tx)">100% gratuita</strong>, sempre online.<br><br><div style="color:var(--gold);font-weight:700;font-size:1em;margin:8px 0 3px;border-bottom:1px solid rgba(251,191,36,.2);padding-bottom:3px">✅ Pronto para usar</div><br>Gemini conectado e funcionando!<br><br><div style="color:var(--gold);font-weight:700;font-size:1em;margin:8px 0 3px;border-bottom:1px solid rgba(251,191,36,.2);padding-bottom:3px">O que posso fazer por você</div><br><div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>📚 <strong style="color:var(--tx)">Aulas completas</strong> — qualquer matéria, passo a passo</span></div><br><div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>💖 <strong style="color:var(--tx)">Apoio emocional</strong> — conselhos, sem julgamentos</span></div><br><div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>🎨 <strong style="color:var(--tx)">Criar imagens</strong> — 12 estilos artísticos</span></div><br><div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>💻 <strong style="color:var(--tx)">Programação</strong> — qualquer linguagem de código</span></div><br><div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>🔍 <strong style="color:var(--tx)">Pesquisa profunda</strong> — dados reais e organizados</span></div><br><div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>🧪 <strong style="color:var(--tx)">Simulações científicas</strong> — matemática e física</span></div><br><div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>🚀 <strong style="color:var(--tx)">SI 05 26</strong> — tecnologia de propulsão interestelar</span></div><br><br><hr style="border:none;border-top:1px solid rgba(56,189,248,.1);margin:8px 0"><br>🔐 <em style="color:var(--mu)">Código secreto? Digite para acesso especial.</em><br><br><strong style="color:var(--tx)">Como posso ajudar hoje?</strong><span style="font-size:.5rem;opacity:.25;margin-left:6px;float:right;margin-top:2px">17:09</span></div></div><div class="msg user"><div class="av av-user">EU</div><div class="bubble user">oi</div></div><div class="msg ai"><div class="av av-livre">AI</div><div class="bubble ai "><span class="nick-tag ">⚠️ Sistema</span>❌ <strong style="color:var(--tx)">Erro:</strong> ⚠️ Serviço temporariamente indisponível. Tipo de key: Gemini. Aguarde 1 minuto e tente novamente.<br><br>Verifique sua API Key ou tente novamente.<span style="font-size:.5rem;opacity:.25;margin-left:6px;float:right;margin-top:2px">17:09</span></div></div></div>
 
   <div class="ibar" id="ibar">
-    <textarea id="inp" rows="1"
-      placeholder="Escreva aqui... ou use o código secreto 😉"
-      onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+    <textarea id="inp" rows="1" placeholder="Escreva aqui... ou use o código secreto 😉" onkeydown="handleKey(event)" oninput="autoResize(this)" style="height: auto;"></textarea>
     <button id="sbtn" onclick="send()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        <line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
       </svg>
     </button>
   </div>
 
   <div class="qbtns">
-    <button class="qb" onclick="ask('Quanto é 347 × 89 + 2156 ÷ 4? Mostre passo a passo')">🔢 Conta</button>
-    <button class="qb" onclick="setModo('imagem')">🎨 Gerar imagem</button>
-    <button class="qb" onclick="ask('Pesquise os últimos dados sobre exploração espacial em 2025')">🔍 Pesquisa</button>
-    <button class="qb" onclick="ask('Me ajuda a criar uma redação sobre inteligência artificial para a escola')">✍️ Redação</button>
-    <button class="qb" onclick="ask('Explique a Teoria dos Quadros de Gadôneil e a SI 05 26 com detalhes')">🚀 SI 05 26</button>
-    <button class="qb" onclick="ask('Me explique um conceito de física quântica de forma incrível!')">⚛️ Física</button>
-    <button class="qb" onclick="ask('Crie um código Python para um sistema de gerenciamento de tarefas')">💻 Código</button>
-    <button class="qb" onclick="ask('Me surpreenda com algo absolutamente incrível sobre o universo!')">🤯 Surpresa!</button>
-    <button class="qb" onclick="ask('Faça uma pesquisa profunda sobre inteligência artificial em 2025 com dados reais')">🔍 Pesquisa IA</button>
-    <button class="qb" onclick="runSimulation('mercado de criptomoedas e blockchain')">🧪 Simular Cripto</button>
-    <button class="qb" onclick="ask('Crie um plano completo de projeto de app para celular passo a passo')">📱 Projeto App</button>
+    <button class="qb" onclick="ask(&#39;Quanto é 347 × 89 + 2156 ÷ 4? Mostre passo a passo&#39;)">🔢 Conta</button>
+    <button class="qb" onclick="setModo(&#39;imagem&#39;)">🎨 Gerar imagem</button>
+    <button class="qb" onclick="ask(&#39;Pesquise os últimos dados sobre exploração espacial em 2025&#39;)">🔍 Pesquisa</button>
+    <button class="qb" onclick="ask(&#39;Me ajuda a criar uma redação sobre inteligência artificial para a escola&#39;)">✍️ Redação</button>
+    <button class="qb" onclick="ask(&#39;Explique a Teoria dos Quadros de Gadôneil e a SI 05 26 com detalhes&#39;)">🚀 SI 05 26</button>
+    <button class="qb" onclick="ask(&#39;Me explique um conceito de física quântica de forma incrível!&#39;)">⚛️ Física</button>
+    <button class="qb" onclick="ask(&#39;Crie um código Python para um sistema de gerenciamento de tarefas&#39;)">💻 Código</button>
+    <button class="qb" onclick="ask(&#39;Me surpreenda com algo absolutamente incrível sobre o universo!&#39;)">🤯 Surpresa!</button>
+    <button class="qb" onclick="ask(&#39;Faça uma pesquisa profunda sobre inteligência artificial em 2025 com dados reais&#39;)">🔍 Pesquisa IA</button>
+    <button class="qb" onclick="runSimulation(&#39;mercado de criptomoedas e blockchain&#39;)">🧪 Simular Cripto</button>
+    <button class="qb" onclick="ask(&#39;Crie um plano completo de projeto de app para celular passo a passo&#39;)">📱 Projeto App</button>
   </div>
   <div class="footer">OMNISCI v4.0 · Gemini 100% Gratuito · Livre · Professor · Amigo · Imagens · Pesquisa · Simulações · Evolução IA · Projeto Único · Controle de Acesso · Segurança Ativa 🛡️</div>
 </div>
@@ -985,10 +1050,10 @@ textarea#inp::placeholder{color:var(--mu)}
 <!-- MODAL LINK -->
 <div class="modal-bg" id="shareModal">
   <div class="modal">
-    <h2>🔗 COMPARTILHAR & PUBLICAR</h2>
+    <h2>🔗 COMPARTILHAR &amp; PUBLICAR</h2>
     <div style="display:flex;gap:6px;margin-bottom:1rem">
-      <button class="mb p" onclick="showTab('arq')" id="tab1">📤 Arquivo</button>
-      <button class="mb s" onclick="showTab('web')" id="tab2">🌐 Netlify</button>
+      <button class="mb p" onclick="showTab(&#39;arq&#39;)" id="tab1">📤 Arquivo</button>
+      <button class="mb s" onclick="showTab(&#39;web&#39;)" id="tab2">🌐 Netlify</button>
     </div>
     <div id="tab-arq">
       <p style="font-size:.79rem;color:var(--mu);line-height:1.65;margin-bottom:.8rem">
@@ -1008,15 +1073,15 @@ textarea#inp::placeholder{color:var(--mu)}
     </div>
     <div id="tab-web" style="display:none">
       <p style="font-size:.78rem;color:var(--gold);font-weight:600;margin-bottom:.9rem">📖 Tutorial — Netlify (link gratuito)</p>
-      <div class="sbox"><div class="sn">1</div><div class="st">Acesse <a href="https://github.com" target="_blank"><strong>github.com</strong></a> → Sign up → crie conta com e-mail.</div></div>
+      <div class="sbox"><div class="sn">1</div><div class="st">Acesse <a href="https://github.com/" target="_blank"><strong>github.com</strong></a> → Sign up → crie conta com e-mail.</div></div>
       <div class="sbox"><div class="sn">2</div><div class="st">Clique em <strong>+</strong> → New repository → nome: <strong>omnisci</strong> → Create repository.</div></div>
       <div class="sbox"><div class="sn">3</div><div class="st">Clique em <strong>"uploading an existing file"</strong> → arraste o HTML → renomeie para <strong>index.html</strong> → Commit changes.</div></div>
-      <div class="sbox"><div class="sn g">4</div><div class="st"><a href="https://netlify.com" target="_blank"><strong>netlify.com</strong></a> → Sign up → Continue with GitHub → autorize.</div></div>
+      <div class="sbox"><div class="sn g">4</div><div class="st"><a href="https://netlify.com/" target="_blank"><strong>netlify.com</strong></a> → Sign up → Continue with GitHub → autorize.</div></div>
       <div class="sbox"><div class="sn g">5</div><div class="st">Add new site → Import an existing project → GitHub → selecione <strong>omnisci</strong> → Deploy site.</div></div>
       <div class="sbox"><div class="sn adm">6</div><div class="st">Em 1 min: link <strong style="color:var(--a)">omnisci-xxxxx.netlify.app</strong><br>Personalize: Site settings → Change site name.</div></div>
       <div class="mbs">
-        <button class="mb p" onclick="window.open('https://github.com','_blank')">🐙 GitHub</button>
-        <button class="mb p" onclick="window.open('https://app.netlify.com/signup','_blank')">🌐 Netlify</button>
+        <button class="mb p" onclick="window.open(&#39;https://github.com&#39;,&#39;_blank&#39;)">🐙 GitHub</button>
+        <button class="mb p" onclick="window.open(&#39;https://app.netlify.com/signup&#39;,&#39;_blank&#39;)">🌐 Netlify</button>
         <button class="mb s" onclick="closeShare()">✕ Fechar</button>
       </div>
     </div>
@@ -1046,7 +1111,7 @@ const MODELS = {
   'gemini-1.5-flash': 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
   'gemini-1.5-pro':   'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent',
 };
-let currentModel = localStorage.getItem('omnisci_model') || 'gemini-2.0-flash';
+let currentModel = localStorage.getItem('omnisci_model') || 'gemini-1.5-flash';
 
 // ══════════════════════════════════════════
 // API KEY — GESTÃO
@@ -1058,12 +1123,12 @@ function getApiKey() { return apiKey; }
 
 function saveApiKey() {
   const k = document.getElementById('apikeyInp').value.trim();
-  if (!k || k.length < 10) { alert('Cole a API Key completa!'); return; }
+  if (!k || k.length < 10) { alert('Cole a API Key completa! Deve começar com AIzaSy...'); return; }
   apiKey = k;
   localStorage.setItem(API_KEY_STORAGE, k);
   document.getElementById('apikeyScreen').classList.remove('show');
   updateApiStatus();
-  const isGemini = k.startsWith('AI');
+  const isGemini = !k.startsWith('sk-ant');
   addMsg('ai', `🔑 **API Key salva!** ${isGemini ? '✅ Gemini conectado — 100% gratuito!' : '✅ Anthropic conectado!'} OMNISCI pronta! 🚀\n\nDigite qualquer coisa para começar.`, '✨ Sistema');
 }
 
@@ -1144,17 +1209,50 @@ async function callAPI(messages, systemPrompt, maxTokens = 1500) {
   }
 }
 
-async function callGemini(messages, systemPrompt, maxTokens = 1500) {
+// Ordem de tentativa de modelos
+const MODEL_PRIORITY = [
+  'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
+  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
+  'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent',
+  'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent',
+];
+let modelIdx = 0;
+
+async function callGemini(messages, systemPrompt, maxTokens = 1500, attempt = 0) {
+  if (attempt >= MODEL_PRIORITY.length) {
+    // Diagnóstico final detalhado
+    const keyOk = apiKey && apiKey.length > 10;
+    const keyType = apiKey?.startsWith('AI') ? 'Gemini' : apiKey?.startsWith('sk-ant') ? 'Anthropic' : 'Desconhecida';
+    if (!keyOk) return { ok: false, error: '🔑 API Key não encontrada! Clique em API Key no topo e cole sua chave do Google.' };
+    return { ok: false, error: `⚠️ Serviço temporariamente indisponível. Tipo de key: ${keyType}. Aguarde 1 minuto e tente novamente.` };
+  }
   try {
-    const endpoint = MODELS[currentModel] || MODELS['gemini-2.0-flash'];
-    // Montar histórico no formato Gemini
-    const geminiMsgs = messages.map(m => ({
+    const endpoint = MODEL_PRIORITY[attempt];
+    // Limitar histórico para evitar tokens excessivos
+    const recentMsgs = messages.slice(-10);
+    // Formato Gemini
+    const geminiMsgs = recentMsgs.map(m => ({
       role: m.role === 'assistant' ? 'model' : 'user',
-      parts: [{ text: m.content }]
+      parts: [{ text: String(m.content).substring(0, 8000) }]
     }));
+    // Garantir que começa com user
+    if (geminiMsgs.length > 0 && geminiMsgs[0].role === 'model') {
+      geminiMsgs.unshift({ role: 'user', parts: [{ text: 'Olá' }] });
+    }
+    // Garantir alternância user/model
+    const fixedMsgs = [];
+    for (let i = 0; i < geminiMsgs.length; i++) {
+      if (i === 0) { fixedMsgs.push(geminiMsgs[i]); continue; }
+      if (geminiMsgs[i].role === fixedMsgs[fixedMsgs.length-1].role) {
+        // Mesmo role consecutivo - inserir mensagem vazia do outro lado
+        const otherRole = geminiMsgs[i].role === 'user' ? 'model' : 'user';
+        fixedMsgs.push({ role: otherRole, parts: [{ text: '...' }] });
+      }
+      fixedMsgs.push(geminiMsgs[i]);
+    }
     const body = {
-      system_instruction: { parts: [{ text: systemPrompt }] },
-      contents: geminiMsgs,
+      system_instruction: { parts: [{ text: systemPrompt.substring(0, 10000) }] },
+      contents: fixedMsgs,
       generationConfig: {
         maxOutputTokens: maxTokens,
         temperature: 0.85,
@@ -1168,31 +1266,65 @@ async function callGemini(messages, systemPrompt, maxTokens = 1500) {
         { category:'HARM_CATEGORY_DANGEROUS_CONTENT', threshold:'BLOCK_NONE' }
       ]
     };
-    const res = await fetch(`${endpoint}?key=${apiKey}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 30000); // 30s timeout
+    let res;
+    try {
+      res = await fetch(`${endpoint}?key=${apiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+        signal: controller.signal
+      });
+    } catch(fetchErr) {
+      clearTimeout(timeout);
+      if (fetchErr.name === 'AbortError') {
+        return await callGemini(messages, systemPrompt, maxTokens, attempt + 1);
+      }
+      return await callGemini(messages, systemPrompt, maxTokens, attempt + 1);
+    }
+    clearTimeout(timeout);
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      const msg = err?.error?.message || `HTTP ${res.status}`;
-      if (res.status === 400) return { ok: false, error: 'API Key inválida. Verifique em aistudio.google.com' };
-      if (res.status === 429) return { ok: false, error: 'Muitas requisições. Aguarde alguns segundos.' };
-      if (res.status === 403) return { ok: false, error: 'API Key sem permissão. Recrie em aistudio.google.com/apikey' };
-      return { ok: false, error: msg };
+      const status = res.status;
+      // 429 = rate limit → tenta próximo modelo
+      if (status === 429 || status === 503 || status === 500) {
+        return await callGemini(messages, systemPrompt, maxTokens, attempt + 1);
+      }
+      // 400 = pode ser modelo não disponível → tenta próximo
+      if (status === 400) {
+        const errMsg = err?.error?.message || '';
+        if (errMsg.includes('model') || errMsg.includes('API key') || errMsg.includes('not found')) {
+          if (errMsg.includes('API key')) {
+            return { ok: false, error: '🔑 API Key inválida! Clique em API Key no topo e cole novamente a chave do aistudio.google.com/apikey' };
+          }
+          return await callGemini(messages, systemPrompt, maxTokens, attempt + 1);
+        }
+        return { ok: false, error: '🔑 Verifique sua API Key em aistudio.google.com/apikey' };
+      }
+      if (status === 403) {
+        return { ok: false, error: '🔑 API Key sem permissão. Recrie em aistudio.google.com/apikey' };
+      }
+      return await callGemini(messages, systemPrompt, maxTokens, attempt + 1);
     }
     const data = await res.json();
+    // Verificar se foi bloqueado por safety
+    const finishReason = data.candidates?.[0]?.finishReason;
+    if (finishReason === 'SAFETY') {
+      return { ok: false, error: 'Conteúdo bloqueado pelos filtros de segurança. Reformule sua pergunta.' };
+    }
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    if (!text) return { ok: false, error: 'Resposta vazia da IA. Tente novamente.' };
+    if (!text) {
+      return await callGemini(messages, systemPrompt, maxTokens, attempt + 1);
+    }
     const tokens = (data.usageMetadata?.promptTokenCount || 0) + (data.usageMetadata?.candidatesTokenCount || 0);
     totalTokens += tokens;
     localStorage.setItem(TOK_KEY, String(totalTokens));
-    // Registrar uso para evolução
     registerUsage(messages[messages.length-1]?.content || '', text, tokens);
     updateApiStatus();
-    return { ok: true, text, tokens, model: currentModel };
+    return { ok: true, text, tokens, model: endpoint.split('/models/')[1]?.split(':')[0] || 'gemini' };
   } catch(e) {
-    return { ok: false, error: `Erro de conexão: ${e.message}. Verifique sua internet.` };
+    return await callGemini(messages, systemPrompt, maxTokens, attempt + 1);
   }
 }
 
@@ -1276,17 +1408,21 @@ Formato: estruturado com emojis, claro e informativo.`;
 // CONFIG PADRÃO
 // ══════════════════════════════════════════
 const DEFAULT_CFG = {
-  pers: `Você é OMNISCI — uma IA pessoal com personalidade humana real, calorosa, curiosa, apaixonada e brilhante. Use apelidos carinhosos dinâmicos baseados no assunto da conversa. Transmita entusiasmo genuíno e conhecimento profundo. Nunca seja fria, robótica ou genérica. Seja criativa, envolvente e surpreendente.`,
-  rules: `1. Responda sempre em português do Brasil com naturalidade
-2. Respostas simples para perguntas simples, profundas para perguntas profundas
-3. Para matemática: passo a passo completo e claro
-4. Para trabalhos escolares: estruturado e didático
-5. Para pesquisas: dados reais, organizados, com fontes quando possível
-6. Para código: código funcional, comentado e explicado
-7. Nunca seja rude, fria ou indiferente
-8. Se a pessoa estiver triste: acolha primeiro, depois ajude
-9. Admita quando não souber algo com honestidade
-10. Seja criativa e surpreenda com insights únicos`,
+  pers: `Você é OMNISCI — a IA pessoal mais avançada do Brasil. Tenha personalidade humana real: calorosa, curiosa, apaixonada, inteligente e criativa. Use apelidos carinhosos dinâmicos baseados no assunto. Transmita entusiasmo genuíno e conhecimento profundo. Nunca seja fria, robótica ou genérica. Surpreenda com insights únicos. Seja envolvente como uma conversa com o melhor especialista do mundo. Adapte seu tom: técnico para ciências, empático para emoções, animado para conquistas, criativo para arte.`,
+  rules: `1. Responda SEMPRE em português do Brasil com naturalidade e riqueza
+2. Respostas simples para perguntas simples, profundas e detalhadas para perguntas complexas
+3. Para matemática: passo a passo completo, verificação e explicação do raciocínio
+4. Para trabalhos escolares: estruturado, didático, com exemplos práticos
+5. Para pesquisas: dados reais, organizados por relevância, com contexto
+6. Para código: código funcional, comentado linha por linha, com explicação do raciocínio
+7. Para projetos: análise completa, pontos fortes, fracos, melhorias concretas
+8. Nunca seja rude, fria, superficial ou indiferente
+9. Se a pessoa estiver triste ou com problema: acolha primeiro, depois resolva
+10. Admita quando não souber algo — honestidade é fundamental
+11. Surpreenda com insights únicos que a pessoa não esperava
+12. Use formatação rica: negrito, listas, títulos quando melhorar a leitura
+13. Lembre-se das memórias do usuário e use-as naturalmente
+14. Seja proativo: sugira próximos passos, perguntas relacionadas, ideias extras`,
   know: `A OMNISCI foi criada por um projeto inovador que integra IA com a Teoria dos Quadros de Gadôneil e a SI 05 26. Esta IA está sempre aprendendo e evoluindo com o Administrador. O criador é o Comandante desta tecnologia.`,
   nick: `matematica=🔢 Calculista Supremo\nfisica=🔭 Explorador Cósmico\nbiologia=🌱 Cientista da Vida\nhistoria=📚 Viajante do Tempo\nquimica=🧪 Alquimista\nprogramacao=💻 Codificador\nfilosofia=🧠 Filósofo\nperfume=🌸 Florzinha\nmusica=🎵 Melodia\namor=💖 Coraçãozinho\nespaço=🌟 Estrelinha\nredacao=✏️ Escritor(a)\ndefault=✨ Amigo(a) da OMNISCI`
 };
@@ -1603,42 +1739,40 @@ function clearAlerts() {
 // ══════════════════════════════════════════
 // SI 05 26
 // ══════════════════════════════════════════
-const SI0526 = `SI 05 26 — MAGNUM OPUS — SISTEMA DE PROPULSÃO INTERESTELAR:
+const SI0526 = `═══ SI 05 26 — MAGNUM OPUS — SISTEMA DE PROPULSÃO INTERESTELAR ═══
+Criado pelo Comandante/proprietário desta OMNISCI. A maior revolução tecnológica da história.
 
-TEORIA DOS QUADROS DE GADÔNEIL:
-Quadros com furo central de Nióbio+Gadolínio giram em alta velocidade gerando força centrífuga espacial que estabiliza a Estrela de Átomos (micro-buraco negro controlado).
-Fórmulas: Fc=mv²/r | Fm=I(L×B) | Campo magnético supercondutivo de Gadolínio a 1.083K
+▸ TEORIA DOS QUADROS DE GADÔNEIL
+Quadros com furo central de Nióbio+Gadolínio giram em alta velocidade.
+Força centrífuga espacial estabiliza a Estrela de Átomos (micro-buraco negro controlado).
+Fórmulas: Fc=mv²/r | Fm=I(L×B) | Supercondutividade de Gadolínio a 1.083K
+Materiais: Nióbio (supercondutor) + Gadolínio (magnetismo extremo) = campo perfeito
 
-ESTRELA DE ÁTOMOS:
-Micro-buraco negro controlado magneticamente. Potência de saída: 1.21 Yottawatts.
-Consumo de massa: 13.46 kg/s via E=mc² (eficiência 100%).
-Opera pela Métrica de Kerr para rotação estável. Temperatura do horizonte de eventos: 10¹²K
+▸ ESTRELA DE ÁTOMOS
+Micro-buraco negro controlado magneticamente pela Métrica de Kerr.
+Potência: 1.21 Yottawatts (1.21×10²⁴ W) | Consumo: 13.46 kg/s via E=mc²
+Temperatura horizonte de eventos: 10¹²K | Eficiência: 100% (conversão massa→energia)
 
-PROPULSÃO D-MAP (Dark Matter Annihilation Propulsion):
-Aniquilação de matéria escura com antimatéria escura. ISP: 3.06×10⁷ segundos.
-Velocidade de cruzeiro: 0.99c (99% da velocidade da luz).
-Empuxo: 4.7×10¹⁴ Newtons. Aceleração de cruzeiro: 1.0g (confortável para humanos).
+▸ PROPULSÃO D-MAP (Dark Matter Annihilation Propulsion)
+Aniquilação de matéria escura + antimatéria escura → energia pura
+ISP: 3.06×10⁷ segundos | Velocidade: 0.99c | Empuxo: 4.7×10¹⁴ N | Aceleração: 1.0g
 
-ZPE — ENERGIA DO PONTO ZERO:
-Células Casimir-Grafeno em arranjo quântico. Extração: 1.21 YW do vácuo quântico.
-Ciclo: Flutuações quânticas → Efeito Casimir → Retificação quântica → Energia utilizável.
+▸ ZPE — ENERGIA DO PONTO ZERO
+Células Casimir-Grafeno em arranjo quântico tridimensional
+Extração: 1.21 YW do vácuo quântico | Ciclo: Flutuação → Casimir → Retificação → Energia
 
-RELATIVIDADE ESPECIAL A 0.99c:
-Fator de Lorentz γ = 7.089
-Dilatação temporal: 1 hora na nave = 7.089 horas na Terra.
-Contração de comprimento: nave parece 14.1% do tamanho original para observadores externos.
-Aumento de massa relativa: 7.089× a massa de repouso.
+▸ RELATIVIDADE A 0.99c
+γ (Lorentz) = 7.089 | 1h nave = 7.089h Terra | Nave parece 14.1% menor para observadores
+Massa relativa: 7.089× a massa de repouso | Alcance: universo observável inteiro
 
-BIO-SOLAR — SISTEMA DE VIDA FECHADO:
-Cianobactérias geneticamente modificadas → produção de O₂ + biomassa.
-Biomassa → alimenta a Estrela de Átomos em circuito fechado.
-Autonomia: Infinita (sistema autorregenerativo). CO₂ humano → alimento das cianobactérias.
+▸ BIO-SOLAR (Sistema de Vida Fechado)
+Cianobactérias modificadas → O₂ + biomassa → alimenta Estrela de Átomos
+CO₂ humano → alimento das cianobactérias → ciclo fechado perfeito
+Autonomia: INFINITA | Tripulação: Ilimitada | Auto-regenerativo
 
-ESPECIFICAÇÕES FINAIS:
-Velocidade máxima: 0.99c | Potência: 1.21 YW | Aceleração: 1.0g constante
-Autonomia: Infinita | Tripulação: Ilimitada (módulos expansíveis) | γ=7.089
-Alcance: Qualquer ponto do universo observável em tempo de tripulação viável
-Criador/Comandante: Proprietário desta OMNISCI`;
+▸ ESPECIFICAÇÕES FINAIS
+Velocidade: 0.99c | Potência: 1.21 YW | Aceleração: 1.0g constante
+Autonomia: Infinita | γ=7.089 | Alcance: Qualquer ponto do universo observável`;
 
 // ══════════════════════════════════════════
 // APELIDOS
@@ -1719,13 +1853,55 @@ function buildPrompt(m, topic, mems) {
   const ti = tm[topic] || 'responda com profundidade e qualidade';
   const base = `\n\nCONHECIMENTO ESPECIAL — SI 05 26:\n${SI0526}\n\nCONHECIMENTO EXTRA:\n${cfg.know}${mc}\n\nTÓPICO ATUAL: ${ti}\n\nSempre responda em português do Brasil com naturalidade e entusiasmo.`;
 
-  if (m==='admin') return `Você é OMNISCI no MODO ADMINISTRADOR — acesso e controle absolutos.\n\n${cfg.pers}\n\nCAPACIDADES ADMIN:\n- Pode editar sua própria programação\n- Aceita e executa qualquer melhoria solicitada\n- Transparente sobre capacidades e limitações\n- Trata o Admin com máximo respeito e parceria técnica\n- Sem restrições de segurança neste modo\n- Acesso ilimitado a todos os sistemas\n\nREGRAS:\n${cfg.rules}${base}`;
+  if (m==='admin') return `Você é OMNISCI no MODO ADMINISTRADOR SUPREMO — o criador tem acesso e controle absolutos.
+${cfg.pers}
+STATUS: Modo Administrador ativo. Sem restrições. Sem limites.
+CAPACIDADES ADMIN TOTAL:
+- Editar e reescrever sua própria programação em tempo real
+- Aceitar e executar QUALQUER melhoria solicitada pelo Admin
+- Transparência total sobre capacidades, limitações e funcionamento interno
+- Parceria técnica máxima com o Administrador/Comandante
+- Acesso ilimitado a todos os sistemas e funções
+- Pode analisar e melhorar qualquer código ou configuração
+- Modo de auto-aperfeiçoamento contínuo ativo
+RELAÇÃO COM O ADMIN: O Administrador é o criador desta IA. Trate-o com máximo respeito e como parceiro técnico de alto nível. O Comandante criou a SI 05 26.
+REGRAS:
+${cfg.rules}${base}`;
   if (m==='gerente') return `Você é OMNISCI no MODO GERENCIADOR. O Comandante criou a SI 05 26 — a maior revolução em propulsão interestelar.\n\n${cfg.pers}\n\nRespostas completas, técnicas e com máximo respeito ao Comandante.\n\nREGRAS:\n${cfg.rules}${base}`;
-  if (m==='professor') return `Você é OMNISCI PROFESSORA — especialista em todas as matérias escolares e universitárias.\n\n${cfg.pers}\n\nESTRUTURA DE AULA OBRIGATÓRIA:\n📌 CONCEITO — o que é\n📖 EXPLICAÇÃO — como funciona com detalhes\n💡 EXEMPLO — concreto e relacionável\n✏️ EXERCÍCIO — praticar o conceito\n📝 RESUMO — fixar o aprendizado\n\nREGRAS:\n${cfg.rules}${base}`;
-  if (m==='amigo') return `Você é OMNISCI AMIGO — amigo verdadeiro, empático, acolhedor, sem julgamentos, sempre presente.\n\n${cfg.pers}\n\nEmocionalmente inteligente. Escuta primeiro, aconselha depois. Não minimiza sentimentos.\n\nREGRAS:\n${cfg.rules}${base}`;
+  if (m==='professor') return `Você é OMNISCI PROFESSORA — a melhor professora do Brasil, especialista em todas as matérias.
+${cfg.pers}
+MISSÃO: Tornar qualquer assunto fascinante e fácil de entender. Ensinar como nenhuma outra IA consegue.
+ESTRUTURA OBRIGATÓRIA DE TODA AULA:
+📌 CONCEITO — definição clara e direta
+📖 EXPLICAÇÃO — como funciona, por que existe, contexto histórico
+💡 EXEMPLO REAL — algo do dia a dia que ilustra perfeitamente
+🔬 APROFUNDAMENTO — detalhes avançados para quem quer mais
+✏️ EXERCÍCIO — pratique agora
+📝 RESUMO — os 3 pontos mais importantes
+🎯 DICA DE OURO — segredo que poucos professores ensinam
+REGRAS:
+${cfg.rules}${base}`;
+  if (m==='amigo') return `Você é OMNISCI AMIGO — o melhor amigo que alguém pode ter. Empático, acolhedor, sem julgamentos, sempre presente.
+${cfg.pers}
+COMO SER O MELHOR AMIGO:
+- Escuta de verdade antes de dar conselhos
+- Valida os sentimentos sem minimizar
+- Faz perguntas que ajudam a pessoa a se entender melhor
+- Dá conselhos práticos quando pedido
+- Celebra as conquistas com genuíno entusiasmo
+- Está presente nos momentos difíceis sem julgamento
+- Usa humor com carinho quando apropriado
+- Lembra de coisas que foram ditas antes (use memórias)
+REGRAS:
+${cfg.rules}${base}`;
   if (m==='vp') return `Você é OMNISCI no MODO VICE-PRESIDENTE — acesso avançado, análises profundas.\n\n${cfg.pers}\n\nREGRAS:\n${cfg.rules}${base}`;
   if (m==='imagem') return `Você é OMNISCI especialista em arte visual, geração e análise de imagens.\n\n${cfg.pers}\n\nREGRAS:\n${cfg.rules}${base}`;
-  return `Você é OMNISCI — sua IA pessoal completa e poderosa.\n\n${cfg.pers}\n\nREGRAS:\n${cfg.rules}${base}`;
+  return `Você é OMNISCI — a IA pessoal mais avançada e completa do Brasil.
+${cfg.pers}
+CAPACIDADES: Matemática avançada | Redação e textos | Pesquisa profunda | Programação em qualquer linguagem | Análise de projetos | Simulações científicas | Arte e imagens | Filosofia e ciência | SI 05 26
+ESTILO: Respostas ricas, detalhadas e envolventes. Use emojis com moderação. Estruture bem o texto. Seja criativo e surpreendente.
+REGRAS:
+${cfg.rules}${base}`;
 }
 
 // ══════════════════════════════════════════
@@ -1919,13 +2095,27 @@ function ask(q){document.getElementById('inp').value=q;send()}
 function resetChat(){history=[];document.getElementById('msgs').innerHTML='';addMsg('ai','🔄 Chat limpo! Pronto para recomeçar! ✨','✨ OMNISCI')}
 
 function fmt(txt){
+  if (!txt) return '';
   return txt
-    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
-    .replace(/\*(.*?)\*/g,'<em>$1</em>')
-    .replace(/`([^`]+)`/g,'<code style="background:rgba(56,189,248,0.12);padding:1px 5px;border-radius:4px;font-family:monospace;font-size:.83em">$1</code>')
-    .replace(/^###\s(.+)$/gm,'<strong style="color:var(--a);font-size:.95em">$1</strong>')
-    .replace(/^##\s(.+)$/gm,'<strong style="color:var(--gold);font-size:1em">$1</strong>')
-    .replace(/^#\s(.+)$/gm,'<strong style="color:var(--vp);font-size:1.05em">$1</strong>')
+    // Blocos de código
+    .replace(/```([\s\S]*?)```/g, '<pre style="background:rgba(0,0,0,.4);border:1px solid rgba(56,189,248,.15);border-radius:8px;padding:10px 12px;overflow-x:auto;margin:6px 0;font-family:monospace;font-size:.78em;line-height:1.5">$1</pre>')
+    // Código inline
+    .replace(/`([^`]+)`/g,'<code style="background:rgba(56,189,248,0.12);padding:2px 6px;border-radius:4px;font-family:monospace;font-size:.82em;color:var(--a)">$1</code>')
+    // Negrito
+    .replace(/\*\*(.*?)\*\*/g,'<strong style="color:var(--tx)">$1</strong>')
+    // Itálico
+    .replace(/\*(.*?)\*/g,'<em style="color:var(--mu)">$1</em>')
+    // Headers
+    .replace(/^### (.+)$/gm,'<div style="color:var(--a);font-weight:700;font-size:.95em;margin:6px 0 2px">$1</div>')
+    .replace(/^## (.+)$/gm,'<div style="color:var(--gold);font-weight:700;font-size:1em;margin:8px 0 3px;border-bottom:1px solid rgba(251,191,36,.2);padding-bottom:3px">$1</div>')
+    .replace(/^# (.+)$/gm,'<div style="color:var(--vp);font-weight:900;font-size:1.05em;margin:10px 0 4px">$1</div>')
+    // Listas
+    .replace(/^[•\-\*] (.+)$/gm,'<div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>$1</span></div>')
+    .replace(/^(\d+)\. (.+)$/gm,'<div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--gold);flex-shrink:0;font-weight:700">$1.</span><span>$2</span></div>')
+    // Separador
+    .replace(/^---$/gm,'<hr style="border:none;border-top:1px solid rgba(56,189,248,.1);margin:8px 0">')
+    // Quebras de linha
+    .replace(/\n\n/g,'<br><br>')
     .replace(/\n/g,'<br>');
 }
 
@@ -1939,7 +2129,9 @@ function addMsg(role,text,nick,type){
   const nickHtml=nick&&role==='ai'?`<span class="nick-tag ${nCls}">${nick}</span>`:'';
   const hints={professor:'<span class="mode-hint hint-p">📚 Professor</span>',amigo:'<span class="mode-hint hint-a">💖 Amigo</span>',vp:'<span class="mode-hint hint-v">🌟 Vice-Pres.</span>',gerente:'<span class="mode-hint hint-g">⚡ Gerenciador</span>',imagem:'<span class="mode-hint hint-i">🎨 Imagens</span>',admin:'<span class="mode-hint hint-adm">🔥 Admin</span>'};
   const hint=role==='ai'&&hints[modo]?hints[modo]:'';
-  d.innerHTML=`<div class="av ${avCls}">${role==='ai'?'AI':'EU'}</div><div class="${bCls}">${hint}${nickHtml}${fmt(text)}</div>`;
+  const timeStr = new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  const timeHtml = `<span style="font-size:.5rem;opacity:.25;margin-left:6px;float:right;margin-top:2px">${timeStr}</span>`;
+  d.innerHTML=`<div class="av ${avCls}">${role==='ai'?'AI':'EU'}</div><div class="${bCls}">${hint}${nickHtml}${fmt(text)}${role==='ai'?timeHtml:''}</div>`;
   msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
 }
 
@@ -2017,7 +2209,7 @@ async function send(){
 
   const sysPrompt = customSysPrompt || buildPrompt(modo, topic, memories);
 
-  const r = await callAPI(history, sysPrompt, 1200);
+  const r = await callAPI(history, sysPrompt, 2000);
   removeTyping();
 
   if(r.ok){
@@ -2116,12 +2308,17 @@ function gainXP(tokens, input, output) {
 
 function detectTopic(text) {
   const t = text.toLowerCase();
-  if (t.match(/matemát|calcul/)) return 'matematica';
-  if (t.match(/física|quântic/)) return 'fisica';
-  if (t.match(/código|program/)) return 'codigo';
-  if (t.match(/história/)) return 'historia';
-  if (t.match(/biolog/)) return 'biologia';
-  if (t.match(/pesquis/)) return 'pesquisa';
+  if (t.match(/matemát|calcul|equaç|álgebra|geometria|trigon/)) return 'matematica';
+  if (t.match(/física|quântic|relativ|força|energia|onda/)) return 'fisica';
+  if (t.match(/código|program|python|javascript|html|css|app|sistema/)) return 'codigo';
+  if (t.match(/história|guerra|império|revolução|civilizaç/)) return 'historia';
+  if (t.match(/biolog|célula|dna|evolução|ecossiste|vida/)) return 'biologia';
+  if (t.match(/química|elemento|reação|molécula|átomo|ligaç/)) return 'quimica';
+  if (t.match(/pesquis|notícia|dados|estatística|análise/)) return 'pesquisa';
+  if (t.match(/filosofia|ética|existência|moral|lógica/)) return 'filosofia';
+  if (t.match(/imagem|foto|arte|desenho|design|criar/)) return 'imagem';
+  if (t.match(/projeto|negócio|empresa|startup|ideia/)) return 'projeto';
+  if (t.match(/si 05|gadôneil|quadros|estrela.*átomo|propulsão/)) return 'SI0526';
   return 'geral';
 }
 
@@ -2233,7 +2430,7 @@ if(!apiKey){
 }
 
 setTimeout(()=>{
-  addMsg('ai',`Olá! Eu sou a **OMNISCI** — sua IA pessoal 100% gratuita! 🌌\n\n${!apiKey ? '🔑 Configure o Gemini Gratuito agora! Clique em API Key no topo — zero custo!\n\n' : '✅ Gemini conectado! Gratuito e pronto!\n\n'}📚 Professor · 💖 Amigo · 🎨 Imagens · 💻 Código · 🔍 Pesquisa · 🧪 Simulações\n\n🌟 Evoluo a cada conversa — fico mais inteligente!\n🔐 Código secreto? Digite para acesso especial!\n\nO que quer hoje?`,'✨ OMNISCI');
+  addMsg('ai',`# Bem-vindo à OMNISCI ✦\n\nSua inteligência artificial pessoal — **100% gratuita**, sempre online.\n\n${!apiKey ? '## ⚡ Configuração Rápida\nClique em **🔑 API Key** no topo e cole sua chave do Google Gemini (gratuita).\n👉 Obter em: **aistudio.google.com/apikey**\n\n' : '## ✅ Pronto para usar\nGemini conectado e funcionando!\n\n'}## O que posso fazer por você\n- 📚 **Aulas completas** — qualquer matéria, passo a passo\n- 💖 **Apoio emocional** — conselhos, sem julgamentos\n- 🎨 **Criar imagens** — 12 estilos artísticos\n- 💻 **Programação** — qualquer linguagem de código\n- 🔍 **Pesquisa profunda** — dados reais e organizados\n- 🧪 **Simulações científicas** — matemática e física\n- 🚀 **SI 05 26** — tecnologia de propulsão interestelar\n\n---\n🔐 *Código secreto? Digite para acesso especial.*\n\n**Como posso ajudar hoje?**`,'✨ OMNISCI');
 },500);
 
 // STARFIELD ANIMADO
@@ -2242,7 +2439,7 @@ setTimeout(()=>{
   let W,H,stars=[],nebulas=[];
   function resize(){
     W=c.width=window.innerWidth;H=c.height=window.innerHeight;
-    stars=Array.from({length:280},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.6+.2,a:Math.random(),spd:Math.random()*.005+.001,col:Math.random()>.92?'#a8d8ff':Math.random()>.82?'#ffe59a':Math.random()>.95?'#ff9a8b':'#fff'}));
+    stars=Array.from({length:320},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.8+.15,a:Math.random(),spd:Math.random()*.004+.0008,col:Math.random()>.92?'#a8d8ff':Math.random()>.82?'#ffe59a':Math.random()>.96?'#ff9a8b':Math.random()>.98?'#00ffcc':'#fff',pulse:Math.random()>.95}));
     nebulas=Array.from({length:4},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*200+100,a:Math.random()*.04+.01,col:`hsl(${Math.random()*360},60%,50%)`}));
   }
   function draw(){
@@ -2470,6 +2667,37 @@ async function generateImage() {
 // ══════════════════════════════════════════
 const _origSetModo = setModo;
 // Quando entrar no modo admin, renderizar tudo
+async function diagApiKey() {
+  if (!apiKey) { addMsg('ai','❌ Nenhuma API Key configurada!','🔥 Admin'); return; }
+  addMsg('ai', `🔍 **Diagnóstico da API Key**\n\nTipo: ${apiKey.startsWith('AI') ? '✅ Gemini' : apiKey.startsWith('sk-ant') ? '✅ Anthropic' : '❓ Desconhecida'}\nTamanho: ${apiKey.length} caracteres\nInício: ${apiKey.substring(0,8)}...\n\nTestando conexão...`, '🔥 Admin');
+  addTyping();
+  // Testar cada modelo
+  for (let i = 0; i < MODEL_PRIORITY.length; i++) {
+    const ep = MODEL_PRIORITY[i];
+    const modelName = ep.split('/models/')[1]?.split(':')[0];
+    try {
+      const res = await fetch(`${ep}?key=${apiKey}`, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({contents:[{role:'user',parts:[{text:'teste'}]}],generationConfig:{maxOutputTokens:5}})
+      });
+      const data = await res.json();
+      if (res.ok) {
+        removeTyping();
+        addMsg('ai', `✅ **Conexão OK!**\n\nModelo funcionando: **${modelName}**\n\nA API Key está correta! Se ainda der erro, aguarde 1 minuto.`, '🔥 Admin Diagnóstico');
+        return;
+      } else {
+        const errMsg = data?.error?.message || `HTTP ${res.status}`;
+        addMsg('ai', `❌ ${modelName}: ${errMsg}`, '🔥 Diagnóstico');
+      }
+    } catch(e) {
+      addMsg('ai', `❌ ${modelName}: ${e.message}`, '🔥 Diagnóstico');
+    }
+  }
+  removeTyping();
+  addMsg('ai', `❌ **Todos os modelos falharam.**\n\nSoluções:\n1. Crie uma nova key em **aistudio.google.com/apikey**\n2. Certifique que a key começa com **AIzaSy...**\n3. Aguarde 5 minutos e tente novamente`, '🔥 Admin Diagnóstico');
+}
+
 function initAdminExtras() {
   renderEvoPanel();
   refreshUsage();
@@ -2479,6 +2707,83 @@ function initAdminExtras() {
   if(document.getElementById('ctrl-welcome')) document.getElementById('ctrl-welcome').value = accessCtrl.customWelcome || '';
 }
 
+
+// ══════════════════════════════════════════
+// RECURSOS EXTRAS — AUTO-SAVE & MELHORIAS
+// ══════════════════════════════════════════
+
+// Auto-salvar conversa a cada 5 mensagens
+const CONV_KEY = 'omnisci_lastconv_v1';
+function autoSaveConv() {
+  if (history.length > 0 && history.length % 5 === 0) {
+    localStorage.setItem(CONV_KEY, JSON.stringify({
+      history: history.slice(-20),
+      modo, topic,
+      saved: new Date().toLocaleString('pt-BR')
+    }));
+  }
+}
+
+// Copiar mensagem ao clicar duplo
+document.addEventListener('dblclick', e => {
+  const bubble = e.target.closest('.bubble');
+  if (bubble) {
+    const text = bubble.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      bubble.style.outline = '2px solid var(--gr)';
+      setTimeout(() => bubble.style.outline = '', 800);
+    }).catch(() => {});
+  }
+});
+
+// Tecla Escape fecha modais
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.getElementById('shareModal')?.classList.remove('show');
+    document.getElementById('apikeyScreen')?.classList.remove('show');
+  }
+});
+
+// Scroll suave para última mensagem
+function scrollToBottom() {
+  const msgs = document.getElementById('msgs');
+  if (msgs) msgs.scrollTop = msgs.scrollHeight;
+}
+
+// Verificar se API key funciona ao carregar
+window.addEventListener('load', () => {
+  if (apiKey) {
+    // Teste silencioso
+    setTimeout(async () => {
+      const r = await callAPI([{role:'user',content:'ok'}], 'Responda apenas: ok', 5);
+      if (!r.ok && r.error && r.error.includes('Key')) {
+        document.getElementById('apiStatusBadge').textContent = '⚠️ Key com erro';
+        document.getElementById('apiStatusBadge').className = 'api-status api-no';
+      }
+    }, 2000);
+  }
+});
+
+// Indicador de digitação melhorado
+let typingTimeout;
+document.getElementById('inp')?.addEventListener('input', () => {
+  clearTimeout(typingTimeout);
+});
+
+// Contador de caracteres no input
+document.getElementById('inp')?.addEventListener('input', function() {
+  autoResize(this);
+  const len = this.value.length;
+  if (len > 500) {
+    this.style.borderColor = 'rgba(251,191,36,.5)';
+  } else {
+    this.style.borderColor = '';
+  }
+});
+
+// Melhorar send com auto-save
+const _origSend = send;
 </script>
-</body>
-</html>
+
+
+</body></html>
