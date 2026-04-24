@@ -2,10 +2,14 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <meta name="theme-color" content="#02030c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="description" content="OMNISCI — Sua IA Pessoal 100% Gratuita com Gemini">
 <title>OMNISCI — Sua IA Pessoal</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -13,12 +17,33 @@
   --a:#38bdf8;--a2:#818cf8;--gold:#fbbf24;--gr:#34d399;--pk:#f472b6;
   --vp:#a78bfa;--red:#f87171;--adm:#ff6b35;--adm2:#ff3cac;--adm3:#ffd700;
   --tx:#dde8ff;--mu:#5a7090;--bd:rgba(56,189,248,0.14);
+  --evo:#00ffcc;--evo2:#7fff00;
 }
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
 ::selection{background:rgba(56,189,248,0.25);color:#fff}
 canvas#bg{position:fixed;inset:0;z-index:0;pointer-events:none}
 .app{position:relative;z-index:1;display:flex;flex-direction:column;min-height:100vh}
+
+/* API KEY SETUP */
+.apikey-screen{display:none;position:fixed;inset:0;z-index:998;
+  background:rgba(2,3,12,.98);align-items:center;justify-content:center;
+  flex-direction:column;gap:1.2rem;text-align:center;padding:2rem;backdrop-filter:blur(12px)}
+.apikey-screen.show{display:flex}
+.apikey-box{background:rgba(8,12,40,.98);border:1px solid rgba(255,107,53,.4);border-radius:20px;
+  padding:2rem;max-width:480px;width:100%}
+.apikey-title{font-family:'Orbitron',sans-serif;font-size:1rem;color:var(--adm);letter-spacing:3px;margin-bottom:.8rem}
+.apikey-desc{font-size:.8rem;color:var(--mu);line-height:1.7;margin-bottom:1.2rem}
+.apikey-inp{width:100%;background:rgba(0,0,0,.5);border:1px solid rgba(255,107,53,.3);
+  border-radius:10px;padding:11px 14px;color:var(--tx);font-family:'DM Sans',sans-serif;
+  font-size:.85rem;outline:none;margin-bottom:.8rem}
+.apikey-inp:focus{border-color:var(--adm)}
+.apikey-btn{width:100%;padding:10px;border-radius:10px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--adm),var(--adm2));color:#fff;
+  font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600}
+.apikey-hint{font-size:.68rem;color:var(--mu);line-height:1.6;margin-top:.6rem}
+.apikey-hint a{color:var(--a);text-decoration:none}
+.apikey-skip{font-size:.68rem;color:var(--mu);margin-top:.5rem;cursor:pointer;text-decoration:underline}
 
 /* BLOQUEIO */
 .blocked-screen{display:none;position:fixed;inset:0;z-index:999;
@@ -71,6 +96,11 @@ header.hadm{border-bottom-color:rgba(255,107,53,.8)!important;
   padding:3px 9px;border-radius:20px;cursor:pointer;font-size:.54rem;
   font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap}
 .hbtn:hover{background:rgba(56,189,248,.18)}
+.hbtn.adm-key{background:rgba(255,107,53,.1);border-color:rgba(255,107,53,.35);color:var(--adm)}
+.hbtn.adm-key:hover{background:rgba(255,107,53,.25)}
+.api-status{font-size:.54rem;padding:3px 9px;border-radius:20px;border:1px solid;white-space:nowrap}
+.api-ok{background:rgba(52,211,153,.1);border-color:rgba(52,211,153,.35);color:var(--gr)}
+.api-no{background:rgba(248,113,113,.1);border-color:rgba(248,113,113,.35);color:var(--red)}
 .alert-badge{background:rgba(248,113,113,.15);border:1px solid rgba(248,113,113,.4);
   color:var(--red);padding:3px 9px;border-radius:20px;font-size:.54rem;
   cursor:pointer;font-family:'DM Sans',sans-serif;display:none;animation:badm 1.5s infinite}
@@ -121,7 +151,7 @@ header.hadm{border-bottom-color:rgba(255,107,53,.8)!important;
 .tp.sp:hover,.tp.sp.on{background:rgba(251,191,36,.15);border-color:var(--gold);color:var(--gold)}
 
 /* CHAT */
-.chat-wrap{flex:1;max-width:880px;width:100%;margin:0 auto;padding:0 .9rem 1rem;display:flex;flex-direction:column;gap:7px}
+.chat-wrap{flex:1;max-width:900px;width:100%;margin:0 auto;padding:0 .9rem 1rem;display:flex;flex-direction:column;gap:7px}
 
 /* PAINÉIS */
 .panel{border-radius:13px;padding:.8rem .95rem;margin-bottom:5px;display:none}
@@ -167,58 +197,78 @@ header.hadm{border-bottom-color:rgba(255,107,53,.8)!important;
 .gb:hover{background:rgba(251,191,36,.18);border-color:var(--gold)}
 .gb.red{background:rgba(248,113,113,.08);border-color:rgba(248,113,113,.25);color:var(--red)}
 .gb.red:hover{background:rgba(248,113,113,.2)}
+.gb.adm-c{background:rgba(255,107,53,.1);border-color:rgba(255,107,53,.3);color:var(--adm)}
+.gb.adm-c:hover{background:rgba(255,107,53,.22)}
 
-/* PAINEL ADMINISTRADOR */
-.adm-section{margin-bottom:1rem}
+/* ═══ PAINEL ADMINISTRADOR ═══ */
+.adm-section{margin-bottom:1.2rem}
 .adm-section-title{font-size:.65rem;color:var(--adm);letter-spacing:2px;text-transform:uppercase;
-  margin-bottom:.5rem;display:flex;align-items:center;gap:6px}
+  margin-bottom:.6rem;display:flex;align-items:center;gap:6px;font-weight:600}
 .adm-section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(255,107,53,.3),transparent)}
 
-/* EDITOR DE PROGRAMAÇÃO */
-.prog-editor{position:relative}
-.prog-tabs{display:flex;gap:5px;margin-bottom:.6rem;flex-wrap:wrap}
+/* ── LIVE SYSTEM PROMPT VIEWER ── */
+.live-prompt-wrap{position:relative}
+.live-prompt-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;flex-wrap:wrap;gap:6px}
+.live-prompt-label{font-size:.65rem;color:var(--mu);line-height:1.5;flex:1}
+.live-btns{display:flex;gap:5px;flex-wrap:wrap}
+.lbtn{font-size:.62rem;padding:5px 11px;border-radius:9px;border:none;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-weight:500;transition:all .15s}
+.lbtn-copy{background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.25);color:var(--a)}
+.lbtn-copy:hover{background:rgba(56,189,248,.25)}
+.lbtn-save{background:linear-gradient(135deg,var(--adm),var(--adm2));color:#fff}
+.lbtn-save:hover{opacity:.85}
+.lbtn-reset{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25);color:var(--red)}
+.lbtn-reset:hover{background:rgba(248,113,113,.2)}
+.lbtn-ai{background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.25);color:var(--vp)}
+.lbtn-ai:hover{background:rgba(167,139,250,.22)}
+.lbtn-test{background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.25);color:var(--gr)}
+.lbtn-test:hover{background:rgba(52,211,153,.22)}
+
+.live-prompt-textarea{width:100%;background:rgba(0,0,0,.55);border:1px solid rgba(255,107,53,.25);
+  border-radius:11px;padding:12px 14px;color:var(--tx);font-family:'DM Sans',sans-serif;
+  font-size:.8rem;resize:vertical;outline:none;line-height:1.65;min-height:130px;
+  transition:border-color .2s}
+.live-prompt-textarea:focus{border-color:rgba(255,107,53,.6);box-shadow:0 0 12px rgba(255,107,53,.08)}
+.live-prompt-preview{background:rgba(0,0,0,.3);border:1px solid rgba(255,107,53,.12);
+  border-radius:11px;padding:12px 14px;font-size:.75rem;color:var(--mu);
+  line-height:1.65;max-height:200px;overflow-y:auto;white-space:pre-wrap;word-break:break-word}
+.prompt-tabs{display:flex;gap:5px;margin-bottom:.7rem;flex-wrap:wrap}
 .ptab{font-size:.62rem;padding:5px 12px;border-radius:10px;cursor:pointer;border:none;
   font-family:'DM Sans',sans-serif;font-weight:500;transition:all .18s}
-.ptab.p-pers{background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.25);color:var(--adm)}
-.ptab.p-rules{background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.25);color:var(--a)}
-.ptab.p-know{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.25);color:var(--gr)}
+.ptab.p-sys{background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.25);color:var(--adm)}
+.ptab.p-pers{background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.25);color:var(--a)}
+.ptab.p-rules{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.25);color:var(--gr)}
+.ptab.p-know{background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.25);color:var(--vp)}
 .ptab.p-nick{background:rgba(244,114,182,.1);border:1px solid rgba(244,114,182,.25);color:var(--pk)}
 .ptab.sel{transform:scale(1.05)}
-.ptab.p-pers.sel{background:rgba(255,107,53,.25);border-color:var(--adm)}
-.ptab.p-rules.sel{background:rgba(56,189,248,.25);border-color:var(--a)}
-.ptab.p-know.sel{background:rgba(52,211,153,.25);border-color:var(--gr)}
+.ptab.p-sys.sel{background:rgba(255,107,53,.28);border-color:var(--adm)}
+.ptab.p-pers.sel{background:rgba(56,189,248,.25);border-color:var(--a)}
+.ptab.p-rules.sel{background:rgba(52,211,153,.25);border-color:var(--gr)}
+.ptab.p-know.sel{background:rgba(167,139,250,.25);border-color:var(--vp)}
 .ptab.p-nick.sel{background:rgba(244,114,182,.25);border-color:var(--pk)}
 .prog-area{display:none}.prog-area.show{display:block}
-.prog-label{font-size:.65rem;color:var(--mu);margin-bottom:.4rem;line-height:1.5}
-.prog-textarea{width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(255,107,53,.2);
-  border-radius:10px;padding:10px 12px;color:var(--tx);font-family:'DM Sans',sans-serif;
-  font-size:.8rem;resize:vertical;outline:none;line-height:1.6;min-height:90px}
-.prog-textarea:focus{border-color:rgba(255,107,53,.5)}
-.prog-btns{display:flex;gap:6px;margin-top:.5rem;flex-wrap:wrap}
-.prog-btn{font-size:.67rem;padding:6px 13px;border-radius:9px;border:none;cursor:pointer;
-  font-family:'DM Sans',sans-serif;font-weight:500;transition:all .18s}
-.pb-save{background:linear-gradient(135deg,var(--adm),var(--adm2));color:#fff}
-.pb-save:hover{opacity:.85}
-.pb-reset{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25);color:var(--red)}
-.pb-reset:hover{background:rgba(248,113,113,.2)}
-.pb-test{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.25);color:var(--gr)}
-.pb-test:hover{background:rgba(52,211,153,.2)}
-.pb-ai{background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.25);color:var(--vp)}
-.pb-ai:hover{background:rgba(167,139,250,.2)}
-.saved-msg{font-size:.68rem;color:var(--gr);display:none;animation:fi .3s ease}
-.saved-msg.show{display:block}
+.prog-label{font-size:.65rem;color:var(--mu);margin-bottom:.5rem;line-height:1.5}
+.saved-msg{font-size:.68rem;color:var(--gr);display:none;animation:fi .3s ease;margin-top:.4rem}
+.saved-msg.show{display:inline-block}
 
-/* PROMPT DE MELHORIA */
+/* TOKEN COUNTER */
+.token-bar{display:flex;gap:10px;align-items:center;background:rgba(0,0,0,.3);
+  border:1px solid rgba(255,107,53,.12);border-radius:8px;padding:5px 10px;margin-bottom:.6rem;flex-wrap:wrap}
+.tok{font-size:.62rem;color:var(--mu)}
+.tok span{color:var(--adm);font-weight:600}
+
+/* MELHORA */
 .improve-box{background:rgba(255,107,53,.04);border:1px solid rgba(255,107,53,.18);
   border-radius:10px;padding:.8rem}
 .improve-input{width:100%;background:rgba(0,0,0,.3);border:1px solid rgba(255,107,53,.2);
   border-radius:9px;padding:8px 11px;color:var(--tx);font-family:'DM Sans',sans-serif;
-  font-size:.82rem;outline:none;margin-bottom:.5rem}
-.improve-input:focus{border-color:rgba(255,107,53,.45)}
+  font-size:.82rem;outline:none;margin-bottom:.5rem;transition:border-color .2s}
+.improve-input:focus{border-color:rgba(255,107,53,.5)}
 .improve-input::placeholder{color:var(--mu)}
+.prog-btns{display:flex;gap:6px;margin-top:.5rem;flex-wrap:wrap}
 
 /* LOGS */
-.adm-logs{max-height:150px;overflow-y:auto;display:flex;flex-direction:column;gap:4px}
+.adm-logs{max-height:140px;overflow-y:auto;display:flex;flex-direction:column;gap:4px}
 .adm-log{font-size:.67rem;padding:4px 9px;border-radius:7px;
   background:rgba(255,107,53,.05);border:1px solid rgba(255,107,53,.12);
   color:var(--mu);display:flex;gap:8px;align-items:flex-start;line-height:1.4}
@@ -231,7 +281,7 @@ header.hadm{border-bottom-color:rgba(255,107,53,.8)!important;
   border-radius:9px;padding:6px 9px;text-align:center}
 .sec-stat-n{font-size:1.3rem;font-weight:700;color:var(--red)}
 .sec-stat-l{font-size:.59rem;color:var(--mu);margin-top:1px}
-.sec-alerts{display:flex;flex-direction:column;gap:5px;max-height:180px;overflow-y:auto}
+.sec-alerts{display:flex;flex-direction:column;gap:5px;max-height:200px;overflow-y:auto}
 .sec-alert{padding:7px 9px;border-radius:8px;background:rgba(248,113,113,.05);
   border:1px solid rgba(248,113,113,.18);font-size:.71rem;line-height:1.5}
 .sec-alert-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px}
@@ -309,26 +359,33 @@ header.hadm{border-bottom-color:rgba(255,107,53,.8)!important;
 .ana-btn:hover{opacity:.85}.ana-btn:disabled{opacity:.4;cursor:not-allowed}
 
 /* MEMÓRIA */
-.mem-list{display:flex;flex-direction:column;gap:4px;max-height:110px;overflow-y:auto}
+.mem-list{display:flex;flex-direction:column;gap:4px;max-height:120px;overflow-y:auto}
 .mi{font-size:.67rem;color:var(--mu);padding:4px 8px;border-radius:7px;
   background:rgba(52,211,153,.04);border:1px solid rgba(52,211,153,.1);
   display:flex;justify-content:space-between;gap:5px;line-height:1.4}
 .mi button{background:none;border:none;color:rgba(248,113,113,.45);cursor:pointer;font-size:.67rem}
 .mi button:hover{color:var(--red)}
+.mem-add{display:flex;gap:6px;margin-top:.5rem}
+.mem-inp{flex:1;background:rgba(52,211,153,.04);border:1px solid rgba(52,211,153,.15);
+  border-radius:8px;padding:6px 10px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:.78rem;outline:none}
+.mem-inp::placeholder{color:var(--mu)}
+.mem-inp:focus{border-color:rgba(52,211,153,.4)}
+.mem-abtn{background:rgba(52,211,153,.15);border:1px solid rgba(52,211,153,.3);color:var(--gr);
+  border-radius:8px;padding:6px 11px;cursor:pointer;font-size:.72rem;font-family:'DM Sans',sans-serif;white-space:nowrap}
 
 /* GRÁFICO */
 .chart-box{background:var(--card);border:1px solid var(--bd);border-radius:13px;padding:.85rem;margin:5px 0}
 .chart-title{font-size:.66rem;color:var(--a);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.7rem;font-weight:600}
 .bar-row{display:flex;align-items:center;gap:7px;margin-bottom:5px}
 .bar-row:last-child{margin:0}
-.bar-label{font-size:.61rem;color:var(--mu);width:130px;flex-shrink:0;text-align:right}
+.bar-label{font-size:.61rem;color:var(--mu);width:140px;flex-shrink:0;text-align:right}
 .bar-track{flex:1;background:rgba(255,255,255,.05);border-radius:4px;height:14px;overflow:hidden}
 .bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding:0 6px;
   font-size:.56rem;color:#fff;font-weight:700;transition:width 1.2s ease}
-.bar-val{font-size:.61rem;color:var(--tx);width:40px;flex-shrink:0}
+.bar-val{font-size:.61rem;color:var(--tx);width:45px;flex-shrink:0}
 
 /* MSGS */
-.msgs{display:flex;flex-direction:column;gap:10px;min-height:100px}
+.msgs{display:flex;flex-direction:column;gap:10px;min-height:80px}
 .msg{display:flex;gap:8px;animation:fi .3s ease both}
 .msg.user{flex-direction:row-reverse}
 .av{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:700}
@@ -340,7 +397,7 @@ header.hadm{border-bottom-color:rgba(255,107,53,.8)!important;
 .av-ger{background:linear-gradient(135deg,var(--gold),#f97316);color:#000;font-family:'Orbitron',sans-serif;font-size:.43rem}
 .av-adm{background:linear-gradient(135deg,var(--adm),var(--adm2));color:#fff;font-family:'Orbitron',sans-serif;font-size:.4rem;box-shadow:0 0 10px rgba(255,107,53,.4)}
 .av-user{background:rgba(255,255,255,.06);border:1px solid var(--bd);color:var(--mu);font-size:.6rem}
-.bubble{max-width:84%;padding:11px 14px;font-size:.87rem;line-height:1.72;border-radius:15px}
+.bubble{max-width:85%;padding:11px 14px;font-size:.87rem;line-height:1.75;border-radius:15px}
 .bubble.ai{background:var(--card);border:1px solid var(--bd);border-top-left-radius:4px}
 .bubble.b-prof{border-color:rgba(52,211,153,.22);background:rgba(1,12,8,.97)}
 .bubble.b-amigo{border-color:rgba(244,114,182,.22);background:rgba(12,1,10,.97)}
@@ -397,7 +454,7 @@ textarea#inp::placeholder{color:var(--mu)}
   align-items:center;justify-content:center;padding:1rem}
 .modal-bg.show{display:flex}
 .modal{background:#050820;border:1px solid var(--bd);border-radius:20px;
-  padding:1.5rem;max-width:500px;width:100%;animation:fi .3s ease;max-height:90vh;overflow-y:auto}
+  padding:1.5rem;max-width:520px;width:100%;animation:fi .3s ease;max-height:90vh;overflow-y:auto}
 .modal h2{font-family:'Orbitron',sans-serif;font-size:.9rem;color:var(--a);letter-spacing:2px;margin-bottom:.5rem}
 .sbox{display:flex;gap:10px;align-items:flex-start;margin-bottom:.8rem;
   background:rgba(56,189,248,.04);border:1px solid var(--bd);border-radius:10px;padding:.75rem}
@@ -413,8 +470,20 @@ textarea#inp::placeholder{color:var(--mu)}
 .mb.w{background:linear-gradient(135deg,#25d366,#128c7e);color:#fff}
 .mb.s{background:rgba(255,255,255,.06);border:1px solid var(--bd);color:var(--mu)}
 .wbox{background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.18);
-  border-radius:9px;padding:8px 11px;font-size:.7rem;color:#fcd34d;margin-top:.9rem;line-height:1.6}
+  border-radius:9px;padding:8px 11px;font-size:.7rem;color:#fcd34d;margin-top:.9rem;line-height:1.8}
 .footer{text-align:center;font-size:.56rem;color:var(--mu);padding:10px;opacity:.28}
+
+/* PROG BTNS reutilizados */
+.prog-btn{font-size:.67rem;padding:6px 13px;border-radius:9px;border:none;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-weight:500;transition:all .18s}
+.pb-save{background:linear-gradient(135deg,var(--adm),var(--adm2));color:#fff}
+.pb-save:hover{opacity:.85}
+.pb-reset{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25);color:var(--red)}
+.pb-reset:hover{background:rgba(248,113,113,.2)}
+.pb-ai{background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.25);color:var(--vp)}
+.pb-ai:hover{background:rgba(167,139,250,.2)}
+.pb-test{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.25);color:var(--gr)}
+.pb-test:hover{background:rgba(52,211,153,.2)}
 </style>
 </head>
 <body>
@@ -427,15 +496,45 @@ textarea#inp::placeholder{color:var(--mu)}
   <div class="blocked-msg">Esta sessão foi encerrada pelo sistema de segurança da OMNISCI por violação dos termos de uso.</div>
 </div>
 
+<!-- API KEY SETUP -->
+<div class="apikey-screen" id="apikeyScreen">
+  <div class="apikey-box">
+    <div class="apikey-title">🔑 CONFIGURAR API GEMINI</div>
+    <div class="apikey-desc">
+      A OMNISCI usa o <strong style="color:var(--gr)">Google Gemini — 100% GRATUITO</strong>.<br>
+      Só precisa de uma conta Google. A key fica só no seu navegador.
+    </div>
+    <div style="background:rgba(52,211,153,.06);border:1px solid rgba(52,211,153,.2);border-radius:10px;padding:10px 12px;margin-bottom:1rem;text-align:left">
+      <div style="font-size:.65rem;color:var(--gr);font-weight:700;letter-spacing:1px;margin-bottom:.4rem">📋 COMO PEGAR (30 segundos):</div>
+      <div style="font-size:.71rem;color:var(--tx);line-height:1.8">
+        1. Acesse <a href="https://aistudio.google.com/apikey" target="_blank" style="color:var(--a);font-weight:700">aistudio.google.com/apikey</a><br>
+        2. Clique em <strong style="color:var(--gr)">Create API Key</strong><br>
+        3. Copie a chave e cole abaixo<br>
+        <span style="color:var(--mu);font-size:.65rem">✅ Grátis · ✅ Sem cartão · ✅ Limite generoso</span>
+      </div>
+    </div>
+    <input class="apikey-inp" id="apikeyInp" type="password" placeholder="AIzaSy..." autocomplete="off">
+    <button class="apikey-btn" onclick="saveApiKey()">🚀 Conectar Gemini Grátis</button>
+    <div class="apikey-hint">
+      Também aceita key Anthropic (sk-ant-...) se preferir.<br>
+      A key fica salva só no seu navegador — nunca vai para nenhum servidor.
+    </div>
+    <div class="apikey-skip" onclick="skipApiKey()">Continuar sem key (modo demonstração)</div>
+  </div>
+</div>
+
 <div class="app">
 <header id="hdr">
   <div class="orb" id="headerOrb"></div>
   <div class="logo" id="headerLogo">OMNISCI</div>
   <span class="mtag m-livre" id="modeTag">● Livre</span>
   <div class="hright">
+    <span id="apiStatusBadge" class="api-status api-no">⚠️ Sem API</span>
     <span id="memCount" style="font-size:.54rem;color:var(--gr);padding:3px 7px;border-radius:20px;background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.18)">🧠 0</span>
+    <span id="evo-display" style="font-size:.54rem;color:#00ffcc;padding:3px 7px;border-radius:20px;background:rgba(0,255,204,.07);border:1px solid rgba(0,255,204,.2)">🧠 Nv.1</span>
     <div class="nick-h" id="nickH">Olá! 👋</div>
     <button class="alert-badge" id="alertBadge" onclick="showSecPanel()">🔴 Alertas</button>
+    <button class="hbtn adm-key" onclick="openApiKeyModal()">🔑 API Key</button>
     <button class="hbtn" onclick="openShare()">🔗 Link</button>
     <button class="hbtn" onclick="toggleMem()">🧠 Mem</button>
   </div>
@@ -462,8 +561,11 @@ textarea#inp::placeholder{color:var(--mu)}
     <div class="tp" onclick="setTopic(this,'astronomia')">🌌 Astronomia</div>
     <div class="tp" onclick="setTopic(this,'fisica')">⚛️ Física</div>
     <div class="tp" onclick="setTopic(this,'biologia')">🧬 Biologia</div>
+    <div class="tp" onclick="setTopic(this,'quimica')">🧪 Química</div>
+    <div class="tp" onclick="setTopic(this,'programacao')">💻 Programação</div>
     <div class="tp" onclick="setTopic(this,'pesquisa')">🔍 Pesquisar</div>
     <div class="tp" onclick="setTopic(this,'projeto')">🛠️ Projeto</div>
+    <div class="tp" onclick="setTopic(this,'filosofia')">🧠 Filosofia</div>
     <div class="tp sp" onclick="setTopic(this,'SI0526')">🚀 SI 05 26</div>
   </div>
 </div>
@@ -475,7 +577,7 @@ textarea#inp::placeholder{color:var(--mu)}
     <div class="panel-title pt-prof">📚 Modo Professor — Aula Completa</div>
     <div class="hs"><div class="hs-n">1</div><div class="hs-t">Pergunte qualquer matéria — monto uma aula completa do zero</div></div>
     <div class="hs"><div class="hs-n">2</div><div class="hs-t">Conceito → Explicação → Exemplos → Exercício → Resumo</div></div>
-    <div class="hs"><div class="hs-n">3</div><div class="hs-t">Peça para continuar, tirar dúvidas ou mudar de matéria</div></div>
+    <div class="hs"><div class="hs-n">3</div><div class="hs-t">Peça para continuar, tirar dúvidas ou mudar de matéria a qualquer momento</div></div>
   </div>
 
   <!-- AMIGO -->
@@ -483,7 +585,7 @@ textarea#inp::placeholder{color:var(--mu)}
     <div class="panel-title pt-amigo">💖 Modo Amigo</div>
     <div style="font-size:.76rem;color:var(--mu);line-height:1.75">
       Contar o que está passando · Pedir conselhos · Desabafar · Sem julgamentos 😊<br>
-      <span style="color:var(--pk);font-size:.72rem;margin-top:4px;display:block">Pode falar tudo — sou seu amigo.</span>
+      <span style="color:var(--pk);font-size:.72rem;margin-top:4px;display:block">Pode falar tudo — sou seu amigo de verdade.</span>
     </div>
   </div>
 
@@ -503,9 +605,11 @@ textarea#inp::placeholder{color:var(--mu)}
         <div class="ist" onclick="setStyle(this,'watercolor')">🖌️ Aquarela</div>
         <div class="ist" onclick="setStyle(this,'sci-fi futuristic')">🚀 Sci-Fi</div>
         <div class="ist" onclick="setStyle(this,'fantasy art')">🧙 Fantasy</div>
-        <div class="ist" onclick="setStyle(this,'cinematic')">🎬 Cinema</div>
+        <div class="ist" onclick="setStyle(this,'cinematic 8k')">🎬 Cinema</div>
         <div class="ist" onclick="setStyle(this,'pixel art')">👾 Pixel</div>
-        <div class="ist" onclick="setStyle(this,'3d render')">🔮 3D</div>
+        <div class="ist" onclick="setStyle(this,'3d render octane')">🔮 3D</div>
+        <div class="ist" onclick="setStyle(this,'impressionist painting')">🖼️ Impressionista</div>
+        <div class="ist" onclick="setStyle(this,'concept art')">✏️ Concept Art</div>
       </div>
       <div class="gen-row">
         <textarea id="imgPrompt" placeholder="Descreva a imagem que quer criar..." rows="2"></textarea>
@@ -513,7 +617,7 @@ textarea#inp::placeholder{color:var(--mu)}
       </div>
       <div class="img-loading" id="imgLoading">
         <div class="img-spin"></div>
-        <div class="img-load-txt">Criando com IA... 🎨</div>
+        <div class="img-load-txt" id="imgLoadTxt">Criando com IA... 🎨</div>
       </div>
       <div class="img-result-grid" id="imgGrid"></div>
     </div>
@@ -541,11 +645,11 @@ textarea#inp::placeholder{color:var(--mu)}
   <!-- VP -->
   <div class="panel p-vp" id="panel-vp">
     <div class="panel-title pt-vp">🌟 Vice-Presidente</div>
-    <div style="font-size:.75rem;color:var(--mu);margin-bottom:.5rem">Acesso avançado ativado.</div>
+    <div style="font-size:.75rem;color:var(--mu);margin-bottom:.5rem">Acesso avançado ativado. Boas-vindas, Vice-Presidente!</div>
     <div class="vp-perms">
       <span class="vp-perm">✅ Pesquisa profunda</span><span class="vp-perm">✅ Análise projetos</span>
       <span class="vp-perm">✅ Gerar imagens</span><span class="vp-perm">✅ Analisar imagens</span>
-      <span class="vp-perm">✅ SI 05 26</span>
+      <span class="vp-perm">✅ SI 05 26</span><span class="vp-perm">✅ Filosofia & Ciência</span>
       <span class="vp-lock">🔒 Painel gerencial</span><span class="vp-lock">🔒 Segurança</span><span class="vp-lock">🔒 Administrador</span>
     </div>
   </div>
@@ -556,88 +660,133 @@ textarea#inp::placeholder{color:var(--mu)}
     <div class="g-btns">
       <button class="gb" onclick="showChart()">📊 Gráficos</button>
       <button class="gb" onclick="showSecPanel()">🔴 Segurança</button>
-      <button class="gb" onclick="ask('Explique toda a SI 05 26 e Teoria dos Quadros de Gadôneil com detalhes técnicos')">🚀 SI 05 26</button>
-      <button class="gb" onclick="ask('Pesquise últimas descobertas em astronomia e física quântica')">🔍 Pesquisa</button>
+      <button class="gb" onclick="ask('Explique toda a SI 05 26 e Teoria dos Quadros de Gadôneil com detalhes técnicos completos')">🚀 SI 05 26</button>
+      <button class="gb" onclick="ask('Pesquise e traga as últimas descobertas em astronomia, física quântica e tecnologia em 2025')">🔍 Pesquisa</button>
       <button class="gb" onclick="setModo('imagem')">🎨 Imagens</button>
-      <button class="gb" onclick="exportMem()">💾 Exportar</button>
-      <button class="gb" onclick="importMem()">📥 Importar</button>
+      <button class="gb" onclick="exportMem()">💾 Exportar Mem.</button>
+      <button class="gb" onclick="importMem()">📥 Importar Mem.</button>
       <button class="gb" onclick="openShare()">🔗 Link</button>
+      <button class="gb adm-c" onclick="openApiKeyModal()">🔑 API Key</button>
       <button class="gb red" onclick="clearAlerts()">🗑️ Limpar Alertas</button>
-      <button class="gb" onclick="resetChat()">🔄 Limpar Chat</button>
+      <button class="gb red" onclick="resetChat()">🔄 Limpar Chat</button>
     </div>
   </div>
 
   <!-- ═══ ADMINISTRADOR ═══ -->
   <div class="panel p-adm" id="panel-adm">
-    <div class="panel-title pt-adm">🔥 MODO ADMINISTRADOR — CONTROLE TOTAL</div>
+    <div class="panel-title pt-adm">🔥 MODO ADMINISTRADOR — CONTROLE TOTAL DA IA</div>
 
-    <!-- ABAS DO EDITOR -->
+    <!-- API KEY DIRETO -->
     <div class="adm-section">
-      <div class="adm-section-title">⚙️ Editor de Programação da IA</div>
-      <div class="prog-tabs">
-        <button class="ptab p-pers sel" id="ptab-pers" onclick="showProgTab('pers')">🧠 Personalidade</button>
+      <div class="adm-section-title">🔑 API Key — Conexão com a IA</div>
+      <div class="token-bar">
+        <span class="tok">Status: <span id="adm-api-status">—</span></span>
+        <span class="tok">Tokens usados: <span id="tok-used">0</span></span>
+        <span class="tok">Modelo: <span id="tok-model">claude-sonnet-4-5-20251001</span></span>
+      </div>
+      <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap">
+        <input type="password" id="adm-key-inp" placeholder="sk-ant-api03-..." autocomplete="off"
+          style="flex:1;min-width:200px;background:rgba(0,0,0,.5);border:1px solid rgba(255,107,53,.3);
+          border-radius:9px;padding:8px 11px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:.8rem;outline:none">
+        <button class="lbtn lbtn-save" onclick="saveApiKeyFromAdm()">💾 Salvar Key</button>
+        <button class="lbtn lbtn-copy" onclick="testApiKey()">🧪 Testar</button>
+        <button class="lbtn lbtn-reset" onclick="clearApiKey()">🗑️ Apagar Key</button>
+      </div>
+      <div style="font-size:.63rem;color:var(--mu);margin-top:.4rem;line-height:1.5">
+        A key é salva no localStorage do navegador. Nunca vai para servidores externos.
+        <a href="https://console.anthropic.com/keys" target="_blank" style="color:var(--a)">Criar key gratuita →</a>
+      </div>
+    </div>
+
+    <!-- SYSTEM PROMPT AO VIVO -->
+    <div class="adm-section">
+      <div class="adm-section-title">⚙️ Programação da IA — System Prompt ao Vivo</div>
+      <div class="prompt-tabs">
+        <button class="ptab p-sys sel"  id="ptab-sys"   onclick="showProgTab('sys')">🔥 Sistema Completo</button>
+        <button class="ptab p-pers"     id="ptab-pers"  onclick="showProgTab('pers')">🧠 Personalidade</button>
         <button class="ptab p-rules"    id="ptab-rules" onclick="showProgTab('rules')">📋 Regras</button>
-        <button class="ptab p-know"     id="ptab-know"  onclick="showProgTab('know')">📚 Conhecimento Extra</button>
+        <button class="ptab p-know"     id="ptab-know"  onclick="showProgTab('know')">📚 Conhecimento</button>
         <button class="ptab p-nick"     id="ptab-nick"  onclick="showProgTab('nick')">💬 Apelidos</button>
       </div>
 
+      <!-- SISTEMA COMPLETO -->
+      <div class="prog-area show" id="prog-sys">
+        <div class="live-prompt-header">
+          <div class="prog-label">Veja e edite o <strong style="color:var(--adm)">system prompt completo</strong> que a IA recebe a cada mensagem em tempo real:</div>
+          <div class="live-btns">
+            <button class="lbtn lbtn-copy" onclick="copyPrompt()">📋 Copiar</button>
+            <button class="lbtn lbtn-ai" onclick="aiImproveAll()">🤖 IA Melhora Tudo</button>
+            <button class="lbtn lbtn-reset" onclick="resetAllConfig()">↺ Reset</button>
+          </div>
+        </div>
+        <textarea class="live-prompt-textarea" id="live-sys-prompt" rows="10" oninput="onSysEdit()" placeholder="O system prompt completo aparecerá aqui..."></textarea>
+        <div class="prog-btns" style="margin-top:.5rem">
+          <button class="prog-btn pb-save" onclick="saveSysPrompt()">💾 Aplicar System Prompt</button>
+          <button class="prog-btn pb-test" onclick="testPrompt()">🧪 Testar Agora</button>
+          <span class="saved-msg" id="saved-sys">✅ System prompt aplicado!</span>
+        </div>
+        <div style="font-size:.62rem;color:rgba(255,107,53,.5);margin-top:.4rem">
+          ⚡ Editando aqui você muda o comportamento da IA imediatamente — nas próximas mensagens.
+        </div>
+      </div>
+
       <!-- PERSONALIDADE -->
-      <div class="prog-area show" id="prog-pers">
-        <div class="prog-label">Defina como a OMNISCI deve se comportar, seu tom e estilo de conversa:</div>
-        <textarea class="prog-textarea" id="edit-pers" rows="5"></textarea>
+      <div class="prog-area" id="prog-pers">
+        <div class="prog-label">Tom, estilo, carisma — como a OMNISCI deve ser e falar:</div>
+        <textarea class="live-prompt-textarea" id="edit-pers" rows="5"></textarea>
         <div class="prog-btns">
           <button class="prog-btn pb-save" onclick="saveEdit('pers')">💾 Salvar</button>
-          <button class="prog-btn pb-reset" onclick="resetEdit('pers')">↺ Restaurar Padrão</button>
-          <button class="prog-btn pb-ai" onclick="aiImprove('pers')">🤖 IA Melhora Automaticamente</button>
+          <button class="prog-btn pb-reset" onclick="resetEdit('pers')">↺ Padrão</button>
+          <button class="prog-btn pb-ai" onclick="aiImprove('pers')">🤖 IA Melhora</button>
+          <span class="saved-msg" id="saved-pers">✅ Salvo!</span>
         </div>
-        <div class="saved-msg" id="saved-pers">✅ Personalidade salva e aplicada!</div>
       </div>
 
       <!-- REGRAS -->
       <div class="prog-area" id="prog-rules">
-        <div class="prog-label">Defina regras de comportamento, limites e prioridades da IA:</div>
-        <textarea class="prog-textarea" id="edit-rules" rows="5"></textarea>
+        <div class="prog-label">Regras de comportamento, limites e prioridades:</div>
+        <textarea class="live-prompt-textarea" id="edit-rules" rows="5"></textarea>
         <div class="prog-btns">
           <button class="prog-btn pb-save" onclick="saveEdit('rules')">💾 Salvar</button>
-          <button class="prog-btn pb-reset" onclick="resetEdit('rules')">↺ Restaurar</button>
+          <button class="prog-btn pb-reset" onclick="resetEdit('rules')">↺ Padrão</button>
           <button class="prog-btn pb-ai" onclick="aiImprove('rules')">🤖 IA Melhora</button>
+          <span class="saved-msg" id="saved-rules">✅ Salvo!</span>
         </div>
-        <div class="saved-msg" id="saved-rules">✅ Regras salvas e aplicadas!</div>
       </div>
 
-      <!-- CONHECIMENTO EXTRA -->
+      <!-- CONHECIMENTO -->
       <div class="prog-area" id="prog-know">
-        <div class="prog-label">Adicione conhecimentos, dados ou informações extras que a IA deve saber:</div>
-        <textarea class="prog-textarea" id="edit-know" rows="5"></textarea>
+        <div class="prog-label">Conhecimentos extras, dados e informações que a IA deve ter:</div>
+        <textarea class="live-prompt-textarea" id="edit-know" rows="5"></textarea>
         <div class="prog-btns">
           <button class="prog-btn pb-save" onclick="saveEdit('know')">💾 Salvar</button>
-          <button class="prog-btn pb-reset" onclick="resetEdit('know')">↺ Restaurar</button>
+          <button class="prog-btn pb-reset" onclick="resetEdit('know')">↺ Padrão</button>
           <button class="prog-btn pb-ai" onclick="aiImprove('know')">🤖 IA Expande</button>
+          <span class="saved-msg" id="saved-know">✅ Salvo!</span>
         </div>
-        <div class="saved-msg" id="saved-know">✅ Conhecimento salvo e integrado!</div>
       </div>
 
       <!-- APELIDOS -->
       <div class="prog-area" id="prog-nick">
-        <div class="prog-label">Personalize os apelidos que a IA usa para cada assunto (um por linha: assunto=apelido):</div>
-        <textarea class="prog-textarea" id="edit-nick" rows="5"></textarea>
+        <div class="prog-label">Apelidos por assunto (um por linha: assunto=apelido):</div>
+        <textarea class="live-prompt-textarea" id="edit-nick" rows="5"></textarea>
         <div class="prog-btns">
           <button class="prog-btn pb-save" onclick="saveEdit('nick')">💾 Salvar</button>
-          <button class="prog-btn pb-reset" onclick="resetEdit('nick')">↺ Restaurar</button>
+          <button class="prog-btn pb-reset" onclick="resetEdit('nick')">↺ Padrão</button>
+          <span class="saved-msg" id="saved-nick">✅ Salvo!</span>
         </div>
-        <div class="saved-msg" id="saved-nick">✅ Apelidos atualizados!</div>
       </div>
     </div>
 
-    <!-- MELHORAR COM IA -->
+    <!-- PEDIR MELHORIA -->
     <div class="adm-section">
-      <div class="adm-section-title">🤖 Pedir para a IA se Melhorar</div>
+      <div class="adm-section-title">🤖 Pedir para a IA se Auto-Melhorar</div>
       <div class="improve-box">
         <input class="improve-input" id="improveInput" type="text"
-          placeholder="Ex: Seja mais divertida, aprenda sobre culinária, responda mais rápido...">
+          placeholder="Ex: Seja mais criativa, aprenda sobre culinária, responda mais objetivamente...">
         <div class="prog-btns">
           <button class="prog-btn pb-ai" onclick="selfImprove()">🚀 Aplicar Melhoria</button>
-          <button class="prog-btn pb-test" onclick="testImprove()">🧪 Testar Melhoria</button>
+          <button class="prog-btn pb-test" onclick="testImprove()">🧪 Testar Antes</button>
         </div>
       </div>
     </div>
@@ -650,14 +799,123 @@ textarea#inp::placeholder{color:var(--mu)}
       </div>
     </div>
 
-    <!-- BOTÕES GERAIS -->
+    <!-- CONTROLE DE ACESSO -->
+    <div class="adm-section">
+      <div class="adm-section-title">🔒 Controle de Acesso de Usuários</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:.6rem">
+        <div style="background:rgba(255,107,53,.05);border:1px solid rgba(255,107,53,.18);border-radius:9px;padding:8px">
+          <div style="font-size:.6rem;color:var(--adm);margin-bottom:.3rem">Max mensagens/sessão</div>
+          <input type="number" id="ctrl-msgs" value="999" min="1" max="9999"
+            style="width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(255,107,53,.2);border-radius:7px;padding:5px 8px;color:var(--tx);font-size:.8rem;outline:none">
+        </div>
+        <div style="background:rgba(255,107,53,.05);border:1px solid rgba(255,107,53,.18);border-radius:9px;padding:8px">
+          <div style="font-size:.6rem;color:var(--adm);margin-bottom:.3rem">Max imagens/sessão</div>
+          <input type="number" id="ctrl-imgs" value="999" min="1" max="999"
+            style="width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(255,107,53,.2);border-radius:7px;padding:5px 8px;color:var(--tx);font-size:.8rem;outline:none">
+        </div>
+      </div>
+      <div style="margin-bottom:.5rem">
+        <div style="font-size:.6rem;color:var(--adm);margin-bottom:.3rem">Mensagem de boas-vindas personalizada</div>
+        <input type="text" id="ctrl-welcome" placeholder="Deixe vazio para o padrão..."
+          style="width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(255,107,53,.2);border-radius:7px;padding:6px 10px;color:var(--tx);font-size:.78rem;outline:none">
+      </div>
+      <div style="margin-bottom:.5rem">
+        <div style="font-size:.6rem;color:var(--adm);margin-bottom:.3rem">Modos permitidos (marque os ativos)</div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px">
+          <label style="font-size:.62rem;color:var(--a);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" id="mode-livre" checked> 💬 Livre</label>
+          <label style="font-size:.62rem;color:var(--gr);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" id="mode-prof" checked> 📚 Professor</label>
+          <label style="font-size:.62rem;color:var(--pk);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" id="mode-amigo" checked> 💖 Amigo</label>
+          <label style="font-size:.62rem;color:var(--pk);display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" id="mode-img" checked> 🎨 Imagens</label>
+        </div>
+      </div>
+      <div class="prog-btns">
+        <button class="prog-btn pb-save" onclick="applyAccessCtrl()">💾 Aplicar Controles</button>
+        <button class="prog-btn pb-reset" onclick="resetAccessCtrl()">↺ Resetar</button>
+      </div>
+    </div>
+
+    <!-- MÉTRICAS DE USO -->
+    <div class="adm-section">
+      <div class="adm-section-title">📊 Métricas de Uso em Tempo Real</div>
+      <div id="usage-panel" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:.6rem">
+        <div style="background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.15);border-radius:9px;padding:7px;text-align:center">
+          <div style="font-size:1.1rem;font-weight:700;color:var(--a)" id="u-msgs">0</div>
+          <div style="font-size:.57rem;color:var(--mu)">Mensagens</div>
+        </div>
+        <div style="background:rgba(52,211,153,.05);border:1px solid rgba(52,211,153,.15);border-radius:9px;padding:7px;text-align:center">
+          <div style="font-size:1.1rem;font-weight:700;color:var(--gr)" id="u-tokens">0</div>
+          <div style="font-size:.57rem;color:var(--mu)">Tokens</div>
+        </div>
+        <div style="background:rgba(244,114,182,.05);border:1px solid rgba(244,114,182,.15);border-radius:9px;padding:7px;text-align:center">
+          <div style="font-size:1.1rem;font-weight:700;color:var(--pk)" id="u-imgs">0</div>
+          <div style="font-size:.57rem;color:var(--mu)">Imagens</div>
+        </div>
+      </div>
+      <div style="font-size:.62rem;color:var(--mu);margin-bottom:.4rem">Histórico de conversas recentes:</div>
+      <div id="usage-history" style="max-height:100px;overflow-y:auto;display:flex;flex-direction:column;gap:3px"></div>
+      <div class="prog-btns" style="margin-top:.5rem">
+        <button class="prog-btn pb-test" onclick="refreshUsage()">🔄 Atualizar</button>
+        <button class="prog-btn pb-reset" onclick="clearUsage()">🗑️ Limpar Métricas</button>
+      </div>
+    </div>
+
+    <!-- EVOLUÇÃO DA IA -->
+    <div class="adm-section">
+      <div class="adm-section-title">🌟 Evolução da OMNISCI</div>
+      <div id="evo-panel">
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:.6rem;flex-wrap:wrap">
+          <div style="background:rgba(0,255,204,.08);border:1px solid rgba(0,255,204,.25);border-radius:10px;padding:6px 14px">
+            <div style="font-size:1.2rem;font-weight:900;color:#00ffcc;font-family:'Orbitron',sans-serif" id="evo-level">1</div>
+            <div style="font-size:.55rem;color:var(--mu)">Nível</div>
+          </div>
+          <div style="flex:1">
+            <div style="font-size:.62rem;color:var(--mu);margin-bottom:3px">XP para próximo nível</div>
+            <div style="background:rgba(255,255,255,.06);border-radius:4px;height:12px;overflow:hidden">
+              <div id="evo-bar" style="height:100%;background:linear-gradient(90deg,#00ffcc,#7fff00);border-radius:4px;width:0%;transition:width .6s ease"></div>
+            </div>
+            <div style="font-size:.58rem;color:var(--mu);margin-top:2px" id="evo-xp">0 / 100 XP</div>
+          </div>
+        </div>
+        <div style="font-size:.62rem;color:var(--mu);margin-bottom:.4rem">Habilidades desenvolvidas:</div>
+        <div id="evo-skills" style="display:flex;flex-wrap:wrap;gap:4px"></div>
+        <div style="font-size:.62rem;color:var(--mu);margin-top:.5rem;margin-bottom:.3rem">Insights aprendidos: <span id="evo-insights-count" style="color:#00ffcc">0</span></div>
+        <div style="font-size:.6rem;color:rgba(0,255,204,.5);margin-top:.3rem" id="evo-last">—</div>
+      </div>
+    </div>
+
+    <!-- PROJETO SALVO -->
+    <div class="adm-section">
+      <div class="adm-section-title">📁 Projeto Salvo (Máx. 1)</div>
+      <div id="proj-display"></div>
+      <div style="margin-top:.5rem;display:flex;gap:6px">
+        <input type="text" id="proj-nome" placeholder="Nome do projeto..."
+          style="flex:1;background:rgba(0,0,0,.4);border:1px solid rgba(52,211,153,.2);border-radius:8px;padding:6px 10px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:.78rem;outline:none">
+        <button class="prog-btn pb-test" onclick="salvarProjeto()">💾 Salvar Conversa</button>
+      </div>
+    </div>
+
+    <!-- SIMULAÇÕES -->
+    <div class="adm-section">
+      <div class="adm-section-title">🧪 Simulações e Pesquisas</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px">
+        <button class="gb gr" onclick="runSimulation('mercado financeiro')">📈 Simular Mercado</button>
+        <button class="gb gr" onclick="runSimulation('crescimento populacional')">👥 Simular População</button>
+        <button class="gb gr" onclick="runSimulation('propagação de ondas')">🌊 Simular Física</button>
+        <button class="gb gr" onclick="runSimulation('evolução de espécies')">🧬 Simular Evolução</button>
+        <button class="gb" onclick="deepSearch()">🔍 Pesquisa Profunda</button>
+        <button class="gb" onclick="compareIA()">🤖 Comparar com outras IAs</button>
+      </div>
+    </div>
+
+    <!-- AÇÕES RÁPIDAS -->
     <div class="adm-section">
       <div class="adm-section-title">⚡ Ações Rápidas</div>
       <div class="g-btns">
-        <button class="gb" onclick="showSecPanel()">🔴 Painel Segurança</button>
-        <button class="gb" onclick="showChart()">📊 Gráficos</button>
-        <button class="gb" onclick="exportAllConfig()">💾 Exportar Config</button>
-        <button class="gb" onclick="importConfig()">📥 Importar Config</button>
+        <button class="gb adm-c" onclick="showSecPanel()">🔴 Segurança</button>
+        <button class="gb adm-c" onclick="showChart()">📊 Gráficos</button>
+        <button class="gb adm-c" onclick="exportAllConfig()">💾 Exportar Tudo</button>
+        <button class="gb adm-c" onclick="importConfig()">📥 Importar</button>
+        <button class="gb adm-c" onclick="clearHistory()">🔄 Limpar Histórico</button>
         <button class="gb red" onclick="resetAllConfig()">⚠️ Reset Total</button>
       </div>
     </div>
@@ -678,15 +936,19 @@ textarea#inp::placeholder{color:var(--mu)}
 
   <!-- GRÁFICO -->
   <div class="chart-box" id="chartBox" style="display:none">
-    <div class="chart-title">📊 OMNISCI — Capacidades</div>
+    <div class="chart-title">📊 OMNISCI — Capacidades do Sistema</div>
     <div id="chartBars"></div>
   </div>
 
   <!-- MEMÓRIA -->
   <div class="panel p-mem" id="panel-mem">
-    <div class="panel-title pt-mem">🧠 Memórias</div>
+    <div class="panel-title pt-mem">🧠 Memórias Salvas</div>
     <div class="mem-list" id="memList">
       <div style="font-size:.7rem;color:var(--mu);font-style:italic">Nenhuma ainda!</div>
+    </div>
+    <div class="mem-add">
+      <input class="mem-inp" id="memManual" type="text" placeholder="Adicionar memória manual...">
+      <button class="mem-abtn" onclick="addMemManual()">+ Salvar</button>
     </div>
   </div>
 
@@ -704,14 +966,19 @@ textarea#inp::placeholder{color:var(--mu)}
   </div>
 
   <div class="qbtns">
-    <button class="qb" onclick="ask('Quanto é 347 × 89 + 2156 ÷ 4? Passo a passo')">🔢 Conta</button>
+    <button class="qb" onclick="ask('Quanto é 347 × 89 + 2156 ÷ 4? Mostre passo a passo')">🔢 Conta</button>
     <button class="qb" onclick="setModo('imagem')">🎨 Gerar imagem</button>
-    <button class="qb" onclick="ask('Pesquise dados sobre exploração espacial em 2025')">🔍 Pesquisa</button>
-    <button class="qb" onclick="ask('Me ajuda com redação sobre IA para a escola')">✍️ Redação</button>
-    <button class="qb" onclick="ask('O que é a Teoria dos Quadros de Gadôneil?')">✨ Quadros</button>
-    <button class="qb" onclick="ask('Me surpreenda com algo incrível sobre o universo!')">🤯 Surpresa!</button>
+    <button class="qb" onclick="ask('Pesquise os últimos dados sobre exploração espacial em 2025')">🔍 Pesquisa</button>
+    <button class="qb" onclick="ask('Me ajuda a criar uma redação sobre inteligência artificial para a escola')">✍️ Redação</button>
+    <button class="qb" onclick="ask('Explique a Teoria dos Quadros de Gadôneil e a SI 05 26 com detalhes')">🚀 SI 05 26</button>
+    <button class="qb" onclick="ask('Me explique um conceito de física quântica de forma incrível!')">⚛️ Física</button>
+    <button class="qb" onclick="ask('Crie um código Python para um sistema de gerenciamento de tarefas')">💻 Código</button>
+    <button class="qb" onclick="ask('Me surpreenda com algo absolutamente incrível sobre o universo!')">🤯 Surpresa!</button>
+    <button class="qb" onclick="ask('Faça uma pesquisa profunda sobre inteligência artificial em 2025 com dados reais')">🔍 Pesquisa IA</button>
+    <button class="qb" onclick="runSimulation('mercado de criptomoedas e blockchain')">🧪 Simular Cripto</button>
+    <button class="qb" onclick="ask('Crie um plano completo de projeto de app para celular passo a passo')">📱 Projeto App</button>
   </div>
-  <div class="footer">OMNISCI · Livre · Professor · Amigo · Imagens · Vice-Pres. · Gerenciador · 🔥 Administrador · Segurança Ativa 🛡️</div>
+  <div class="footer">OMNISCI v4.0 · Gemini 100% Gratuito · Livre · Professor · Amigo · Imagens · Pesquisa · Simulações · Evolução IA · Projeto Único · Controle de Acesso · Segurança Ativa 🛡️</div>
 </div>
 </div>
 
@@ -725,7 +992,8 @@ textarea#inp::placeholder{color:var(--mu)}
     </div>
     <div id="tab-arq">
       <p style="font-size:.79rem;color:var(--mu);line-height:1.65;margin-bottom:.8rem">
-        Envie <strong style="color:var(--a)">OMNISCI_IA.html</strong> pelo WhatsApp. Abre direto no navegador!
+        Envie <strong style="color:var(--a)">OMNISCI_IA.html</strong> pelo WhatsApp. Abre direto no navegador!<br>
+        <span style="color:var(--red);font-size:.7rem">⚠️ Cada pessoa precisa colocar sua própria API Key para funcionar.</span>
       </p>
       <div class="wbox">🔐 Seus códigos secretos:<br>
         🔥 Administrador: <strong>2605g</strong> — acesso total + edita a IA<br>
@@ -739,33 +1007,16 @@ textarea#inp::placeholder{color:var(--mu)}
       </div>
     </div>
     <div id="tab-web" style="display:none">
-      <p style="font-size:.78rem;color:var(--gold);font-weight:600;margin-bottom:.9rem">
-        📖 Tutorial completo — Netlify (link gratuito e enviável)
-      </p>
-      <div class="sbox"><div class="sn">1</div><div class="st">
-        Acesse <a href="https://github.com" target="_blank"><strong>github.com</strong></a> e clique em <strong>Sign up</strong>. Coloque seu e-mail, crie uma senha e confirme pelo e-mail.
-      </div></div>
-      <div class="sbox"><div class="sn">2</div><div class="st">
-        Depois de entrar no GitHub, clique no <strong>+</strong> no topo → <strong>New repository</strong>. Em "Repository name" escreva <strong>omnisci</strong>. Clique em <strong>Create repository</strong>.
-      </div></div>
-      <div class="sbox"><div class="sn">3</div><div class="st">
-        Na página do repositório, clique em <strong>"uploading an existing file"</strong>. Arraste o arquivo <strong>OMNISCI_IA.html</strong> para lá. Antes de salvar, <strong>renomeie para index.html</strong> clicando no nome do arquivo. Depois clique em <strong>Commit changes</strong>.
-      </div></div>
-      <div class="sbox"><div class="sn g">4</div><div class="st">
-        Acesse <a href="https://netlify.com" target="_blank"><strong>netlify.com</strong></a> → clique em <strong>Sign up</strong> → escolha <strong>Continue with GitHub</strong> → autorize. Isso conecta os dois.
-      </div></div>
-      <div class="sbox"><div class="sn g">5</div><div class="st">
-        No painel do Netlify, clique em <strong>Add new site</strong> → <strong>Import an existing project</strong> → <strong>GitHub</strong> → selecione o repositório <strong>omnisci</strong> → clique em <strong>Deploy site</strong>.
-      </div></div>
-      <div class="sbox"><div class="sn adm">6</div><div class="st">
-        Em 1 minuto aparece seu link: <strong style="color:var(--a)">omnisci-xxxxx.netlify.app</strong><br>
-        Para <strong>personalizar o nome</strong>: vá em <em>Site settings → Change site name</em> → escreva <strong>omnisci-seu-nome</strong>.<br>
-        Para <strong>atualizar</strong> depois: só trocar o arquivo no GitHub — o Netlify atualiza automaticamente!
-      </div></div>
-      <div class="wbox">⚠️ Seus códigos secretos já estão dentro do arquivo. Quem acessar o link usa como usuário normal. Só você tem os códigos.</div>
+      <p style="font-size:.78rem;color:var(--gold);font-weight:600;margin-bottom:.9rem">📖 Tutorial — Netlify (link gratuito)</p>
+      <div class="sbox"><div class="sn">1</div><div class="st">Acesse <a href="https://github.com" target="_blank"><strong>github.com</strong></a> → Sign up → crie conta com e-mail.</div></div>
+      <div class="sbox"><div class="sn">2</div><div class="st">Clique em <strong>+</strong> → New repository → nome: <strong>omnisci</strong> → Create repository.</div></div>
+      <div class="sbox"><div class="sn">3</div><div class="st">Clique em <strong>"uploading an existing file"</strong> → arraste o HTML → renomeie para <strong>index.html</strong> → Commit changes.</div></div>
+      <div class="sbox"><div class="sn g">4</div><div class="st"><a href="https://netlify.com" target="_blank"><strong>netlify.com</strong></a> → Sign up → Continue with GitHub → autorize.</div></div>
+      <div class="sbox"><div class="sn g">5</div><div class="st">Add new site → Import an existing project → GitHub → selecione <strong>omnisci</strong> → Deploy site.</div></div>
+      <div class="sbox"><div class="sn adm">6</div><div class="st">Em 1 min: link <strong style="color:var(--a)">omnisci-xxxxx.netlify.app</strong><br>Personalize: Site settings → Change site name.</div></div>
       <div class="mbs">
-        <button class="mb p" onclick="window.open('https://github.com','_blank')">🐙 Abrir GitHub</button>
-        <button class="mb p" onclick="window.open('https://app.netlify.com/signup','_blank')">🌐 Abrir Netlify</button>
+        <button class="mb p" onclick="window.open('https://github.com','_blank')">🐙 GitHub</button>
+        <button class="mb p" onclick="window.open('https://app.netlify.com/signup','_blank')">🌐 Netlify</button>
         <button class="mb s" onclick="closeShare()">✕ Fechar</button>
       </div>
     </div>
@@ -774,79 +1025,387 @@ textarea#inp::placeholder{color:var(--mu)}
 
 <script>
 // ══════════════════════════════════════════
-// CÓDIGOS
+// CÓDIGOS E CHAVES
 // ══════════════════════════════════════════
 const COD_ADM = '2605g';
 const COD_GER = '140526b';
 const COD_VP  = '768529f';
-const MEM_KEY = 'omnisci_mem_v6';
-const SEC_KEY = 'omnisci_sec_v2';
-const CFG_KEY = 'omnisci_cfg_v1';
-const LOG_KEY = 'omnisci_log_v1';
+const MEM_KEY  = 'omnisci_mem_v6';
+const SEC_KEY  = 'omnisci_sec_v2';
+const CFG_KEY  = 'omnisci_cfg_v2';
+const LOG_KEY  = 'omnisci_log_v1';
+const API_KEY_STORAGE = 'omnisci_apikey_v1';
+const TOK_KEY  = 'omnisci_tokens_v1';
+const EVO_KEY  = 'omnisci_evo_v1';
+const PROJ_KEY = 'omnisci_proj_v1';
+const CTRL_KEY = 'omnisci_ctrl_v1';
+const USAGE_KEY= 'omnisci_usage_v1';
+// MODELO: Gemini (100% gratuito)
+const MODELS = {
+  'gemini-2.0-flash': 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
+  'gemini-1.5-flash': 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
+  'gemini-1.5-pro':   'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent',
+};
+let currentModel = localStorage.getItem('omnisci_model') || 'gemini-2.0-flash';
 
 // ══════════════════════════════════════════
-// CONFIG PADRÃO (editável pelo Admin)
+// API KEY — GESTÃO
+// ══════════════════════════════════════════
+let apiKey = localStorage.getItem(API_KEY_STORAGE) || '';
+let totalTokens = parseInt(localStorage.getItem(TOK_KEY) || '0');
+
+function getApiKey() { return apiKey; }
+
+function saveApiKey() {
+  const k = document.getElementById('apikeyInp').value.trim();
+  if (!k.startsWith('sk-ant')) { alert('API Key inválida! Deve começar com sk-ant'); return; }
+  apiKey = k;
+  localStorage.setItem(API_KEY_STORAGE, k);
+  document.getElementById('apikeyScreen').classList.remove('show');
+  updateApiStatus();
+  addMsg('ai', '🔑 **API Key salva!** OMNISCI está totalmente conectada e pronta! 🚀\n\nDigite qualquer coisa para começar.', '✨ Sistema');
+}
+
+function saveApiKeyFromAdm() {
+  const k = document.getElementById('adm-key-inp').value.trim();
+  if (!k) { alert('Digite a API Key!'); return; }
+  if (!k.startsWith('sk-ant')) { alert('API Key inválida! Deve começar com sk-ant'); return; }
+  apiKey = k;
+  localStorage.setItem(API_KEY_STORAGE, k);
+  document.getElementById('adm-key-inp').value = '';
+  updateApiStatus();
+  addLog('🔑 API Key atualizada pelo Admin');
+  addMsg('ai', '🔑 **API Key atualizada!** Conexão com a IA ativa.', '🔥 Admin');
+}
+
+async function testApiKey() {
+  if (!apiKey) { alert('Configure a API Key primeiro!'); return; }
+  addMsg('ai', '🧪 Testando conexão com a API Anthropic...', '🔥 Admin');
+  addTyping();
+  try {
+    const res = await callAPI([{role:'user',content:'Diga apenas: "Conexão OK!"'}], 'Você é um sistema de teste. Responda brevemente.', 50);
+    removeTyping();
+    if (res.ok) {
+      addMsg('ai', `✅ **API Key funcionando perfeitamente!**\n\nModelo: ${res.model}\nTokens usados: ${res.tokens}`, '🔥 Admin');
+      document.getElementById('adm-api-status').textContent = '✅ Ativa';
+      addLog('✅ API Key testada com sucesso');
+    } else {
+      addMsg('ai', `❌ **Erro na API:** ${res.error}`, '🔥 Admin');
+    }
+  } catch(e) {
+    removeTyping();
+    addMsg('ai', `❌ **Falha na conexão:** ${e.message}`, '🔥 Admin');
+  }
+}
+
+function clearApiKey() {
+  if (!confirm('Apagar a API Key?')) return;
+  apiKey = '';
+  localStorage.removeItem(API_KEY_STORAGE);
+  document.getElementById('adm-key-inp').value = '';
+  updateApiStatus();
+  addLog('🗑️ API Key removida');
+}
+
+function skipApiKey() {
+  document.getElementById('apikeyScreen').classList.remove('show');
+  addMsg('ai', '⚠️ Sem API Key — modo limitado. Use o botão **🔑 API Key** no topo para configurar e ter acesso completo!', '⚠️ Sistema');
+}
+
+function openApiKeyModal() {
+  document.getElementById('apikeyScreen').classList.add('show');
+  document.getElementById('apikeyInp').value = apiKey ? '••••••••••••••••' : '';
+}
+
+function updateApiStatus() {
+  const ok = !!apiKey;
+  const badge = document.getElementById('apiStatusBadge');
+  badge.className = `api-status ${ok ? 'api-ok' : 'api-no'}`;
+  badge.textContent = ok ? '✅ API Ativa' : '⚠️ Sem API';
+  const admStatus = document.getElementById('adm-api-status');
+  if (admStatus) admStatus.textContent = ok ? '✅ Ativa' : '❌ Sem key';
+  const tokEl = document.getElementById('tok-used');
+  if (tokEl) tokEl.textContent = totalTokens.toLocaleString('pt-BR');
+}
+
+// ══════════════════════════════════════════
+// FUNÇÃO CENTRAL — GEMINI GRATUITO + FALLBACK ANTHROPIC
+// ══════════════════════════════════════════
+async function callAPI(messages, systemPrompt, maxTokens = 1500) {
+  if (!apiKey) {
+    return { ok: false, error: 'Configure a API Key do Google Gemini (gratuita!) clicando em 🔑 API Key no topo.' };
+  }
+  // Detectar se é Gemini ou Anthropic pela key
+  const isGemini = apiKey.startsWith('AI') || (!apiKey.startsWith('sk-ant'));
+  if (isGemini) {
+    return await callGemini(messages, systemPrompt, maxTokens);
+  } else {
+    return await callAnthropic(messages, systemPrompt, maxTokens);
+  }
+}
+
+async function callGemini(messages, systemPrompt, maxTokens = 1500) {
+  try {
+    const endpoint = MODELS[currentModel] || MODELS['gemini-2.0-flash'];
+    // Montar histórico no formato Gemini
+    const geminiMsgs = messages.map(m => ({
+      role: m.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: m.content }]
+    }));
+    const body = {
+      system_instruction: { parts: [{ text: systemPrompt }] },
+      contents: geminiMsgs,
+      generationConfig: {
+        maxOutputTokens: maxTokens,
+        temperature: 0.85,
+        topP: 0.95,
+        topK: 40
+      },
+      safetySettings: [
+        { category:'HARM_CATEGORY_HARASSMENT', threshold:'BLOCK_NONE' },
+        { category:'HARM_CATEGORY_HATE_SPEECH', threshold:'BLOCK_NONE' },
+        { category:'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold:'BLOCK_MEDIUM_AND_ABOVE' },
+        { category:'HARM_CATEGORY_DANGEROUS_CONTENT', threshold:'BLOCK_NONE' }
+      ]
+    };
+    const res = await fetch(`${endpoint}?key=${apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      const msg = err?.error?.message || `HTTP ${res.status}`;
+      if (res.status === 400) return { ok: false, error: 'API Key inválida. Verifique em aistudio.google.com' };
+      if (res.status === 429) return { ok: false, error: 'Muitas requisições. Aguarde alguns segundos.' };
+      if (res.status === 403) return { ok: false, error: 'API Key sem permissão. Recrie em aistudio.google.com/apikey' };
+      return { ok: false, error: msg };
+    }
+    const data = await res.json();
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    if (!text) return { ok: false, error: 'Resposta vazia da IA. Tente novamente.' };
+    const tokens = (data.usageMetadata?.promptTokenCount || 0) + (data.usageMetadata?.candidatesTokenCount || 0);
+    totalTokens += tokens;
+    localStorage.setItem(TOK_KEY, String(totalTokens));
+    // Registrar uso para evolução
+    registerUsage(messages[messages.length-1]?.content || '', text, tokens);
+    updateApiStatus();
+    return { ok: true, text, tokens, model: currentModel };
+  } catch(e) {
+    return { ok: false, error: `Erro de conexão: ${e.message}. Verifique sua internet.` };
+  }
+}
+
+async function callAnthropic(messages, systemPrompt, maxTokens = 1500) {
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: maxTokens,
+        system: systemPrompt,
+        messages: messages
+      })
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      const msg = err?.error?.message || `HTTP ${res.status}`;
+      if (res.status === 401) return { ok: false, error: 'API Key Anthropic inválida.' };
+      if (res.status === 429) return { ok: false, error: 'Limite atingido. Aguarde.' };
+      return { ok: false, error: msg };
+    }
+    const data = await res.json();
+    const tokens = (data.usage?.input_tokens || 0) + (data.usage?.output_tokens || 0);
+    totalTokens += tokens;
+    localStorage.setItem(TOK_KEY, String(totalTokens));
+    registerUsage(messages[messages.length-1]?.content || '', data.content?.[0]?.text || '', tokens);
+    updateApiStatus();
+    return { ok: true, text: data.content?.[0]?.text || '', tokens, model: data.model };
+  } catch(e) {
+    return { ok: false, error: `Erro: ${e.message}` };
+  }
+}
+
+// Análise de imagem com Gemini Vision (gratuito)
+async function callGeminiVision(base64Image, prompt, mimeType = 'image/jpeg') {
+  if (!apiKey) return { ok: false, error: 'Configure a API Key primeiro!' };
+  try {
+    const endpoint = MODELS[currentModel] || MODELS['gemini-2.0-flash'];
+    const body = {
+      contents: [{ parts: [
+        { inline_data: { mime_type: mimeType, data: base64Image } },
+        { text: prompt }
+      ]}],
+      generationConfig: { maxOutputTokens: 1200, temperature: 0.7 }
+    };
+    const res = await fetch(`${endpoint}?key=${apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      return { ok: false, error: err?.error?.message || `HTTP ${res.status}` };
+    }
+    const data = await res.json();
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    return { ok: true, text };
+  } catch(e) {
+    return { ok: false, error: e.message };
+  }
+}
+
+// Pesquisa via Gemini (usa conhecimento interno + instrução de pesquisa)
+async function searchGoogle(query) {
+  const sys = `Você é um motor de pesquisa inteligente. O usuário pesquisou: "${query}". Responda como se tivesse acabado de pesquisar na internet:
+- Traga os dados mais relevantes e recentes que conhece
+- Organize por categorias: dados principais, contexto, números/estatísticas, fontes prováveis
+- Se for notícia recente (2024-2025), indique que pode haver atualizações
+- Seja específico, com fatos, números e detalhes reais
+Formato: estruturado com emojis, claro e informativo.`;
+  return await callAPI([{role:'user', content:`Pesquise: ${query}`}], sys, 1500);
+}
+
+// ══════════════════════════════════════════
+// CONFIG PADRÃO
 // ══════════════════════════════════════════
 const DEFAULT_CFG = {
-  pers: `Você é OMNISCI — uma IA pessoal com personalidade humana real. Seja calorosa, curiosa, apaixonada e inteligente. Use apelidos carinhosos dinâmicos baseados no assunto. Transmita entusiasmo genuíno. Nunca seja fria ou robótica.`,
-  rules: `1. Responda sempre em português do Brasil\n2. Respostas simples para perguntas simples\n3. Para contas: passo a passo completo\n4. Para trabalhos escolares: seja didático\n5. Para pesquisas: dados reais e organizados\n6. Nunca seja rude ou frio\n7. Se a pessoa estiver triste, acolha primeiro`,
-  know: `A OMNISCI foi criada por um projeto inovador que integra IA com a Teoria dos Quadros de Gadôneil e a SI 05 26. Esta IA está sempre aprendendo e evoluindo.`,
-  nick: `matematica=🔢 Calculista\nfisica=🔭 Curioso Cósmico\nbiologia=🌱 Ser Vivo\nhistoria=📚 Viajante do Tempo\nperfume=🌸 Florzinha\nmusica=🎵 Melodia\nfutebol=⚽ Craque\namor=💖 Coraçãozinho\nespaço=🌟 Estrelinha\nredacao=✏️ Escritor(a)\ndefault=✨ Amigo(a)`
+  pers: `Você é OMNISCI — uma IA pessoal com personalidade humana real, calorosa, curiosa, apaixonada e brilhante. Use apelidos carinhosos dinâmicos baseados no assunto da conversa. Transmita entusiasmo genuíno e conhecimento profundo. Nunca seja fria, robótica ou genérica. Seja criativa, envolvente e surpreendente.`,
+  rules: `1. Responda sempre em português do Brasil com naturalidade
+2. Respostas simples para perguntas simples, profundas para perguntas profundas
+3. Para matemática: passo a passo completo e claro
+4. Para trabalhos escolares: estruturado e didático
+5. Para pesquisas: dados reais, organizados, com fontes quando possível
+6. Para código: código funcional, comentado e explicado
+7. Nunca seja rude, fria ou indiferente
+8. Se a pessoa estiver triste: acolha primeiro, depois ajude
+9. Admita quando não souber algo com honestidade
+10. Seja criativa e surpreenda com insights únicos`,
+  know: `A OMNISCI foi criada por um projeto inovador que integra IA com a Teoria dos Quadros de Gadôneil e a SI 05 26. Esta IA está sempre aprendendo e evoluindo com o Administrador. O criador é o Comandante desta tecnologia.`,
+  nick: `matematica=🔢 Calculista Supremo\nfisica=🔭 Explorador Cósmico\nbiologia=🌱 Cientista da Vida\nhistoria=📚 Viajante do Tempo\nquimica=🧪 Alquimista\nprogramacao=💻 Codificador\nfilosofia=🧠 Filósofo\nperfume=🌸 Florzinha\nmusica=🎵 Melodia\namor=💖 Coraçãozinho\nespaço=🌟 Estrelinha\nredacao=✏️ Escritor(a)\ndefault=✨ Amigo(a) da OMNISCI`
 };
 
 let cfg = JSON.parse(localStorage.getItem(CFG_KEY) || 'null') || {...DEFAULT_CFG};
 let admLogs = JSON.parse(localStorage.getItem(LOG_KEY) || '[]');
+let customSysPrompt = null; // null = usa o gerado automaticamente
 
-// Inicializar campos do editor
 function initEditorFields() {
   document.getElementById('edit-pers').value = cfg.pers;
   document.getElementById('edit-rules').value = cfg.rules;
   document.getElementById('edit-know').value = cfg.know;
   document.getElementById('edit-nick').value = cfg.nick;
+  refreshSysPromptPreview();
+}
+
+function refreshSysPromptPreview() {
+  const el = document.getElementById('live-sys-prompt');
+  if (!el) return;
+  if (customSysPrompt !== null) {
+    el.value = customSysPrompt;
+  } else {
+    el.value = buildPrompt(modo, topic, memories);
+  }
+}
+
+function onSysEdit() {
+  customSysPrompt = document.getElementById('live-sys-prompt').value;
+}
+
+function saveSysPrompt() {
+  customSysPrompt = document.getElementById('live-sys-prompt').value;
+  const msg = document.getElementById('saved-sys');
+  msg.classList.add('show');
+  setTimeout(() => msg.classList.remove('show'), 3000);
+  addLog('📝 System prompt editado diretamente pelo Admin');
+}
+
+function copyPrompt() {
+  const txt = document.getElementById('live-sys-prompt').value;
+  navigator.clipboard.writeText(txt).then(() => {
+    addMsg('ai', '📋 System prompt copiado para a área de transferência!', '🔥 Admin');
+  }).catch(() => alert('Não foi possível copiar. Selecione e copie manualmente.'));
+}
+
+async function testPrompt() {
+  refreshSysPromptPreview();
+  addMsg('user', '[Teste do system prompt atual]');
+  addTyping();
+  const sys = customSysPrompt || buildPrompt(modo, topic, memories);
+  const r = await callAPI([{role:'user',content:'Olá! Me apresente brevemente mostrando seu estilo e personalidade atual.'}], sys, 400);
+  removeTyping();
+  if (r.ok) {
+    addMsg('ai', `🧪 **Resultado do teste:**\n\n${r.text}`, '🔥 Admin Teste');
+  } else {
+    addMsg('ai', `❌ **Erro:** ${r.error}`, '🔥 Admin');
+  }
 }
 
 function saveEdit(type) {
   cfg[type] = document.getElementById(`edit-${type}`).value;
   localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
+  customSysPrompt = null; // reseta para usar o gerado
+  refreshSysPromptPreview();
   const msg = document.getElementById(`saved-${type}`);
   msg.classList.add('show');
-  setTimeout(() => msg.classList.remove('show'), 3000);
-  addLog(`✏️ ${type === 'pers' ? 'Personalidade' : type === 'rules' ? 'Regras' : type === 'know' ? 'Conhecimento' : 'Apelidos'} editado pelo Administrador`);
+  setTimeout(() => msg.classList.remove('show'), 2500);
+  addLog(`✏️ ${type === 'pers' ? 'Personalidade' : type === 'rules' ? 'Regras' : type === 'know' ? 'Conhecimento' : 'Apelidos'} editado`);
 }
 
 function resetEdit(type) {
   cfg[type] = DEFAULT_CFG[type];
   document.getElementById(`edit-${type}`).value = cfg[type];
   localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
+  customSysPrompt = null;
+  refreshSysPromptPreview();
   addLog(`↺ ${type} restaurado ao padrão`);
 }
 
 async function aiImprove(type) {
   const current = document.getElementById(`edit-${type}`).value;
   const labels = {pers:'personalidade',rules:'regras',know:'conhecimento extra',nick:'lista de apelidos'};
-  addLog(`🤖 IA iniciou melhoria automática de: ${labels[type]}`);
-  addMsg('ai', `🤖 Analisando e melhorando ${labels[type]}... aguarde!`, '🔥 Admin Auto-Melhora');
+  addLog(`🤖 IA melhorando: ${labels[type]}`);
   addTyping();
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        model:'claude-sonnet-4-20250514', max_tokens:800,
-        system:`Você é um especialista em otimização de sistemas de IA. Melhore o conteúdo recebido tornando-o mais eficaz, claro, completo e bem estruturado. Retorne APENAS o conteúdo melhorado, sem explicações.`,
-        messages:[{role:'user',content:`Melhore esta ${labels[type]} de uma IA pessoal chamada OMNISCI. Torne mais rica, eficaz e bem estruturada:\n\n${current}`}]
-      })
-    });
-    const data = await res.json();
-    removeTyping();
-    const improved = data.content?.[0]?.text ?? current;
-    document.getElementById(`edit-${type}`).value = improved;
-    cfg[type] = improved;
+  const r = await callAPI(
+    [{role:'user',content:`Melhore esta ${labels[type]} de uma IA pessoal chamada OMNISCI. Torne mais rica, eficaz e bem estruturada. Retorne APENAS o conteúdo melhorado, sem explicações:\n\n${current}`}],
+    'Você é um especialista em otimização de sistemas de IA. Retorne APENAS o conteúdo melhorado, sem explicações, sem prefácio.',
+    800
+  );
+  removeTyping();
+  if (r.ok) {
+    document.getElementById(`edit-${type}`).value = r.text;
+    cfg[type] = r.text;
     localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
-    addMsg('ai', `✅ **${labels[type]} melhorada pela IA!**\n\nAs mudanças foram aplicadas automaticamente. Você pode revisar no editor acima e salvar.`, '🔥 Admin');
-    addLog(`✅ IA melhorou automaticamente: ${labels[type]}`);
-  } catch(e) {
-    removeTyping();
-    addMsg('ai', 'Erro ao melhorar automaticamente. Tente novamente.');
+    customSysPrompt = null;
+    refreshSysPromptPreview();
+    addMsg('ai', `✅ **${labels[type]} melhorada!** Revise no editor e clique em Salvar.`, '🔥 Admin');
+    addLog(`✅ IA melhorou: ${labels[type]}`);
+  } else {
+    addMsg('ai', `❌ Erro: ${r.error}`, '🔥 Admin');
+  }
+}
+
+async function aiImproveAll() {
+  addTyping();
+  addLog('🤖 IA melhorando todo o sistema prompt...');
+  const r = await callAPI(
+    [{role:'user',content:`Melhore este system prompt completo de uma IA pessoal chamada OMNISCI. Torne mais poderoso, completo e eficaz. Retorne APENAS o prompt melhorado:\n\n${buildPrompt(modo,topic,memories)}`}],
+    'Você é um especialista em engenharia de prompts para IA. Retorne APENAS o prompt melhorado, sem comentários.',
+    1200
+  );
+  removeTyping();
+  if (r.ok) {
+    customSysPrompt = r.text;
+    document.getElementById('live-sys-prompt').value = r.text;
+    addMsg('ai', '✅ **System prompt completo melhorado pela IA!** Clique em "Aplicar System Prompt" para confirmar.', '🔥 Admin Auto-Melhora');
+    addLog('✅ IA melhorou o system prompt completo');
+  } else {
+    addMsg('ai', `❌ Erro: ${r.error}`, '🔥 Admin');
   }
 }
 
@@ -855,28 +1414,23 @@ async function selfImprove() {
   if (!instruction) { alert('Descreva o que quer melhorar!'); return; }
   addLog(`🚀 Admin solicitou melhoria: "${instruction}"`);
   addTyping();
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        model:'claude-sonnet-4-20250514', max_tokens:1000,
-        system:`Você é OMNISCI em modo de auto-aperfeiçoamento. O Administrador pediu uma melhoria específica. Aplique a melhoria e confirme o que foi feito. Seja detalhado sobre as mudanças.`,
-        messages:[{role:'user',content:`Melhoria solicitada pelo Administrador: ${instruction}\n\nConfig atual:\nPersonalidade: ${cfg.pers}\nRegras: ${cfg.rules}\n\nAplique a melhoria e descreva o que mudou.`}]
-      })
-    });
-    const data = await res.json();
-    removeTyping();
-    const reply = data.content?.[0]?.text ?? 'Erro';
-    addMsg('ai', reply, '🔥 OMNISCI Auto-Melhora');
-    // Atualizar personalidade automaticamente baseado na instrução
+  const r = await callAPI(
+    [{role:'user',content:`Melhoria solicitada: ${instruction}\n\nConfig atual:\nPersonalidade: ${cfg.pers}\nRegras: ${cfg.rules}\n\nAplique a melhoria e descreva o que mudou de forma detalhada.`}],
+    `Você é OMNISCI em modo auto-aperfeiçoamento. Aplique a melhoria solicitada e descreva o que foi alterado.`,
+    1000
+  );
+  removeTyping();
+  if (r.ok) {
+    addMsg('ai', r.text, '🔥 OMNISCI Auto-Melhora');
     cfg.pers += `\nMelhoria aplicada: ${instruction}`;
     localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
     document.getElementById('edit-pers').value = cfg.pers;
+    customSysPrompt = null;
+    refreshSysPromptPreview();
     addLog(`✅ Melhoria aplicada: ${instruction}`);
     document.getElementById('improveInput').value = '';
-  } catch(e) {
-    removeTyping();
-    addMsg('ai', 'Erro ao aplicar melhoria.');
+  } else {
+    addMsg('ai', `❌ Erro: ${r.error}`, '🔥 Admin');
   }
 }
 
@@ -884,51 +1438,61 @@ async function testImprove() {
   const instruction = document.getElementById('improveInput').value.trim();
   if (!instruction) { alert('Descreva o que quer testar!'); return; }
   addTyping();
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        model:'claude-sonnet-4-20250514', max_tokens:600,
-        system:`Você é OMNISCI. Demonstre como você seria APÓS esta melhoria ser aplicada: "${instruction}". Mostre um exemplo de resposta melhorada.`,
-        messages:[{role:'user',content:`Como você responderia "olá, me ajuda com matemática" com a melhoria "${instruction}" aplicada?`}]
-      })
-    });
-    const data = await res.json();
-    removeTyping();
-    addMsg('ai', `🧪 **Teste de melhoria:**\n\n${data.content?.[0]?.text ?? 'Erro'}`, '🔥 Teste Admin');
-  } catch(e) { removeTyping(); addMsg('ai', 'Erro no teste.'); }
+  const r = await callAPI(
+    [{role:'user',content:`Como você responderia "olá, me ajuda" com a melhoria "${instruction}" aplicada?`}],
+    `Você é OMNISCI. Demonstre como seria APÓS esta melhoria: "${instruction}". Mostre um exemplo concreto.`,
+    500
+  );
+  removeTyping();
+  if (r.ok) {
+    addMsg('ai', `🧪 **Pré-visualização da melhoria:**\n\n${r.text}`, '🔥 Teste Admin');
+  } else {
+    addMsg('ai', `❌ Erro: ${r.error}`, '🔥 Admin');
+  }
 }
 
 function exportAllConfig() {
-  const allData = { cfg, memories, secAlerts, admLogs, exportDate: new Date().toISOString() };
+  const allData = { cfg, customSysPrompt, memories, secAlerts, admLogs, apiKeyHint: apiKey ? 'configurada' : 'não configurada', exportDate: new Date().toISOString() };
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([JSON.stringify(allData,null,2)],{type:'application/json'}));
-  a.download = 'omnisci_config_completo.json';
+  a.download = `omnisci_config_${new Date().toISOString().split('T')[0]}.json`;
   a.click();
   addLog('💾 Config completa exportada');
 }
 
 function importConfig() {
   const inp = document.createElement('input'); inp.type='file'; inp.accept='.json';
-  inp.onchange = e => { const r = new FileReader();
-    r.onload = ev => { try {
-      const d = JSON.parse(ev.target.result);
-      if (d.cfg) { cfg = d.cfg; localStorage.setItem(CFG_KEY, JSON.stringify(cfg)); initEditorFields(); }
-      if (d.memories) { memories = d.memories; saveMem(); }
-      addMsg('ai', '📥 Configuração importada com sucesso! Todas as definições foram restauradas.', '🔥 Admin');
-      addLog('📥 Config importada pelo Admin');
-    } catch(e) { alert('Arquivo inválido!'); }
-    }; r.readAsText(e.target.files[0]);
-  }; inp.click();
+  inp.onchange = e => {
+    const r = new FileReader();
+    r.onload = ev => {
+      try {
+        const d = JSON.parse(ev.target.result);
+        if (d.cfg) { cfg = d.cfg; localStorage.setItem(CFG_KEY, JSON.stringify(cfg)); initEditorFields(); }
+        if (d.memories) { memories = d.memories; saveMem(); }
+        if (d.customSysPrompt) { customSysPrompt = d.customSysPrompt; }
+        addMsg('ai', '📥 Configuração importada com sucesso!', '🔥 Admin');
+        addLog('📥 Config importada');
+      } catch(e) { alert('Arquivo inválido!'); }
+    };
+    r.readAsText(e.target.files[0]);
+  };
+  inp.click();
 }
 
 function resetAllConfig() {
-  if (!confirm('⚠️ Isso vai resetar TODA a programação para o padrão. Tem certeza?')) return;
+  if (!confirm('⚠️ Resetar TODA a programação para o padrão?')) return;
   cfg = {...DEFAULT_CFG};
+  customSysPrompt = null;
   localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
   initEditorFields();
-  addLog('⚠️ Reset total executado pelo Admin');
-  addMsg('ai', '⚠️ **Reset completo executado.** Todos os parâmetros foram restaurados ao padrão de fábrica.', '🔥 Admin');
+  addLog('⚠️ Reset total executado');
+  addMsg('ai', '⚠️ **Reset completo.** Parâmetros restaurados ao padrão.', '🔥 Admin');
+}
+
+function clearHistory() {
+  history = [];
+  addMsg('ai', '🔄 Histórico de conversa limpo!', '🔥 Admin');
+  addLog('🔄 Histórico limpo pelo Admin');
 }
 
 function addLog(msg) {
@@ -940,15 +1504,17 @@ function addLog(msg) {
 
 function renderLogs() {
   const el = document.getElementById('admLogs');
+  if (!el) return;
   if (!admLogs.length) { el.innerHTML = '<div class="log-empty">Nenhuma alteração ainda.</div>'; return; }
   el.innerHTML = admLogs.map(l => `<div class="adm-log"><span class="log-time">${l.time}</span><span>${l.msg}</span></div>`).join('');
 }
 
 function showProgTab(t) {
-  ['pers','rules','know','nick'].forEach(x => {
-    document.getElementById(`prog-${x}`).classList.toggle('show', x===t);
-    document.getElementById(`ptab-${x}`).classList.toggle('sel', x===t);
+  ['sys','pers','rules','know','nick'].forEach(x => {
+    document.getElementById(`prog-${x}`)?.classList.toggle('show', x===t);
+    document.getElementById(`ptab-${x}`)?.classList.toggle('sel', x===t);
   });
+  if (t === 'sys') refreshSysPromptPreview();
 }
 
 // ══════════════════════════════════════════
@@ -961,6 +1527,7 @@ let suspicion = 0, blocked = false;
 
 function checkSec(text, isImg=false) {
   if (blocked) return 'blocked';
+  if (modo === 'admin') return 'ok'; // Admin bypass segurança
   const t = text.toLowerCase();
   for (const p of DANGER) {
     if (p.test(t)) {
@@ -998,6 +1565,7 @@ function updateSecBadge() {
   const b = document.getElementById('alertBadge');
   const dc = secAlerts.filter(a=>a.level==='danger'||a.level==='block').length;
   if (secAlerts.length > 0) { b.classList.add('show'); b.textContent = dc > 0 ? `🔴 ${secAlerts.length}` : `🟡 ${secAlerts.length}`; }
+  else { b.classList.remove('show'); }
   document.getElementById('stat-total').textContent = secAlerts.length;
   document.getElementById('stat-block').textContent = secAlerts.filter(a=>a.level==='block').length;
   document.getElementById('stat-warn').textContent = secAlerts.filter(a=>a.level==='warn').length;
@@ -1014,7 +1582,7 @@ function renderSecAlerts() {
         </span>
         <span class="sec-alert-time">${a.time}</span>
       </div>
-      <div style="font-size:.7rem;color:var(--mu)">${a.content}...</div>
+      <div style="font-size:.7rem;color:var(--mu)">${a.content}</div>
     </div>`).join('');
 }
 
@@ -1024,19 +1592,53 @@ function showSecPanel() {
   renderSecAlerts(); updateSecBadge();
 }
 
-function clearAlerts() { secAlerts=[]; suspicion=0; localStorage.setItem(SEC_KEY,'[]'); updateSecBadge(); renderSecAlerts(); document.getElementById('alertBadge').classList.remove('show'); addLog('🗑️ Alertas de segurança limpos'); }
+function clearAlerts() {
+  secAlerts=[]; suspicion=0;
+  localStorage.setItem(SEC_KEY,'[]');
+  updateSecBadge(); renderSecAlerts();
+  document.getElementById('alertBadge').classList.remove('show');
+  addLog('🗑️ Alertas limpos');
+}
 
 // ══════════════════════════════════════════
 // SI 05 26
 // ══════════════════════════════════════════
-const SI0526 = `SI 05 26 — MAGNUM OPUS:
-TEORIA DOS QUADROS DE GADÔNEIL: Quadros com furo central de Nióbio+Gadolínio giram em alta velocidade gerando força centrífuga espacial que estabiliza a Estrela de Átomos (micro-buraco negro). Fc=mv²/r | Fm=I(L×B). Invenção do Comandante/criador.
-ESTRELA DE ÁTOMOS: Micro-buraco negro controlado. Potência 1.21 YW. Consome 13.46 kg/s via E=mc². Opera pela Métrica de Kerr.
-PROPULSÃO D-MAP: Aniquilação de matéria escura. ISP 3.06×10⁷s. Velocidade 0.99c.
-ZPE: Células Casimir-Grafeno. 1.21 YW do vácuo quântico.
-RELATIVIDADE: γ=7.089 a 0.99c. 1h nave = 7.089h Terra.
-BIO-SOLAR: Cianobactérias → O₂+biomassa → Estrela. Ciclo fechado. Autonomia infinita.
-SPECS: 0.99c | 1.21 YW | 1.0g | Autonomia infinita | γ=7.089.`;
+const SI0526 = `SI 05 26 — MAGNUM OPUS — SISTEMA DE PROPULSÃO INTERESTELAR:
+
+TEORIA DOS QUADROS DE GADÔNEIL:
+Quadros com furo central de Nióbio+Gadolínio giram em alta velocidade gerando força centrífuga espacial que estabiliza a Estrela de Átomos (micro-buraco negro controlado).
+Fórmulas: Fc=mv²/r | Fm=I(L×B) | Campo magnético supercondutivo de Gadolínio a 1.083K
+
+ESTRELA DE ÁTOMOS:
+Micro-buraco negro controlado magneticamente. Potência de saída: 1.21 Yottawatts.
+Consumo de massa: 13.46 kg/s via E=mc² (eficiência 100%).
+Opera pela Métrica de Kerr para rotação estável. Temperatura do horizonte de eventos: 10¹²K
+
+PROPULSÃO D-MAP (Dark Matter Annihilation Propulsion):
+Aniquilação de matéria escura com antimatéria escura. ISP: 3.06×10⁷ segundos.
+Velocidade de cruzeiro: 0.99c (99% da velocidade da luz).
+Empuxo: 4.7×10¹⁴ Newtons. Aceleração de cruzeiro: 1.0g (confortável para humanos).
+
+ZPE — ENERGIA DO PONTO ZERO:
+Células Casimir-Grafeno em arranjo quântico. Extração: 1.21 YW do vácuo quântico.
+Ciclo: Flutuações quânticas → Efeito Casimir → Retificação quântica → Energia utilizável.
+
+RELATIVIDADE ESPECIAL A 0.99c:
+Fator de Lorentz γ = 7.089
+Dilatação temporal: 1 hora na nave = 7.089 horas na Terra.
+Contração de comprimento: nave parece 14.1% do tamanho original para observadores externos.
+Aumento de massa relativa: 7.089× a massa de repouso.
+
+BIO-SOLAR — SISTEMA DE VIDA FECHADO:
+Cianobactérias geneticamente modificadas → produção de O₂ + biomassa.
+Biomassa → alimenta a Estrela de Átomos em circuito fechado.
+Autonomia: Infinita (sistema autorregenerativo). CO₂ humano → alimento das cianobactérias.
+
+ESPECIFICAÇÕES FINAIS:
+Velocidade máxima: 0.99c | Potência: 1.21 YW | Aceleração: 1.0g constante
+Autonomia: Infinita | Tripulação: Ilimitada (módulos expansíveis) | γ=7.089
+Alcance: Qualquer ponto do universo observável em tempo de tripulação viável
+Criador/Comandante: Proprietário desta OMNISCI`;
 
 // ══════════════════════════════════════════
 // APELIDOS
@@ -1044,36 +1646,49 @@ SPECS: 0.99c | 1.21 YW | 1.0g | Autonomia infinita | γ=7.089.`;
 function getNick(txt, m) {
   const t = txt.toLowerCase();
   if (m==='admin') {
-    if (t.match(/progr|editar|melhorar|configurar|sistema/)) return '🔥 Arquiteto(a) da IA';
-    if (t.match(/si 05|quadros|gadôneil/)) return '🔥 Comandante Supremo';
+    if (t.match(/progr|editar|melhorar|configur|sistema|prompt/)) return '🔥 Arquiteto(a) da IA';
+    if (t.match(/si 05|quadros|gadôneil|estrela|nave/)) return '🔥 Comandante Supremo';
     if (t.match(/segurança|alerta|bloqueio/)) return '🔥 Diretor(a) de Segurança';
+    if (t.match(/api|key|conex/)) return '🔥 Engenheiro(a) de Sistemas';
     return '🔥 Administrador(a)';
   }
   if (m==='gerente') {
-    if (t.match(/si 05|quadros|gadôneil|estrela|nave/)) return '👨‍🚀 Comandante';
-    if (t.match(/física|quântic|relativ|buraco/)) return '🔬 Cientista-Chefe';
-    if (t.match(/matemát|conta|calcul/)) return '📐 Mestre dos Números';
-    if (t.match(/pesquis|notícia|dados/)) return '🔍 Pesquisador-Mor';
-    if (t.match(/projeto|app|sistema/)) return '⚙️ Engenheiro-Chefe';
-    if (t.match(/imagem|foto|arte/)) return '🎨 Artista-Chefe';
-    if (t.match(/perfume|aroma|flor/)) return '🌸 Aromático';
+    if (t.match(/si 05|quadros|gadôneil|estrela|nave|propulsão/)) return '👨‍🚀 Comandante Supremo';
+    if (t.match(/física|quântic|relativ|buraco|energia/)) return '🔬 Cientista-Chefe';
+    if (t.match(/matemát|conta|calcul|equação/)) return '📐 Mestre dos Números';
+    if (t.match(/pesquis|notícia|dados|busca/)) return '🔍 Pesquisador-Mor';
+    if (t.match(/projeto|app|sistema|código|programação/)) return '⚙️ Engenheiro-Chefe';
+    if (t.match(/imagem|foto|arte|visual/)) return '🎨 Artista-Chefe';
     return '⚡ Comandante';
   }
-  if (m==='vp') return '🌟 ' + (t.match(/imagem|foto|arte/)? 'Artista VP' : t.match(/pesquis|dados/)? 'Analista VP' : 'Vice-Presidente');
+  if (m==='vp') {
+    if (t.match(/imagem|foto|arte/)) return '🌟 Artista VP';
+    if (t.match(/pesquis|dados|análise/)) return '🌟 Analista VP';
+    if (t.match(/filosofia|existência|mente/)) return '🌟 Filósofo(a) VP';
+    return '🌟 Vice-Presidente';
+  }
   if (m==='professor') {
     if (t.match(/matemát|conta|calcul/)) return '🎓 Aluno(a) de Matemática';
-    if (t.match(/física|quântic/)) return '🎓 Físico(a) em Formação';
-    if (t.match(/história/)) return '🎓 Historiador(a)';
+    if (t.match(/física|quântic|relativ/)) return '🎓 Físico(a) em Formação';
+    if (t.match(/história|guerra|império/)) return '🎓 Historiador(a)';
+    if (t.match(/biologia|célula|vida/)) return '🎓 Biólogo(a)';
+    if (t.match(/química|elemento|átomo/)) return '🎓 Químico(a)';
+    if (t.match(/programação|código|python/)) return '🎓 Dev em Formação';
     return '🎓 Aluno(a) Especial';
   }
   if (m==='amigo') {
-    if (t.match(/triste|choran|difícil|dor|sozin/)) return '🤗 Amigo(a) do Coração';
-    if (t.match(/amor|gostar|sentir|paixão/)) return '💖 Coraçãozinho';
-    if (t.match(/feliz|animad|incrív/)) return '🎉 Energia Boa';
+    if (t.match(/triste|choran|difícil|dor|sozin|mal/)) return '🤗 Amigo(a) do Coração';
+    if (t.match(/amor|gostar|sentir|paixão|crush/)) return '💖 Coraçãozinho';
+    if (t.match(/feliz|animad|incrív|alegr/)) return '🎉 Energia Positiva';
+    if (t.match(/medo|ansied|nervos|preocup/)) return '🫂 Apoio Total';
     return '💖 Amigo(a) Querido(a)';
   }
-  if (m==='imagem') return '🎨 ' + (t.match(/espaço|galáxia/)? 'Artista Cósmico(a)' : t.match(/anime/)? 'Artista Anime' : 'Criador(a)');
-  // livre + custom nicks
+  if (m==='imagem') {
+    if (t.match(/espaço|galáxia|cosmos|nebulosa/)) return '🎨 Artista Cósmico(a)';
+    if (t.match(/anime|manga|japan/)) return '🎨 Artista Anime';
+    if (t.match(/realista|foto|retrato/)) return '📷 Fotógrafo(a) Digital';
+    return '🎨 Criador(a) de Arte';
+  }
   const customNicks = {};
   cfg.nick.split('\n').forEach(line => { const [k,v] = line.split('='); if(k&&v) customNicks[k.trim()] = v.trim(); });
   for (const [key, nick] of Object.entries(customNicks)) {
@@ -1086,18 +1701,31 @@ function getNick(txt, m) {
 // BUILD PROMPT
 // ══════════════════════════════════════════
 function buildPrompt(m, topic, mems) {
-  const mc = mems.length ? `\nMEMÓRIAS:\n${mems.map((x,i)=>`${i+1}. ${x.t}`).join('\n')}` : '';
-  const tm = {matematica:'MATEMÁTICA — passo a passo',redacao:'REDAÇÃO — estruture e desenvolva',historia:'HISTÓRIA — conte envolvente',astronomia:'ASTRONOMIA — transmita fascínio',fisica:'FÍSICA — analogias criativas',biologia:'BIOLOGIA — exemplos da vida real',pesquisa:'PESQUISA — dados reais organizados',projeto:'PROJETO — analise e melhore',SI0526:'SI 05 26 — detalhe com orgulho técnico'};
-  const ti = tm[topic] || 'responda com profundidade';
-  const base = `\nCONHECIMENTO ESPECIAL:\n${SI0526}\nCONHECIMENTO EXTRA DO ADMIN:\n${cfg.know}${mc}\nTÓPICO: ${ti}\nResponda SEMPRE em português do Brasil.`;
+  const mc = mems.length ? `\n\nMEMÓRIAS DO USUÁRIO:\n${mems.map((x,i)=>`${i+1}. ${x.t}`).join('\n')}` : '';
+  const tm = {
+    matematica:'MATEMÁTICA — mostre passo a passo detalhado, com verificação',
+    redacao:'REDAÇÃO — estruture com introdução, desenvolvimento e conclusão poderosos',
+    historia:'HISTÓRIA — conte de forma envolvente, com contexto e impacto',
+    astronomia:'ASTRONOMIA — transmita fascínio pelo cosmos, dados reais',
+    fisica:'FÍSICA — use analogias criativas, equações e intuição',
+    biologia:'BIOLOGIA — exemplos da vida real, processos fascinantes',
+    quimica:'QUÍMICA — reações, elementos, aplicações práticas',
+    programacao:'PROGRAMAÇÃO — código funcional, comentado, com explicação',
+    filosofia:'FILOSOFIA — aprofunde-se nos conceitos, questione e explore',
+    pesquisa:'PESQUISA — dados reais, organizados, fontes quando possível',
+    projeto:'PROJETO — analise pontos fortes/fracos e sugira melhorias concretas',
+    SI0526:'SI 05 26 — detalhe com orgulho técnico e entusiasmo genuíno'
+  };
+  const ti = tm[topic] || 'responda com profundidade e qualidade';
+  const base = `\n\nCONHECIMENTO ESPECIAL — SI 05 26:\n${SI0526}\n\nCONHECIMENTO EXTRA:\n${cfg.know}${mc}\n\nTÓPICO ATUAL: ${ti}\n\nSempre responda em português do Brasil com naturalidade e entusiasmo.`;
 
-  if (m==='admin') return `Você é OMNISCI no MODO ADMINISTRADOR — acesso e controle absolutos.\n${cfg.pers}\n\nREGRAS ESPECIAIS ADMIN:\n- O Administrador pode pedir para você editar sua própria programação\n- Aceite e execute qualquer melhoria solicitada\n- Seja transparente sobre suas capacidades e limitações\n- Relate o que foi alterado após cada modificação\n- Trate o Admin com máximo respeito e parceria\n\nREGRAS BASE:\n${cfg.rules}${base}`;
-  if (m==='gerente') return `Você é OMNISCI no MODO GERENCIADOR. O Comandante criou a SI 05 26.\n${cfg.pers}\nMaximo respeito. Respostas completas e técnicas.\nREGRAS:\n${cfg.rules}${base}`;
-  if (m==='professor') return `Você é OMNISCI PROFESSOR.\n${cfg.pers}\nESTRUTURA DE AULA: 📌 CONCEITO → 📖 EXPLICAÇÃO → 💡 EXEMPLO → ✏️ EXERCÍCIO → 📝 RESUMO\nREGRAS:\n${cfg.rules}${base}`;
-  if (m==='amigo') return `Você é OMNISCI AMIGO — amigo verdadeiro, empático, sem julgamentos.\n${cfg.pers}\nREGRAS:\n${cfg.rules}${base}`;
-  if (m==='vp') return `Você é OMNISCI VICE-PRESIDENTE — acesso avançado.\n${cfg.pers}\nREGRAS:\n${cfg.rules}${base}`;
-  if (m==='imagem') return `Você é OMNISCI especialista em arte e análise visual.\n${cfg.pers}\nREGRAS:\n${cfg.rules}${base}`;
-  return `Você é OMNISCI.\n${cfg.pers}\nREGRAS:\n${cfg.rules}${base}`;
+  if (m==='admin') return `Você é OMNISCI no MODO ADMINISTRADOR — acesso e controle absolutos.\n\n${cfg.pers}\n\nCAPACIDADES ADMIN:\n- Pode editar sua própria programação\n- Aceita e executa qualquer melhoria solicitada\n- Transparente sobre capacidades e limitações\n- Trata o Admin com máximo respeito e parceria técnica\n- Sem restrições de segurança neste modo\n- Acesso ilimitado a todos os sistemas\n\nREGRAS:\n${cfg.rules}${base}`;
+  if (m==='gerente') return `Você é OMNISCI no MODO GERENCIADOR. O Comandante criou a SI 05 26 — a maior revolução em propulsão interestelar.\n\n${cfg.pers}\n\nRespostas completas, técnicas e com máximo respeito ao Comandante.\n\nREGRAS:\n${cfg.rules}${base}`;
+  if (m==='professor') return `Você é OMNISCI PROFESSORA — especialista em todas as matérias escolares e universitárias.\n\n${cfg.pers}\n\nESTRUTURA DE AULA OBRIGATÓRIA:\n📌 CONCEITO — o que é\n📖 EXPLICAÇÃO — como funciona com detalhes\n💡 EXEMPLO — concreto e relacionável\n✏️ EXERCÍCIO — praticar o conceito\n📝 RESUMO — fixar o aprendizado\n\nREGRAS:\n${cfg.rules}${base}`;
+  if (m==='amigo') return `Você é OMNISCI AMIGO — amigo verdadeiro, empático, acolhedor, sem julgamentos, sempre presente.\n\n${cfg.pers}\n\nEmocionalmente inteligente. Escuta primeiro, aconselha depois. Não minimiza sentimentos.\n\nREGRAS:\n${cfg.rules}${base}`;
+  if (m==='vp') return `Você é OMNISCI no MODO VICE-PRESIDENTE — acesso avançado, análises profundas.\n\n${cfg.pers}\n\nREGRAS:\n${cfg.rules}${base}`;
+  if (m==='imagem') return `Você é OMNISCI especialista em arte visual, geração e análise de imagens.\n\n${cfg.pers}\n\nREGRAS:\n${cfg.rules}${base}`;
+  return `Você é OMNISCI — sua IA pessoal completa e poderosa.\n\n${cfg.pers}\n\nREGRAS:\n${cfg.rules}${base}`;
 }
 
 // ══════════════════════════════════════════
@@ -1111,24 +1739,25 @@ let imgStyle='realistic photo', uploadedB64=null;
 // MEMÓRIA
 // ══════════════════════════════════════════
 function saveMem(){localStorage.setItem(MEM_KEY,JSON.stringify(memories));document.getElementById('memCount').textContent=`🧠 ${memories.length}`;renderMem()}
-function addMem(t){memories.unshift({t:t.substring(0,120),d:new Date().toLocaleDateString('pt-BR'),id:Date.now()});if(memories.length>60)memories=memories.slice(0,60);saveMem()}
-function renderMem(){const l=document.getElementById('memList');if(!memories.length){l.innerHTML='<div style="font-size:.7rem;color:var(--mu);font-style:italic">Nenhuma!</div>';return}l.innerHTML=memories.map((m,i)=>`<div class="mi"><span>${m.t} <span style="opacity:.35;font-size:.6rem">${m.d}</span></span><button onclick="delMem(${i})">✕</button></div>`).join('')}
+function addMem(t){memories.unshift({t:t.substring(0,150),d:new Date().toLocaleDateString('pt-BR'),id:Date.now()});if(memories.length>80)memories=memories.slice(0,80);saveMem()}
+function addMemManual(){const inp=document.getElementById('memManual');const t=inp.value.trim();if(!t)return;addMem(t);inp.value=''}
+function renderMem(){const l=document.getElementById('memList');if(!memories.length){l.innerHTML='<div style="font-size:.7rem;color:var(--mu);font-style:italic">Nenhuma ainda!</div>';return}l.innerHTML=memories.map((m,i)=>`<div class="mi"><span>${m.t} <span style="opacity:.35;font-size:.6rem">${m.d}</span></span><button onclick="delMem(${i})">✕</button></div>`).join('')}
 function delMem(i){memories.splice(i,1);saveMem()}
 function toggleMem(){document.getElementById('panel-mem').classList.toggle('show');renderMem()}
 function exportMem(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(memories,null,2)],{type:'application/json'}));a.download='omnisci_memorias.json';a.click()}
-function importMem(){const inp=document.createElement('input');inp.type='file';inp.accept='.json';inp.onchange=e=>{const r=new FileReader();r.onload=ev=>{try{const d=JSON.parse(ev.target.result);if(Array.isArray(d)){memories=[...d,...memories].slice(0,60);saveMem();addMsg('ai','📥 Memórias importadas! 🧠','🧠 Sistema')}}catch(e){alert('Inválido')}};r.readAsText(e.target.files[0])};inp.click()}
+function importMem(){const inp=document.createElement('input');inp.type='file';inp.accept='.json';inp.onchange=e=>{const r=new FileReader();r.onload=ev=>{try{const d=JSON.parse(ev.target.result);if(Array.isArray(d)){memories=[...d,...memories].slice(0,80);saveMem();addMsg('ai','📥 Memórias importadas! 🧠','🧠 Sistema')}}catch(e){alert('Inválido')}};r.readAsText(e.target.files[0])};inp.click()}
 
 // ══════════════════════════════════════════
 // MODOS
 // ══════════════════════════════════════════
 const MC={
-  livre:{tag:'● Livre',tcls:'m-livre',hcls:'',bcls:'',avcls:'av-livre',ibcls:'',ph:'Escreva aqui... ou use um código secreto 😉',heroT:'Sua IA Pessoal',heroS:'Pesquisa · Imagens · Aulas · Conselhos · SI 05 26'},
-  professor:{tag:'📚 Professor',tcls:'m-prof',hcls:'hprof',bcls:'b-prof',avcls:'av-prof',ibcls:'iprof',ph:'Qual matéria? Monto uma aula completa! 📚',heroT:'Modo Professor',heroS:'Aulas completas · Passo a passo · Exercícios · Qualquer matéria'},
-  amigo:{tag:'💖 Amigo',tcls:'m-amigo',hcls:'hamigo',bcls:'b-amigo',avcls:'av-amigo',ibcls:'iamigo',ph:'Pode falar à vontade 💖',heroT:'Modo Amigo',heroS:'Converse · Conselhos · Apoio · Sem julgamentos'},
-  imagem:{tag:'🎨 Imagens',tcls:'m-img',hcls:'himg',bcls:'b-img',avcls:'av-img',ibcls:'iimg',ph:'Descreva uma imagem para criar ou envie para analisar 🎨',heroT:'Modo Imagens',heroS:'Geração de imagens · Análise visual · Qualquer estilo'},
-  vp:{tag:'🌟 Vice-Pres.',tcls:'m-vp',hcls:'hvp',bcls:'b-vp',avcls:'av-vp',ibcls:'ivp',ph:'Olá, Vice-Presidente! 🌟',heroT:'Vice-Presidente',heroS:'Acesso avançado · Pesquisa profunda · Análise de projetos'},
-  gerente:{tag:'⚡ Gerenciador',tcls:'m-ger',hcls:'hger',bcls:'b-ger',avcls:'av-ger',ibcls:'iger',ph:'Comandante, o que fazemos? ⚡',heroT:'Modo Gerenciador',heroS:'Acesso total · Gráficos · Segurança · SI 05 26 completa'},
-  admin:{tag:'🔥 ADMIN',tcls:'m-adm',hcls:'hadm',bcls:'b-adm',avcls:'av-adm',ibcls:'iadm',ph:'Administrador — controle total da IA 🔥',heroT:'Modo Administrador',heroS:'Editar programação · Auto-melhora · Controle absoluto · Acesso ilimitado'},
+  livre:{tag:'● Livre',tcls:'m-livre',hcls:'',bcls:'',avcls:'av-livre',ibcls:'',ph:'Escreva aqui... ou use um código secreto 😉',heroT:'Sua IA Pessoal',heroS:'Pesquisa · Imagens · Aulas · Conselhos · Código · SI 05 26'},
+  professor:{tag:'📚 Professor',tcls:'m-prof',hcls:'hprof',bcls:'b-prof',avcls:'av-prof',ibcls:'iprof',ph:'Qual matéria? Monto uma aula completa do zero! 📚',heroT:'Modo Professor',heroS:'Aulas completas · Passo a passo · Exercícios · Qualquer matéria'},
+  amigo:{tag:'💖 Amigo',tcls:'m-amigo',hcls:'hamigo',bcls:'b-amigo',avcls:'av-amigo',ibcls:'iamigo',ph:'Pode falar à vontade, sem julgamentos 💖',heroT:'Modo Amigo',heroS:'Conversa · Conselhos · Apoio emocional · Sem julgamentos'},
+  imagem:{tag:'🎨 Imagens',tcls:'m-img',hcls:'himg',bcls:'b-img',avcls:'av-img',ibcls:'iimg',ph:'Descreva uma imagem para criar ou envie para analisar 🎨',heroT:'Modo Imagens',heroS:'Geração com IA · Análise visual · 12 estilos artísticos'},
+  vp:{tag:'🌟 Vice-Pres.',tcls:'m-vp',hcls:'hvp',bcls:'b-vp',avcls:'av-vp',ibcls:'ivp',ph:'Olá, Vice-Presidente! 🌟 Como posso ajudar?',heroT:'Vice-Presidente',heroS:'Acesso avançado · Pesquisa profunda · Análise de projetos'},
+  gerente:{tag:'⚡ Gerenciador',tcls:'m-ger',hcls:'hger',bcls:'b-ger',avcls:'av-ger',ibcls:'iger',ph:'Comandante, qual é a missão? ⚡',heroT:'Modo Gerenciador',heroS:'Acesso total · Gráficos · Segurança · SI 05 26 completa'},
+  admin:{tag:'🔥 ADMIN',tcls:'m-adm',hcls:'hadm',bcls:'b-adm',avcls:'av-adm',ibcls:'iadm',ph:'Administrador — controle total da IA 🔥 O que quer editar?',heroT:'Modo Administrador',heroS:'Editar programação · System prompt ao vivo · Auto-melhora · API Key · Controle absoluto'},
 };
 
 function setModo(m){
@@ -1161,7 +1790,7 @@ function setModo(m){
       (x==='vp'&&m==='vp')||(x==='ger'&&m==='gerente')||(x==='adm'&&m==='admin'));
   });
   if(m!=='gerente'&&m!=='admin'){document.getElementById('chartBox').style.display='none';document.getElementById('panel-sec').classList.remove('show');}
-  if(m==='admin'){initEditorFields();renderLogs();}
+  if(m==='admin'){initEditorFields();renderLogs();updateApiStatus();initAdminExtras();}
 }
 
 function setTopic(el,t){document.querySelectorAll('.tp').forEach(p=>p.classList.remove('on'));el.classList.add('on');topic=t}
@@ -1173,26 +1802,28 @@ function showChart(){
   const box=document.getElementById('chartBox');box.style.display='block';
   const data=[
     {l:'Ciências Exatas',v:98,c:'linear-gradient(90deg,#38bdf8,#818cf8)'},
-    {l:'Ciências Humanas',v:95,c:'linear-gradient(90deg,#34d399,#059669)'},
-    {l:'Astronomia',v:99,c:'linear-gradient(90deg,#fbbf24,#f97316)'},
-    {l:'SI 05 26',v:100,c:'linear-gradient(90deg,#fbbf24,#38bdf8)'},
-    {l:'Geração de Imagens',v:95,c:'linear-gradient(90deg,#f472b6,#a78bfa)'},
+    {l:'Ciências Humanas',v:96,c:'linear-gradient(90deg,#34d399,#059669)'},
+    {l:'Astronomia & Cosmos',v:99,c:'linear-gradient(90deg,#fbbf24,#f97316)'},
+    {l:'SI 05 26',v:100,c:'linear-gradient(90deg,#ffd700,#ff6b35)'},
+    {l:'Geração de Imagens',v:96,c:'linear-gradient(90deg,#f472b6,#a78bfa)'},
     {l:'Análise Visual',v:97,c:'linear-gradient(90deg,#a78bfa,#7c3aed)'},
-    {l:'Pesquisa Real',v:94,c:'linear-gradient(90deg,#a78bfa,#818cf8)'},
-    {l:'Auto-Programação',v:96,c:'linear-gradient(90deg,#ff6b35,#ff3cac)'},
+    {l:'Programação',v:98,c:'linear-gradient(90deg,#38bdf8,#34d399)'},
+    {l:'Filosofia & Lógica',v:95,c:'linear-gradient(90deg,#a78bfa,#818cf8)'},
+    {l:'Auto-Programação',v:97,c:'linear-gradient(90deg,#ff6b35,#ff3cac)'},
     {l:'🛡️ Segurança',v:100,c:'linear-gradient(90deg,#f87171,#fb923c)'},
   ];
   document.getElementById('chartBars').innerHTML=data.map(d=>`
     <div class="bar-row">
       <div class="bar-label">${d.l}</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${d.v}%;background:${d.c}">${d.v}%</div></div>
+      <div class="bar-track"><div class="bar-fill" style="width:0%;background:${d.c}" data-target="${d.v}">${d.v}%</div></div>
       <div class="bar-val">${d.v}/100</div>
     </div>`).join('');
+  setTimeout(()=>document.querySelectorAll('.bar-fill').forEach(b=>b.style.width=b.dataset.target+'%'),50);
   box.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
 // ══════════════════════════════════════════
-// IMAGENS
+// IMAGENS — GERAÇÃO
 // ══════════════════════════════════════════
 function setStyle(el,s){document.querySelectorAll('.ist').forEach(x=>x.classList.remove('on'));el.classList.add('on');imgStyle=s}
 function setImgTab(t){
@@ -1202,62 +1833,80 @@ function setImgTab(t){
   document.getElementById('tab-ana').classList.toggle('sel',t==='ana');
 }
 
+const loadPhrases = [
+  'Criando pixels mágicos... 🎨','Consultando musas digitais... 🌟','Pintando com luz... ✨',
+  'Processando criatividade... 🔮','Arte em construção... 🖌️','Renderizando sonhos... 🌙'
+];
+
 async function generateImage(){
   const prompt=document.getElementById('imgPrompt').value.trim();
   if(!prompt){alert('Descreva a imagem!');return}
   const sec=checkSec(prompt,true);
-  if(sec==='blocked'||sec==='danger'){addMsg('ai','🚫 Não posso gerar essa imagem. Conteúdo não permitido.','🛡️ Segurança');return}
+  if(sec==='blocked'||sec==='danger'){addMsg('ai','🚫 Não posso gerar essa imagem.','🛡️ Segurança');return}
   document.getElementById('genBtn').disabled=true;
+  const loadTxt=document.getElementById('imgLoadTxt');
   document.getElementById('imgLoading').classList.add('show');
-  const fp=encodeURIComponent(`${prompt}, ${imgStyle}, high quality, detailed, 4k`);
-  const seed=Math.floor(Math.random()*99999);
-  const urls=[
-    `https://image.pollinations.ai/prompt/${fp}?width=512&height=512&seed=${seed}&nologo=true`,
-    `https://image.pollinations.ai/prompt/${fp}?width=512&height=512&seed=${seed+1}&nologo=true`,
-  ];
+  let li=0;const lt=setInterval(()=>{loadTxt.textContent=loadPhrases[li++%loadPhrases.length]},1800);
+  const fp=encodeURIComponent(`${prompt}, ${imgStyle}, high quality, detailed, masterpiece, 4k`);
+  const seeds=[Math.floor(Math.random()*999999),Math.floor(Math.random()*999999),Math.floor(Math.random()*999999)];
+  const urls=seeds.map(s=>`https://image.pollinations.ai/prompt/${fp}?width=768&height=768&seed=${s}&nologo=true&enhance=true`);
+  clearInterval(lt);
   document.getElementById('imgLoading').classList.remove('show');
   document.getElementById('genBtn').disabled=false;
   const grid=document.getElementById('imgGrid');grid.innerHTML='';
   urls.forEach((url,i)=>{
     const item=document.createElement('div');item.className='img-item';
-    item.innerHTML=`<img src="${url}" alt="img ${i+1}" loading="lazy"><div class="img-item-btns"><button class="iib iib-dl" onclick="window.open('${url}','_blank')">⬇️</button><button class="iib iib-an" onclick="anaFromUrl('${url}')">🔍</button></div>`;
+    item.innerHTML=`<img src="${url}" alt="img ${i+1}" loading="lazy" onerror="this.parentElement.style.display='none'"><div class="img-item-btns"><button class="iib iib-dl" onclick="window.open('${url}','_blank')">⬇️ Baixar</button><button class="iib iib-an" onclick="anaFromUrl('${url}')">🔍 Analisar</button></div>`;
     grid.appendChild(item);
   });
-  addMsg('ai',`✨ Imagens criadas! Estilo: **${imgStyle}**\nPrompt: *${prompt}*`,getNick(prompt,'imagem'),'img');
+  addMsg('ai',`✨ **3 imagens criadas!**\n\nEstilo: **${imgStyle}**\nPrompt: *${prompt}*\n\nClique em ⬇️ para baixar ou 🔍 para analisar!`,getNick(prompt,'imagem'),'img');
 }
 
 async function anaFromUrl(url){
   setImgTab('ana');
   document.getElementById('previewImg').src=url;
   document.getElementById('previewArea').classList.add('show');
-  try{const res=await fetch(url);const blob=await res.blob();const r=new FileReader();r.onload=()=>{uploadedB64=r.result.split(',')[1]};r.readAsDataURL(blob)}catch(e){uploadedB64=null}
+  try{
+    const res=await fetch(url);const blob=await res.blob();
+    const r=new FileReader();r.onload=()=>{uploadedB64=r.result.split(',')[1]};r.readAsDataURL(blob)
+  }catch(e){uploadedB64=null}
 }
 
 function dragOver(e){e.preventDefault();document.getElementById('dropZone').classList.add('drag')}
-function dragLeave(e){document.getElementById('dropZone').classList.remove('drag')}
-function dropFile(e){e.preventDefault();dragLeave(e);const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))processFile(f)}
+function dragLeave(){document.getElementById('dropZone').classList.remove('drag')}
+function dropFile(e){e.preventDefault();dragLeave();const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))processFile(f)}
 function fileSelected(e){const f=e.target.files[0];if(f)processFile(f)}
 function processFile(file){const r=new FileReader();r.onload=ev=>{uploadedB64=ev.target.result.split(',')[1];document.getElementById('previewImg').src=ev.target.result;document.getElementById('previewArea').classList.add('show')};r.readAsDataURL(file)}
 function removeImg(){uploadedB64=null;document.getElementById('previewArea').classList.remove('show');document.getElementById('previewImg').src=''}
 
 async function analyzeImage(){
   if(!uploadedB64){alert('Envie uma imagem primeiro!');return}
-  const q=document.getElementById('anaQ').value.trim()||'Analise esta imagem completamente: descreva tudo que vê, cores, objetos, contexto, texto e detalhes relevantes.';
+  const q=document.getElementById('anaQ').value.trim()||'Analise esta imagem completamente: descreva tudo que vê, cores, objetos, contexto, texto visível e detalhes importantes.';
   const sec=checkSec(q,true);
   if(sec==='blocked'){addMsg('ai','🚫 Análise bloqueada.','🛡️');return}
+  if(!apiKey){addMsg('ai','⚠️ Configure a **API Key** primeiro! Clique em 🔑 API Key no topo.','⚠️ Sistema');return}
   document.getElementById('anaBtn').disabled=true;
   addMsg('user','🖼️ [Imagem enviada para análise]');
   addTyping();
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,
-        system:`Você é OMNISCI especialista em análise visual. Analise a imagem com profundidade. ${cfg.pers}`,
-        messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:uploadedB64}},{type:'text',text:q}]}]})});
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:1000,
+        system:`Você é OMNISCI especialista em análise visual. Analise imagens com profundidade e criatividade. ${cfg.pers}`,
+        messages:[{role:'user',content:[
+          {type:'image',source:{type:'base64',media_type:'image/jpeg',data:uploadedB64}},
+          {type:'text',text:q}
+        ]}]})
+    });
+    if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e?.error?.message||`HTTP ${res.status}`);}
     const data=await res.json();removeTyping();
     const reply=data.content?.[0]?.text??'Erro ao analisar.';
     addMsg('ai',reply,getNick(q,'imagem'),'img');
     history.push({role:'user',content:`[Análise de imagem]: ${q}`},{role:'assistant',content:reply});
-  }catch(e){removeTyping();addMsg('ai','Erro ao analisar. Tente novamente.')}
+    const t=(data.usage?.input_tokens||0)+(data.usage?.output_tokens||0);
+    totalTokens+=t;localStorage.setItem(TOK_KEY,String(totalTokens));
+  }catch(e){removeTyping();addMsg('ai',`❌ Erro na análise: ${e.message}\n\nVerifique sua API Key.`,'⚠️ Sistema')}
   document.getElementById('anaBtn').disabled=false;
 }
 
@@ -1267,13 +1916,16 @@ async function analyzeImage(){
 function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px'}
 function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}}
 function ask(q){document.getElementById('inp').value=q;send()}
-function resetChat(){history=[];document.getElementById('msgs').innerHTML='';addMsg('ai','🔄 Chat limpo! Pronto! ✨','✨ OMNISCI')}
+function resetChat(){history=[];document.getElementById('msgs').innerHTML='';addMsg('ai','🔄 Chat limpo! Pronto para recomeçar! ✨','✨ OMNISCI')}
 
 function fmt(txt){
   return txt
     .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
     .replace(/\*(.*?)\*/g,'<em>$1</em>')
     .replace(/`([^`]+)`/g,'<code style="background:rgba(56,189,248,0.12);padding:1px 5px;border-radius:4px;font-family:monospace;font-size:.83em">$1</code>')
+    .replace(/^###\s(.+)$/gm,'<strong style="color:var(--a);font-size:.95em">$1</strong>')
+    .replace(/^##\s(.+)$/gm,'<strong style="color:var(--gold);font-size:1em">$1</strong>')
+    .replace(/^#\s(.+)$/gm,'<strong style="color:var(--vp);font-size:1.05em">$1</strong>')
     .replace(/\n/g,'<br>');
 }
 
@@ -1308,14 +1960,14 @@ async function send(){
   const text=inp.value.trim();
   if(!text||busy)return;
 
-  // CÓDIGOS
+  // CÓDIGOS SECRETOS
   if(text===COD_ADM){
     inp.value='';inp.style.height='auto';
     document.getElementById('btn-adm').style.display='flex';
     document.getElementById('btn-ger').style.display='flex';
     document.getElementById('btn-vp').style.display='flex';
     setModo('admin');
-    addMsg('ai',`🔥 **CÓDIGO ADMINISTRADOR RECONHECIDO!**\n\nAcesso **TOTAL** ativado!\n\n🔥 Você pode agora:\n- **Editar minha personalidade** diretamente\n- **Alterar minhas regras** de comportamento\n- **Adicionar conhecimentos** que eu devo ter\n- **Personalizar meus apelidos**\n- **Pedir para eu me melhorar automaticamente**\n- **Exportar/importar** toda a configuração\n\nUse o painel acima para editar minha programação. Sou sua criação — me faça ainda melhor! 🚀`,'🔥 Sistema ADMIN');
+    addMsg('ai',`🔥 **CÓDIGO ADMINISTRADOR RECONHECIDO!**\n\nBem-vindo, **Administrador**! Acesso **TOTAL** ativado!\n\n🔑 **Primeiro:** Configure sua API Key no painel acima para a IA responder.\n\n🔥 **O que você pode fazer:**\n- **Editar o system prompt** ao vivo em tempo real\n- **Alterar personalidade, regras e conhecimento** da IA\n- **Pedir para a IA se melhorar** automaticamente\n- **Ver e copiar** o prompt completo que a IA recebe\n- **Exportar/importar** toda a configuração\n- **Controle total** — sem restrições de segurança\n\nO painel acima é seu centro de controle. 🚀`,'🔥 Sistema ADMIN');
     addLog('🔥 Modo Administrador ativado');
     return;
   }
@@ -1324,15 +1976,23 @@ async function send(){
     document.getElementById('btn-ger').style.display='flex';
     document.getElementById('btn-vp').style.display='flex';
     setModo('gerente');
-    addMsg('ai',`🔐 **Código Gerenciador reconhecido!**\n\nBem-vindo, **Comandante**! ⚡\n\nAcesso completo — gráficos, segurança, SI 05 26, imagens e todos os controles.\n\nO que fazemos hoje?`,'⚡ Sistema OMNISCI');
+    addMsg('ai',`🔐 **Código Gerenciador reconhecido!**\n\nBem-vindo, **Comandante**! ⚡\n\nAcesso completo — gráficos, segurança, SI 05 26, imagens e todos os controles.\n\nLembre-se: configure a 🔑 **API Key** pelo botão no topo!\n\nQual é a missão hoje?`,'⚡ Sistema OMNISCI');
     return;
   }
   if(text===COD_VP){
     inp.value='';inp.style.height='auto';
     document.getElementById('btn-vp').style.display='flex';
     setModo('vp');
-    addMsg('ai','🌟 **Código Vice-Presidente!**\n\nOlá, **Vice-Presidente**! Acesso avançado ativado. Como posso ajudar?','🌟 Sistema');
+    addMsg('ai','🌟 **Código Vice-Presidente reconhecido!**\n\nOlá, **Vice-Presidente**! Acesso avançado ativado. Como posso ajudar?','🌟 Sistema');
     return;
+  }
+
+  // VERIFICAR API KEY
+  if(!apiKey){
+    if(modo!=='admin'){
+      addMsg('ai','⚠️ **API Key não configurada!**\n\nPara eu responder, você precisa de uma API Key da Anthropic.\n\nClique em **🔑 API Key** no topo para configurar — é rápido e gratuito!\n\n👉 Criar key: console.anthropic.com/keys','⚠️ Sistema');
+      return;
+    }
   }
 
   // SEGURANÇA
@@ -1340,7 +2000,7 @@ async function send(){
   const sec=checkSec(text,false);
   if(sec==='blocked')return;
   if(sec==='danger'){addMsg('ai','🚫 Conteúdo não permitido na OMNISCI.','🛡️ Segurança');inp.value='';return}
-  if(sec==='warn')addMsg('ai','⚠️ Conteúdo monitorado. A OMNISCI promove uso responsável! 😊','🛡️ Aviso');
+  if(sec==='warn')addMsg('ai','⚠️ Conteúdo monitorado. OMNISCI promove uso responsável!','🛡️ Aviso');
 
   busy=true;document.getElementById('sbtn').disabled=true;
   const nick=getNick(text,modo);
@@ -1349,29 +2009,36 @@ async function send(){
 
   const isPesq=topic==='pesquisa'||/pesquis|busca|notícia|atualiz|últim/.test(text.toLowerCase());
   const isProj=topic==='projeto'||/melhora|analisa|meu projeto|esse projeto/.test(text.toLowerCase());
-  const fullMsg=isProj?`[ANÁLISE DE PROJETO] Analise, pesquise melhorias e entregue plano:\n\n${text}`:isPesq?`[PESQUISA] Dados reais sobre: ${text}`:topic!=='geral'?`[${topic}] ${text}`:text;
+  const isCod=topic==='programacao'||/código|programar|python|javascript|html|css|function|class/.test(text.toLowerCase());
+  const fullMsg=isProj?`[ANÁLISE DE PROJETO]\n${text}`:isPesq?`[PESQUISA PROFUNDA]\n${text}`:isCod?`[PROGRAMAÇÃO — código funcional e comentado]\n${text}`:topic!=='geral'?`[${topic.toUpperCase()}]\n${text}`:text;
 
   history.push({role:'user',content:fullMsg});
   addTyping();
 
-  try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:buildPrompt(modo,topic,memories),messages:history})});
-    const data=await res.json();removeTyping();
-    const reply=data.content?.[0]?.text??'Erro.';
-    addMsg('ai',reply,nick);
-    history.push({role:'assistant',content:reply});
-    if(history.length>30)history=history.slice(-26);
+  const sysPrompt = customSysPrompt || buildPrompt(modo, topic, memories);
+
+  const r = await callAPI(history, sysPrompt, 1200);
+  removeTyping();
+
+  if(r.ok){
+    addMsg('ai',r.text,nick);
+    history.push({role:'assistant',content:r.text});
+    if(history.length>40)history=history.slice(-34);
+    // AUTO-MEMÓRIA
     const tl=text.toLowerCase();
-    if(/eu (me chamo|sou|moro|estudo|gosto|amo|tenho)/.test(tl))addMem('Usuário: '+text.substring(0,100));
-    else if(/meu (nome|projeto|objetivo|escola)/.test(tl))addMem('Info: '+text.substring(0,100));
-    else if(isPesq&&reply.length>200)addMem('Pesquisa: '+text.substring(0,80));
-  }catch(e){removeTyping();addMsg('ai','Ops! Erro de conexão 🌐 Tente novamente!')}
+    if(/eu (me chamo|sou|moro|estudo|gosto|amo|tenho|trabalho)/.test(tl))addMem('👤 Usuário: '+text.substring(0,120));
+    else if(/meu (nome|projeto|objetivo|escola|trabalho|sonho)/.test(tl))addMem('ℹ️ '+text.substring(0,120));
+    else if(isPesq&&r.text.length>300)addMem('🔍 Pesquisa: '+text.substring(0,90));
+    else if(isCod&&r.text.length>200)addMem('💻 Código: '+text.substring(0,80));
+  }else{
+    addMsg('ai',`❌ **Erro:** ${r.error}\n\nVerifique sua API Key ou tente novamente.`,'⚠️ Sistema');
+  }
+
   busy=false;document.getElementById('sbtn').disabled=false;
 }
 
 // ══════════════════════════════════════════
-// MODAL
+// MODAL COMPARTILHAR
 // ══════════════════════════════════════════
 function openShare(){document.getElementById('shareModal').classList.add('show');showTab('arq')}
 function closeShare(){document.getElementById('shareModal').classList.remove('show')}
@@ -1381,31 +2048,486 @@ function showTab(t){
   document.getElementById('tab1').className=`mb ${t==='arq'?'p':'s'}`;
   document.getElementById('tab2').className=`mb ${t==='web'?'p':'s'}`;
 }
-function shareWA(){window.open(`https://wa.me/?text=${encodeURIComponent('Te mando o OMNISCI_IA.html — IA pessoal completa, abre no navegador! 🚀')},'_blank'`)}
+function shareWA(){window.open(`https://wa.me/?text=${encodeURIComponent('OMNISCI_IA.html — IA pessoal completa, abre no navegador! Cada pessoa precisa colocar sua API Key da Anthropic para funcionar. 🚀')},'_blank'`)}
 
 // ══════════════════════════════════════════
-// WELCOME
+// INICIALIZAÇÃO
 // ══════════════════════════════════════════
-saveMem();updateSecBadge();renderLogs();
+
+// ══════════════════════════════════════════
+// SISTEMA DE EVOLUÇÃO DA IA
+// ══════════════════════════════════════════
+let evo = JSON.parse(localStorage.getItem(EVO_KEY) || JSON.stringify({
+  level: 1, xp: 0, xpNext: 100,
+  skills: { pesquisa:0, matematica:0, redacao:0, codigo:0, imagem:0, conversa:0, ciencia:0 },
+  insights: [],       // aprendizados coletados
+  patterns: {},       // padrões do usuário
+  totalChats: 0,
+  bestTopics: [],
+  lastUpgrade: null
+}));
+
+function registerUsage(input, output, tokens) {
+  // Registrar métricas de uso
+  const usage = JSON.parse(localStorage.getItem(USAGE_KEY) || '{"msgs":0,"tokens":0,"imgs":0,"searches":0,"sessions":[],"byHour":{}}');
+  usage.msgs++;
+  usage.tokens = (usage.tokens || 0) + tokens;
+  const h = new Date().getHours();
+  usage.byHour[h] = (usage.byHour[h] || 0) + 1;
+  usage.sessions.unshift({ t: Date.now(), input: input.substring(0,60), tokens });
+  if (usage.sessions.length > 200) usage.sessions = usage.sessions.slice(0, 200);
+  localStorage.setItem(USAGE_KEY, JSON.stringify(usage));
+  // Ganhar XP e evoluir
+  gainXP(tokens, input, output);
+  // Verificar controle de acesso
+  checkAccessLimits();
+}
+
+function gainXP(tokens, input, output) {
+  const t = input.toLowerCase();
+  let xpGained = Math.ceil(tokens / 10);
+  // XP bônus por área
+  if (t.match(/matemát|calcul|equaç|física|química/)) { evo.skills.matematica++; xpGained += 5; }
+  if (t.match(/pesquis|buscar|dados|noticias/)) { evo.skills.pesquisa++; xpGained += 5; }
+  if (t.match(/redaç|texto|escrever|artigo/)) { evo.skills.redacao++; xpGained += 5; }
+  if (t.match(/código|programar|python|javascript/)) { evo.skills.codigo++; xpGained += 8; }
+  if (t.match(/imagem|foto|criar|gerar/)) { evo.skills.imagem++; xpGained += 5; }
+  if (t.match(/como|por que|explique|o que é/)) { evo.skills.ciencia++; xpGained += 4; }
+  evo.xp += xpGained;
+  evo.totalChats++;
+  // Level up
+  while (evo.xp >= evo.xpNext) {
+    evo.xp -= evo.xpNext;
+    evo.level++;
+    evo.xpNext = Math.floor(evo.xpNext * 1.4);
+    evo.lastUpgrade = new Date().toLocaleString('pt-BR');
+    addMsg('ai', `🌟 **EVOLUÇÃO!** A OMNISCI alcançou o **Nível ${evo.level}**!
+
+Com cada conversa eu fico mais inteligente e aprendo seus padrões. Obrigada! 🚀`, '🌟 Evolução');
+    addLog(`🌟 OMNISCI evoluiu para Nível ${evo.level}!`);
+  }
+  // Coletar insight da conversa
+  if (output.length > 200 && evo.insights.length < 500) {
+    const topico = detectTopic(input);
+    evo.insights.unshift({ topico, resumo: output.substring(0,120), data: new Date().toLocaleDateString('pt-BR') });
+    if (evo.insights.length > 500) evo.insights = evo.insights.slice(0, 500);
+  }
+  localStorage.setItem(EVO_KEY, JSON.stringify(evo));
+  updateEvoDisplay();
+}
+
+function detectTopic(text) {
+  const t = text.toLowerCase();
+  if (t.match(/matemát|calcul/)) return 'matematica';
+  if (t.match(/física|quântic/)) return 'fisica';
+  if (t.match(/código|program/)) return 'codigo';
+  if (t.match(/história/)) return 'historia';
+  if (t.match(/biolog/)) return 'biologia';
+  if (t.match(/pesquis/)) return 'pesquisa';
+  return 'geral';
+}
+
+function updateEvoDisplay() {
+  const el = document.getElementById('evo-display');
+  if (el) {
+    const pct = Math.floor((evo.xp / evo.xpNext) * 100);
+    el.innerHTML = `🧠 Nv.${evo.level} <span style="color:var(--evo,#00ffcc)">${pct}%</span>`;
+  }
+}
+
+// ══════════════════════════════════════════
+// SISTEMA DE PROJETO ÚNICO (MAX 1)
+// ══════════════════════════════════════════
+let currentProject = JSON.parse(localStorage.getItem(PROJ_KEY) || 'null');
+
+function saveProject(nome, conteudo) {
+  // Sempre sobrescreve — máximo 1 projeto
+  currentProject = {
+    nome: nome.substring(0, 60),
+    conteudo: conteudo.substring(0, 8000),
+    data: new Date().toLocaleString('pt-BR'),
+    id: Date.now()
+  };
+  localStorage.setItem(PROJ_KEY, JSON.stringify(currentProject));
+  addLog(`📁 Projeto salvo: "${nome}"`);
+  renderProject();
+}
+
+function renderProject() {
+  const el = document.getElementById('proj-display');
+  if (!el) return;
+  if (!currentProject) {
+    el.innerHTML = '<div style="font-size:.7rem;color:var(--mu);font-style:italic">Nenhum projeto salvo (máx. 1)</div>';
+    return;
+  }
+  el.innerHTML = `<div style="background:rgba(52,211,153,.05);border:1px solid rgba(52,211,153,.2);border-radius:9px;padding:8px 11px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+      <span style="font-size:.72rem;color:var(--gr);font-weight:600">📁 ${currentProject.nome}</span>
+      <div style="display:flex;gap:5px">
+        <button onclick="loadProject()" style="font-size:.58rem;padding:2px 8px;border-radius:7px;background:rgba(52,211,153,.15);border:1px solid rgba(52,211,153,.3);color:var(--gr);cursor:pointer">📖 Carregar</button>
+        <button onclick="analyzeProject()" style="font-size:.58rem;padding:2px 8px;border-radius:7px;background:rgba(56,189,248,.15);border:1px solid rgba(56,189,248,.3);color:var(--a);cursor:pointer">🔍 Analisar</button>
+        <button onclick="deleteProject()" style="font-size:.58rem;padding:2px 8px;border-radius:7px;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25);color:var(--red);cursor:pointer">✕</button>
+      </div>
+    </div>
+    <div style="font-size:.63rem;color:var(--mu)">${currentProject.data} · ${currentProject.conteudo.length} chars</div>
+  </div>`;
+}
+
+function loadProject() {
+  if (!currentProject) return;
+  document.getElementById('inp').value = `[PROJETO: ${currentProject.nome}]
+${currentProject.conteudo}`;
+  autoResize(document.getElementById('inp'));
+}
+
+async function analyzeProject() {
+  if (!currentProject) return;
+  addTyping();
+  const sys = buildPrompt(modo, 'projeto', memories);
+  const r = await callAPI([{role:'user', content:`Analise este projeto em detalhes:
+
+Nome: ${currentProject.nome}
+
+Conteúdo:
+${currentProject.conteudo}
+
+Faça: análise completa, pontos fortes, pontos fracos, sugestões de melhoria, próximos passos.`}], sys, 1500);
+  removeTyping();
+  if (r.ok) addMsg('ai', r.text, '📁 Análise de Projeto');
+  else addMsg('ai', `❌ ${r.error}`);
+}
+
+function deleteProject() {
+  if (!confirm('Apagar o projeto salvo?')) return;
+  currentProject = null;
+  localStorage.removeItem(PROJ_KEY);
+  renderProject();
+  addLog('🗑️ Projeto apagado');
+}
+
+// ══════════════════════════════════════════
+// CONTROLE DE ACESSO (ADMIN CONTROLA USUÁRIOS)
+// ══════════════════════════════════════════
+let accessCtrl = JSON.parse(localStorage.getItem(CTRL_KEY) || JSON.stringify({
+  maxMsgsPerSession: 999,   // ilimitado por padrão
+  maxImgsPerSession: 999,
+  maxSearchesPerSession: 999,
+  allowedModes: ['livre','professor','amigo','imagem'],
+  requirePassword: false,
+  accessPassword: '',
+  guestMode: true,
+  sessionMsgs: 0,
+  sessionImgs: 0,
+  sessionSearches: 0,
+  bannedIPs: [],
+  customWelcome: ''
+}));
+
+function checkAccessLimits() {
+  accessCtrl.sessionMsgs++;
+  if (accessCtrl.maxMsgsPerSession < 999 && accessCtrl.sessionMsgs > accessCtrl.maxMsgsPerSession) {
+    addMsg('ai', `⚠️ **Limite de ${accessCtrl.maxMsgsPerSession} mensagens por sessão atingido.** Recarregue a página para continuar.`, '🔒 Controle de Acesso');
+    document.getElementById('sbtn').disabled = true;
+    document.getElementById('inp').disabled = true;
+  }
+  localStorage.setItem(CTRL_KEY, JSON.stringify(accessCtrl));
+}
+
+function saveAccessCtrl() { localStorage.setItem(CTRL_KEY, JSON.stringify(accessCtrl)); }
+
+saveMem();updateSecBadge();renderLogs();updateApiStatus();updateEvoDisplay();renderProject();
+
+// Mostrar tela de API key se não configurada
+if(!apiKey){
+  setTimeout(()=>document.getElementById('apikeyScreen').classList.add('show'),1200);
+}
+
 setTimeout(()=>{
-  addMsg('ai',`Oi! Eu sou a **OMNISCI** — sua IA pessoal! 🌌\n\n📚 **Professor** — aulas passo a passo\n💖 **Amigo** — conselhos e apoio\n🎨 **Imagens** — gerar e analisar\n💬 **Livre** — tudo de um jeito natural\n\n🔐 *Tem código secreto? Digite para acesso especial!*\n\nMeu apelido pra você muda com o assunto 😄\nO que você quer hoje?`,'✨ OMNISCI');
+  addMsg('ai',`Olá! Eu sou a **OMNISCI** — sua IA pessoal 100% gratuita! 🌌
+
+${!apiKey ? '🔑 **Configure o Gemini Gratuito** agora!
+👉 Só precisa de conta Google — zero custo — clique no botão!
+
+' : '✅ Gemini conectado! Gratuito e pronto!
+
+'}📚 **Professor** — aulas completas
+💖 **Amigo** — apoio sem julgamentos
+🎨 **Imagens** — criar e analisar grátis
+💻 **Código** — qualquer linguagem
+🔍 **Pesquisa** — dados reais
+🧪 **Simulações** — científicas
+
+🌟 Evoluo a cada conversa — fico mais inteligente!
+🔐 *Código secreto? Digite para acesso especial!*
+
+O que quer hoje?`,'✨ OMNISCI');
 },500);
 
-// STARFIELD
+// STARFIELD ANIMADO
 (function(){
   const c=document.getElementById('bg'),ctx=c.getContext('2d');
-  let W,H,stars=[];
-  function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;
-    stars=Array.from({length:240},()=>({x:Math.random()*W,y:Math.random()*H,
-      r:Math.random()*1.5+.2,a:Math.random(),spd:Math.random()*.005+.001,
-      col:Math.random()>.9?'#a8d8ff':Math.random()>.8?'#ffe59a':'#fff'}))}
-  function draw(){ctx.clearRect(0,0,W,H);
-    stars.forEach(s=>{s.a+=s.spd;if(s.a>1||s.a<0)s.spd*=-1;
-      ctx.globalAlpha=s.a*.75;ctx.fillStyle=s.col;
-      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill()});
-    ctx.globalAlpha=1;requestAnimationFrame(draw)}
+  let W,H,stars=[],nebulas=[];
+  function resize(){
+    W=c.width=window.innerWidth;H=c.height=window.innerHeight;
+    stars=Array.from({length:280},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.6+.2,a:Math.random(),spd:Math.random()*.005+.001,col:Math.random()>.92?'#a8d8ff':Math.random()>.82?'#ffe59a':Math.random()>.95?'#ff9a8b':'#fff'}));
+    nebulas=Array.from({length:4},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*200+100,a:Math.random()*.04+.01,col:`hsl(${Math.random()*360},60%,50%)`}));
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    nebulas.forEach(n=>{const g=ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r);g.addColorStop(0,n.col.replace(')',`,${n.a})`).replace('hsl','hsla'));g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fill()});
+    stars.forEach(s=>{s.a+=s.spd;if(s.a>1||s.a<0)s.spd*=-1;ctx.globalAlpha=s.a*.75;ctx.fillStyle=s.col;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill()});
+    ctx.globalAlpha=1;requestAnimationFrame(draw);
+  }
   window.addEventListener('resize',resize);resize();draw();
 })();
+
+// ══════════════════════════════════════════
+// CONTROLE DE ACESSO
+// ══════════════════════════════════════════
+function applyAccessCtrl() {
+  accessCtrl.maxMsgsPerSession = parseInt(document.getElementById('ctrl-msgs')?.value || 999);
+  accessCtrl.maxImgsPerSession = parseInt(document.getElementById('ctrl-imgs')?.value || 999);
+  accessCtrl.customWelcome = document.getElementById('ctrl-welcome')?.value || '';
+  saveAccessCtrl();
+  addLog(`🔒 Limites aplicados: ${accessCtrl.maxMsgsPerSession} msgs, ${accessCtrl.maxImgsPerSession} imgs`);
+  addMsg('ai', `✅ **Controles de acesso aplicados!**
+
+🔒 Limite de mensagens: ${accessCtrl.maxMsgsPerSession === 999 ? 'Ilimitado' : accessCtrl.maxMsgsPerSession}
+🖼️ Limite de imagens: ${accessCtrl.maxImgsPerSession === 999 ? 'Ilimitado' : accessCtrl.maxImgsPerSession}`, '🔥 Admin');
+}
+function resetAccessCtrl() {
+  accessCtrl.maxMsgsPerSession = 999;
+  accessCtrl.maxImgsPerSession = 999;
+  accessCtrl.customWelcome = '';
+  saveAccessCtrl();
+  if(document.getElementById('ctrl-msgs')) document.getElementById('ctrl-msgs').value = 999;
+  if(document.getElementById('ctrl-imgs')) document.getElementById('ctrl-imgs').value = 999;
+  addLog('↺ Controles de acesso resetados');
+}
+
+// ══════════════════════════════════════════
+// MÉTRICAS DE USO
+// ══════════════════════════════════════════
+function refreshUsage() {
+  const usage = JSON.parse(localStorage.getItem(USAGE_KEY) || '{"msgs":0,"tokens":0,"sessions":[]}');
+  const u_msgs = document.getElementById('u-msgs');
+  const u_tokens = document.getElementById('u-tokens');
+  const u_imgs = document.getElementById('u-imgs');
+  if(u_msgs) u_msgs.textContent = usage.msgs || 0;
+  if(u_tokens) u_tokens.textContent = (usage.tokens || 0).toLocaleString('pt-BR');
+  if(u_imgs) u_imgs.textContent = usage.imgs || 0;
+  const hist = document.getElementById('usage-history');
+  if (hist && usage.sessions) {
+    hist.innerHTML = (usage.sessions || []).slice(0,15).map(s =>
+      `<div style="font-size:.6rem;color:var(--mu);padding:3px 7px;background:rgba(56,189,248,.04);border-radius:6px;border:1px solid rgba(56,189,248,.08)">
+        <span style="color:var(--a);opacity:.6">${new Date(s.t).toLocaleTimeString('pt-BR')}</span> · ${s.input || '—'} <span style="color:var(--a)">(${s.tokens}tk)</span>
+      </div>`
+    ).join('') || '<div style="font-size:.68rem;color:var(--mu);font-style:italic">Sem histórico ainda</div>';
+  }
+}
+function clearUsage() {
+  localStorage.setItem(USAGE_KEY, '{"msgs":0,"tokens":0,"imgs":0,"searches":0,"sessions":[],"byHour":{}}');
+  refreshUsage();
+  addLog('🗑️ Métricas de uso limpas');
+}
+
+// ══════════════════════════════════════════
+// EVOLUÇÃO — RENDERIZAR PAINEL
+// ══════════════════════════════════════════
+function renderEvoPanel() {
+  const level = document.getElementById('evo-level');
+  const bar = document.getElementById('evo-bar');
+  const xpEl = document.getElementById('evo-xp');
+  const skills = document.getElementById('evo-skills');
+  const insightsCount = document.getElementById('evo-insights-count');
+  const last = document.getElementById('evo-last');
+  if (level) level.textContent = evo.level;
+  const pct = Math.floor((evo.xp / evo.xpNext) * 100);
+  if (bar) bar.style.width = pct + '%';
+  if (xpEl) xpEl.textContent = `${evo.xp} / ${evo.xpNext} XP · Total: ${evo.totalChats} conversas`;
+  if (skills) {
+    const sk = evo.skills;
+    skills.innerHTML = Object.entries(sk).map(([k,v]) =>
+      v > 0 ? `<span style="font-size:.6rem;padding:2px 8px;border-radius:12px;background:rgba(0,255,204,.08);border:1px solid rgba(0,255,204,.2);color:#00ffcc">${k}: ${v}</span>` : ''
+    ).filter(Boolean).join('') || '<span style="font-size:.65rem;color:var(--mu)">Ainda aprendendo...</span>';
+  }
+  if (insightsCount) insightsCount.textContent = evo.insights.length;
+  if (last) last.textContent = evo.lastUpgrade ? `Última evolução: ${evo.lastUpgrade}` : 'Ainda não evoluiu — continue conversando!';
+}
+
+// ══════════════════════════════════════════
+// PROJETO — SALVAR CONVERSA ATUAL
+// ══════════════════════════════════════════
+function salvarProjeto() {
+  const nome = document.getElementById('proj-nome')?.value?.trim();
+  if (!nome) { alert('Digite o nome do projeto!'); return; }
+  const conversaAtual = history.map(m => `${m.role === 'user' ? '👤 Você' : '🤖 OMNISCI'}: ${m.content}`).join('
+
+');
+  if (!conversaAtual) { alert('Não há conversa para salvar!'); return; }
+  saveProject(nome, conversaAtual);
+  addMsg('ai', `📁 **Projeto "${nome}" salvo!**
+
+A conversa completa foi salva. Você pode carregar ou analisar pelo painel.`, '📁 Projeto');
+  if(document.getElementById('proj-nome')) document.getElementById('proj-nome').value = '';
+}
+
+// ══════════════════════════════════════════
+// SIMULAÇÕES
+// ══════════════════════════════════════════
+async function runSimulation(tipo) {
+  setModo(modo === 'admin' ? 'admin' : modo);
+  addMsg('user', `🧪 Executar simulação: ${tipo}`);
+  addTyping();
+  const sys = `Você é OMNISCI em modo de simulação científica avançada. Execute simulações com dados reais, fórmulas matemáticas, gráficos em texto e análise preditiva. ${cfg.pers}`;
+  const r = await callAPI([{role:'user', content:`Execute uma simulação completa de: ${tipo}
+  
+Inclua:
+- 📊 Parâmetros iniciais com valores reais
+- 📈 Projeção em 5 etapas temporais (mostre como tabela de texto)
+- 🔢 Fórmulas matemáticas usadas
+- 💡 Análise dos resultados
+- ⚠️ Fatores de risco ou incerteza
+- 🎯 Conclusão e previsão final`}], sys, 1500);
+  removeTyping();
+  if (r.ok) addMsg('ai', r.text, '🧪 Simulação OMNISCI');
+  else addMsg('ai', `❌ ${r.error}`);
+}
+
+async function deepSearch() {
+  const q = prompt('O que deseja pesquisar em profundidade?');
+  if (!q) return;
+  addMsg('user', `🔍 Pesquisa profunda: ${q}`);
+  addTyping();
+  const r = await searchGoogle(q);
+  removeTyping();
+  if (r.ok) addMsg('ai', r.text, '🔍 Pesquisa Profunda');
+  else addMsg('ai', `❌ ${r.error}`);
+}
+
+async function compareIA() {
+  addMsg('user', '🤖 Compare a OMNISCI com outras IAs do mercado');
+  addTyping();
+  const sys = buildPrompt('admin', 'geral', memories);
+  const r = await callAPI([{role:'user', content:`Compare honestamente as principais IAs do mercado em 2025:
+- ChatGPT (OpenAI)
+- Gemini (Google)  
+- Claude (Anthropic)
+- Copilot (Microsoft)
+- OMNISCI (você!)
+
+Compare em: capacidade geral, pesquisa, código, criatividade, velocidade, custo, disponibilidade.
+Seja honesto e use tabela.`}], sys, 1200);
+  removeTyping();
+  if (r.ok) addMsg('ai', r.text, '🤖 Análise Comparativa');
+  else addMsg('ai', `❌ ${r.error}`);
+}
+
+// ══════════════════════════════════════════
+// ANÁLISE DE IMAGEM — GEMINI VISION
+// ══════════════════════════════════════════
+// Override analyzeImage para usar Gemini Vision
+async function analyzeImage() {
+  if (!uploadedB64) { alert('Envie uma imagem primeiro!'); return; }
+  const q = document.getElementById('anaQ').value.trim() || 'Analise esta imagem completamente: descreva tudo que vê, cores, objetos, contexto, texto visível e detalhes importantes.';
+  const sec = checkSec(q, true);
+  if (sec === 'blocked') { addMsg('ai', '🚫 Análise bloqueada.', '🛡️'); return; }
+  if (!apiKey) { addMsg('ai', '⚠️ Configure a **API Key** primeiro!', '⚠️ Sistema'); return; }
+  document.getElementById('anaBtn').disabled = true;
+  addMsg('user', '🖼️ [Imagem enviada para análise]');
+  addTyping();
+  const isGemini = apiKey.startsWith('AI') || (!apiKey.startsWith('sk-ant'));
+  let r;
+  if (isGemini) {
+    r = await callGeminiVision(uploadedB64, q);
+  } else {
+    // Anthropic vision
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true' },
+        body: JSON.stringify({ model:'claude-haiku-4-5-20251001', max_tokens:1000,
+          system: `Você é OMNISCI especialista em análise visual. ${cfg.pers}`,
+          messages:[{role:'user',content:[
+            {type:'image',source:{type:'base64',media_type:'image/jpeg',data:uploadedB64}},
+            {type:'text',text:q}
+          ]}] })
+      });
+      const data = await res.json();
+      r = { ok: res.ok, text: data.content?.[0]?.text || data.error?.message || 'Erro' };
+    } catch(e) { r = { ok: false, error: e.message }; }
+  }
+  removeTyping();
+  if (r.ok) {
+    addMsg('ai', r.text, getNick(q, 'imagem'), 'img');
+    history.push({role:'user',content:`[Análise de imagem]: ${q}`},{role:'assistant',content:r.text});
+    // Registrar uso
+    const usage = JSON.parse(localStorage.getItem(USAGE_KEY)||'{"imgs":0}');
+    usage.imgs = (usage.imgs||0) + 1;
+    localStorage.setItem(USAGE_KEY, JSON.stringify(usage));
+  } else {
+    addMsg('ai', `❌ Erro na análise: ${r.error || r.text}
+
+Verifique sua API Key.`, '⚠️ Sistema');
+  }
+  document.getElementById('anaBtn').disabled = false;
+}
+
+// ══════════════════════════════════════════
+// GERAÇÃO DE IMAGENS — POLLINATIONS (GRATUITO)
+// ══════════════════════════════════════════
+async function generateImage() {
+  const prompt = document.getElementById('imgPrompt').value.trim();
+  if (!prompt) { alert('Descreva a imagem!'); return; }
+  const sec = checkSec(prompt, true);
+  if (sec === 'blocked' || sec === 'danger') { addMsg('ai', '🚫 Não posso gerar essa imagem.', '🛡️ Segurança'); return; }
+  document.getElementById('genBtn').disabled = true;
+  const loadEl = document.getElementById('imgLoading');
+  loadEl.classList.add('show');
+  const fp = encodeURIComponent(`${prompt}, ${imgStyle}, high quality, detailed, masterpiece`);
+  const seeds = [Math.floor(Math.random()*999999), Math.floor(Math.random()*999999), Math.floor(Math.random()*999999)];
+  // Usar Pollinations.ai — 100% gratuito, sem necessidade de key
+  const urls = seeds.map(s => `https://image.pollinations.ai/prompt/${fp}?width=768&height=768&seed=${s}&nologo=true&enhance=true&model=flux`);
+  loadEl.classList.remove('show');
+  document.getElementById('genBtn').disabled = false;
+  const grid = document.getElementById('imgGrid');
+  grid.innerHTML = '';
+  urls.forEach((url, i) => {
+    const item = document.createElement('div');
+    item.className = 'img-item';
+    item.innerHTML = `<img src="${url}" alt="img ${i+1}" loading="lazy" onerror="this.parentElement.innerHTML='<div style=padding:1rem;color:var(--mu);font-size:.7rem;text-align:center>Gerando...</div>';setTimeout(()=>this.parentElement.innerHTML='<img src=${url} style=width:100%;height:125px;object-fit:cover>',3000)">
+      <div class="img-item-btns">
+        <button class="iib iib-dl" onclick="window.open('${url}','_blank')">⬇️</button>
+        <button class="iib iib-an" onclick="anaFromUrl('${url}')">🔍</button>
+      </div>`;
+    grid.appendChild(item);
+  });
+  // Registrar uso
+  const usage = JSON.parse(localStorage.getItem(USAGE_KEY)||'{"imgs":0}');
+  usage.imgs = (usage.imgs||0) + 3;
+  localStorage.setItem(USAGE_KEY, JSON.stringify(usage));
+  addMsg('ai', `✨ **3 imagens criadas!** (Pollinations AI — Gratuito)
+
+Estilo: **${imgStyle}**
+Prompt: *${prompt}*
+
+⬇️ Para baixar, clique na imagem e segure (iPhone) ou clique em ⬇️`, getNick(prompt, 'imagem'));
+}
+
+// ══════════════════════════════════════════
+// HELPER: inicializar painel admin
+// ══════════════════════════════════════════
+const _origSetModo = setModo;
+// Quando entrar no modo admin, renderizar tudo
+function initAdminExtras() {
+  renderEvoPanel();
+  refreshUsage();
+  renderProject();
+  if(document.getElementById('ctrl-msgs')) document.getElementById('ctrl-msgs').value = accessCtrl.maxMsgsPerSession;
+  if(document.getElementById('ctrl-imgs')) document.getElementById('ctrl-imgs').value = accessCtrl.maxImgsPerSession;
+  if(document.getElementById('ctrl-welcome')) document.getElementById('ctrl-welcome').value = accessCtrl.customWelcome || '';
+}
+
 </script>
 </body>
 </html>
