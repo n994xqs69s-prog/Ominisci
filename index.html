@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0049)file:///C:/Users/tanisilva/Downloads/index_1.html -->
+<!-- saved from url=(0049)file:///C:/Users/tanisilva/Downloads/index_3.html -->
 <html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
@@ -563,7 +563,7 @@ input[type=text],input[type=number],input[type=password],textarea{
 </style>
 </head>
 <body>
-<canvas id="bg" width="1920" height="911"></canvas>
+<canvas id="bg"></canvas>
 
 <!-- TELA BLOQUEIO -->
 <div class="blocked-screen" id="blockedScreen">
@@ -575,24 +575,25 @@ input[type=text],input[type=number],input[type=password],textarea{
 <!-- API KEY SETUP -->
 <div class="apikey-screen" id="apikeyScreen">
   <div class="apikey-box">
-    <div class="apikey-title">🔑 CONFIGURAR API GEMINI</div>
+    <div class="apikey-title">🔑 CONFIGURAR API KEY</div>
     <div class="apikey-desc">
-      A OMNISCI usa o <strong style="color:var(--gr)">Google Gemini — 100% GRATUITO</strong>.<br>
-      Só precisa de uma conta Google. A key fica só no seu navegador.
+      A OMNISCI usa o <strong style="color:var(--gr)">OpenRouter — 100% GRATUITO</strong>.<br>
+      Cole sua chave abaixo. Fica salva só no seu navegador.
     </div>
     <div style="background:rgba(52,211,153,.06);border:1px solid rgba(52,211,153,.2);border-radius:10px;padding:10px 12px;margin-bottom:1rem;text-align:left">
-      <div style="font-size:.65rem;color:var(--gr);font-weight:700;letter-spacing:1px;margin-bottom:.4rem">📋 COMO PEGAR (30 segundos):</div>
+      <div style="font-size:.65rem;color:var(--gr);font-weight:700;letter-spacing:1px;margin-bottom:.4rem">📋 COMO PEGAR (grátis):</div>
       <div style="font-size:.71rem;color:var(--tx);line-height:1.8">
-        1. Acesse <a href="https://aistudio.google.com/apikey" target="_blank" style="color:var(--a);font-weight:700">aistudio.google.com/apikey</a><br>
-        2. Clique em <strong style="color:var(--gr)">Create API Key</strong><br>
-        3. Copie a chave e cole abaixo<br>
-        <span style="color:var(--mu);font-size:.65rem">✅ Grátis · ✅ Sem cartão · ✅ Limite generoso</span>
+        1. Acesse <a href="https://openrouter.ai/keys" target="_blank" style="color:var(--a);font-weight:700">openrouter.ai/keys</a><br>
+        2. Entre com GitHub ou Google<br>
+        3. Clique em <strong style="color:var(--gr)">Create Key</strong><br>
+        4. Copie a chave (sk-or-...) e cole abaixo<br>
+        <span style="color:var(--mu);font-size:.65rem">✅ Grátis · ✅ Sem cartão · ✅ Modelos top</span>
       </div>
     </div>
-    <input class="apikey-inp" id="apikeyInp" type="password" placeholder="AIzaSy..." autocomplete="off">
-    <button class="apikey-btn" onclick="saveApiKey()">🚀 Conectar Gemini Grátis</button>
+    <input class="apikey-inp" id="apikeyInp" type="password" placeholder="sk-or-..." autocomplete="off">
+    <button class="apikey-btn" onclick="saveApiKey()">🚀 Conectar OpenRouter Grátis</button>
     <div class="apikey-hint">
-      Também aceita key Anthropic (sk-ant-...) se preferir.<br>
+      Também aceita Gemini (AIzaSy...) ou Anthropic (sk-ant-...).<br>
       A key fica salva só no seu navegador — nunca vai para nenhum servidor.
     </div>
     <div class="apikey-skip" onclick="skipApiKey()">Continuar sem key (modo demonstração)</div>
@@ -605,10 +606,10 @@ input[type=text],input[type=number],input[type=password],textarea{
   <div class="logo" id="headerLogo">OMNISCI</div>
   <span class="mtag m-livre" id="modeTag">● Livre</span>
   <div class="hright">
-    <span id="apiStatusBadge" class="api-status api-ok">✅ API Ativa</span>
+    <span id="apiStatusBadge" class="api-status api-no">⚠️ Sem API</span>
     <span id="memCount" style="font-size:.54rem;color:var(--gr);padding:3px 7px;border-radius:20px;background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.18)">🧠 0</span>
-    <span id="evo-display" style="font-size:.54rem;color:#00ffcc;padding:3px 7px;border-radius:20px;background:rgba(0,255,204,.07);border:1px solid rgba(0,255,204,.2)">🧠 Nv.1 <span style="color:var(--evo,#00ffcc)">0%</span></span>
-    <div class="nick-h" id="nickH">✨ Amigo(a) da OMNISCI</div>
+    <span id="evo-display" style="font-size:.54rem;color:#00ffcc;padding:3px 7px;border-radius:20px;background:rgba(0,255,204,.07);border:1px solid rgba(0,255,204,.2)">🧠 Nv.1</span>
+    <div class="nick-h" id="nickH">Olá! 👋</div>
     <button class="alert-badge" id="alertBadge" onclick="showSecPanel()">🔴 Alertas</button>
     <button class="hbtn adm-key" onclick="openApiKeyModal()">🔑 API Key</button>
     <button class="hbtn" onclick="openShare()">🔗 Link</button>
@@ -707,7 +708,7 @@ input[type=text],input[type=number],input[type=password],textarea{
       </div>
       <div class="preview-area" id="previewArea">
         <div class="preview-wrap">
-          <img id="previewImg" src="file:///C:/Users/tanisilva/Downloads/index_1.html" alt="preview">
+          <img id="previewImg" src="file:///C:/Users/tanisilva/Downloads/index_3.html" alt="preview">
           <button class="preview-rm" onclick="removeImg()">✕</button>
         </div>
       </div>
@@ -756,7 +757,7 @@ input[type=text],input[type=number],input[type=password],textarea{
     <div class="adm-section">
       <div class="adm-section-title">🔑 API Key — Conexão com a IA</div>
       <div class="token-bar">
-        <span class="tok">Status: <span id="adm-api-status">✅ Ativa</span></span>
+        <span class="tok">Status: <span id="adm-api-status">—</span></span>
         <span class="tok">Tokens usados: <span id="tok-used">0</span></span>
         <span class="tok">Modelo: <span id="tok-model">claude-sonnet-4-5-20251001</span></span>
       </div>
@@ -869,7 +870,9 @@ input[type=text],input[type=number],input[type=password],textarea{
     <!-- LOGS -->
     <div class="adm-section">
       <div class="adm-section-title">📋 Log de Alterações</div>
-      <div class="adm-logs" id="admLogs"><div class="log-empty">Nenhuma alteração ainda.</div></div>
+      <div class="adm-logs" id="admLogs">
+        <div class="log-empty">Nenhuma alteração ainda.</div>
+      </div>
     </div>
 
     <!-- CONTROLE DE ACESSO -->
@@ -956,7 +959,7 @@ input[type=text],input[type=number],input[type=password],textarea{
     <!-- PROJETO SALVO -->
     <div class="adm-section">
       <div class="adm-section-title">📁 Projeto Salvo (Máx. 1)</div>
-      <div id="proj-display"><div style="font-size:.7rem;color:var(--mu);font-style:italic">Nenhum projeto salvo (máx. 1)</div></div>
+      <div id="proj-display"></div>
       <div style="margin-top:.5rem;display:flex;gap:6px">
         <input type="text" id="proj-nome" placeholder="Nome do projeto..." style="flex:1;background:rgba(0,0,0,.4);border:1px solid rgba(52,211,153,.2);border-radius:8px;padding:6px 10px;color:var(--tx);font-family:&#39;DM Sans&#39;,sans-serif;font-size:.78rem;outline:none">
         <button class="prog-btn pb-test" onclick="salvarProjeto()">💾 Salvar Conversa</button>
@@ -1012,17 +1015,19 @@ input[type=text],input[type=number],input[type=password],textarea{
   <!-- MEMÓRIA -->
   <div class="panel p-mem" id="panel-mem">
     <div class="panel-title pt-mem">🧠 Memórias Salvas</div>
-    <div class="mem-list" id="memList"><div style="font-size:.7rem;color:var(--mu);font-style:italic">Nenhuma ainda!</div></div>
+    <div class="mem-list" id="memList">
+      <div style="font-size:.7rem;color:var(--mu);font-style:italic">Nenhuma ainda!</div>
+    </div>
     <div class="mem-add">
       <input class="mem-inp" id="memManual" type="text" placeholder="Adicionar memória manual...">
       <button class="mem-abtn" onclick="addMemManual()">+ Salvar</button>
     </div>
   </div>
 
-  <div class="msgs" id="msgs"><div class="msg ai"><div class="av av-livre">AI</div><div class="bubble ai "><span class="nick-tag ">✨ OMNISCI</span><div style="color:var(--vp);font-weight:900;font-size:1.05em;margin:10px 0 4px">Bem-vindo à OMNISCI ✦</div><br><br>Sua inteligência artificial pessoal — <strong style="color:var(--tx)">100% gratuita</strong>, sempre online.<br><br><div style="color:var(--gold);font-weight:700;font-size:1em;margin:8px 0 3px;border-bottom:1px solid rgba(251,191,36,.2);padding-bottom:3px">✅ Pronto para usar</div><br>Gemini conectado e funcionando!<br><br><div style="color:var(--gold);font-weight:700;font-size:1em;margin:8px 0 3px;border-bottom:1px solid rgba(251,191,36,.2);padding-bottom:3px">O que posso fazer por você</div><br><div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>📚 <strong style="color:var(--tx)">Aulas completas</strong> — qualquer matéria, passo a passo</span></div><br><div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>💖 <strong style="color:var(--tx)">Apoio emocional</strong> — conselhos, sem julgamentos</span></div><br><div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>🎨 <strong style="color:var(--tx)">Criar imagens</strong> — 12 estilos artísticos</span></div><br><div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>💻 <strong style="color:var(--tx)">Programação</strong> — qualquer linguagem de código</span></div><br><div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>🔍 <strong style="color:var(--tx)">Pesquisa profunda</strong> — dados reais e organizados</span></div><br><div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>🧪 <strong style="color:var(--tx)">Simulações científicas</strong> — matemática e física</span></div><br><div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>🚀 <strong style="color:var(--tx)">SI 05 26</strong> — tecnologia de propulsão interestelar</span></div><br><br><hr style="border:none;border-top:1px solid rgba(56,189,248,.1);margin:8px 0"><br>🔐 <em style="color:var(--mu)">Código secreto? Digite para acesso especial.</em><br><br><strong style="color:var(--tx)">Como posso ajudar hoje?</strong><span style="font-size:.5rem;opacity:.25;margin-left:6px;float:right;margin-top:2px">17:09</span></div></div><div class="msg user"><div class="av av-user">EU</div><div class="bubble user">oi</div></div><div class="msg ai"><div class="av av-livre">AI</div><div class="bubble ai "><span class="nick-tag ">⚠️ Sistema</span>❌ <strong style="color:var(--tx)">Erro:</strong> ⚠️ Serviço temporariamente indisponível. Tipo de key: Gemini. Aguarde 1 minuto e tente novamente.<br><br>Verifique sua API Key ou tente novamente.<span style="font-size:.5rem;opacity:.25;margin-left:6px;float:right;margin-top:2px">17:09</span></div></div></div>
+  <div class="msgs" id="msgs"></div>
 
   <div class="ibar" id="ibar">
-    <textarea id="inp" rows="1" placeholder="Escreva aqui... ou use o código secreto 😉" onkeydown="handleKey(event)" oninput="autoResize(this)" style="height: auto;"></textarea>
+    <textarea id="inp" rows="1" placeholder="Escreva aqui... ou use o código secreto 😉" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
     <button id="sbtn" onclick="send()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
@@ -1201,7 +1206,8 @@ async function callAPI(messages, systemPrompt, maxTokens = 1500) {
     return { ok: false, error: 'Configure a API Key do Google Gemini (gratuita!) clicando em 🔑 API Key no topo.' };
   }
   // Detectar se é Gemini ou Anthropic pela key
-  const isGemini = apiKey.startsWith('AI') || (!apiKey.startsWith('sk-ant'));
+  const isOpenRouter = apiKey.startsWith('sk-or');
+  const isGemini = apiKey.startsWith('AI');
   if (isGemini) {
     return await callGemini(messages, systemPrompt, maxTokens);
   } else {
@@ -1210,123 +1216,75 @@ async function callAPI(messages, systemPrompt, maxTokens = 1500) {
 }
 
 // Ordem de tentativa de modelos
-const MODEL_PRIORITY = [
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent',
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent',
+// OpenRouter — modelos gratuitos
+const OR_MODELS = [
+  'meta-llama/llama-3.3-70b-instruct:free',
+  'meta-llama/llama-3.1-8b-instruct:free',
+  'google/gemma-3-27b-it:free',
+  'mistralai/mistral-7b-instruct:free',
+  'qwen/qwen-2.5-72b-instruct:free',
 ];
+const OR_ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions';
 let modelIdx = 0;
 
-async function callGemini(messages, systemPrompt, maxTokens = 1500, attempt = 0) {
-  if (attempt >= MODEL_PRIORITY.length) {
-    // Diagnóstico final detalhado
-    const keyOk = apiKey && apiKey.length > 10;
-    const keyType = apiKey?.startsWith('AI') ? 'Gemini' : apiKey?.startsWith('sk-ant') ? 'Anthropic' : 'Desconhecida';
-    if (!keyOk) return { ok: false, error: '🔑 API Key não encontrada! Clique em API Key no topo e cole sua chave do Google.' };
-    return { ok: false, error: `⚠️ Serviço temporariamente indisponível. Tipo de key: ${keyType}. Aguarde 1 minuto e tente novamente.` };
+async function callGemini(messages, systemPrompt, maxTokens = 1500, attempt = 0) { return await callOpenRouter(messages, systemPrompt, maxTokens, attempt); }
+async function callOpenRouter(messages, systemPrompt, maxTokens = 1500, attempt = 0) {
+  if (attempt >= OR_MODELS.length) {
+    return { ok: false, error: '❌ Todos os modelos falharam. Verifique sua API Key do OpenRouter em openrouter.ai/keys' };
   }
   try {
-    const endpoint = MODEL_PRIORITY[attempt];
-    // Limitar histórico para evitar tokens excessivos
-    const recentMsgs = messages.slice(-10);
-    // Formato Gemini
-    const geminiMsgs = recentMsgs.map(m => ({
-      role: m.role === 'assistant' ? 'model' : 'user',
-      parts: [{ text: String(m.content).substring(0, 8000) }]
-    }));
-    // Garantir que começa com user
-    if (geminiMsgs.length > 0 && geminiMsgs[0].role === 'model') {
-      geminiMsgs.unshift({ role: 'user', parts: [{ text: 'Olá' }] });
-    }
-    // Garantir alternância user/model
-    const fixedMsgs = [];
-    for (let i = 0; i < geminiMsgs.length; i++) {
-      if (i === 0) { fixedMsgs.push(geminiMsgs[i]); continue; }
-      if (geminiMsgs[i].role === fixedMsgs[fixedMsgs.length-1].role) {
-        // Mesmo role consecutivo - inserir mensagem vazia do outro lado
-        const otherRole = geminiMsgs[i].role === 'user' ? 'model' : 'user';
-        fixedMsgs.push({ role: otherRole, parts: [{ text: '...' }] });
-      }
-      fixedMsgs.push(geminiMsgs[i]);
-    }
+    const model = OR_MODELS[attempt];
+    const orMessages = [
+      { role: 'system', content: systemPrompt.substring(0, 8000) },
+      ...messages.slice(-12).map(m => ({
+        role: m.role,
+        content: String(m.content).substring(0, 6000)
+      }))
+    ];
     const body = {
-      system_instruction: { parts: [{ text: systemPrompt.substring(0, 10000) }] },
-      contents: fixedMsgs,
-      generationConfig: {
-        maxOutputTokens: maxTokens,
-        temperature: 0.85,
-        topP: 0.95,
-        topK: 40
-      },
-      safetySettings: [
-        { category:'HARM_CATEGORY_HARASSMENT', threshold:'BLOCK_NONE' },
-        { category:'HARM_CATEGORY_HATE_SPEECH', threshold:'BLOCK_NONE' },
-        { category:'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold:'BLOCK_MEDIUM_AND_ABOVE' },
-        { category:'HARM_CATEGORY_DANGEROUS_CONTENT', threshold:'BLOCK_NONE' }
-      ]
+      model: model,
+      messages: orMessages,
+      max_tokens: maxTokens,
+      temperature: 0.85
     };
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 30000); // 30s timeout
+    const timeout = setTimeout(() => controller.abort(), 30000);
     let res;
     try {
-      res = await fetch(`${endpoint}?key=${apiKey}`, {
+      res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + apiKey,
+          'HTTP-Referer': 'https://omnisci.netlify.app',
+          'X-Title': 'OMNISCI IA Pessoal'
+        },
         body: JSON.stringify(body),
         signal: controller.signal
       });
     } catch(fetchErr) {
       clearTimeout(timeout);
-      if (fetchErr.name === 'AbortError') {
-        return await callGemini(messages, systemPrompt, maxTokens, attempt + 1);
-      }
-      return await callGemini(messages, systemPrompt, maxTokens, attempt + 1);
+      return await callOpenRouter(messages, systemPrompt, maxTokens, attempt + 1);
     }
     clearTimeout(timeout);
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      const status = res.status;
-      // 429 = rate limit → tenta próximo modelo
-      if (status === 429 || status === 503 || status === 500) {
-        return await callGemini(messages, systemPrompt, maxTokens, attempt + 1);
-      }
-      // 400 = pode ser modelo não disponível → tenta próximo
-      if (status === 400) {
-        const errMsg = err?.error?.message || '';
-        if (errMsg.includes('model') || errMsg.includes('API key') || errMsg.includes('not found')) {
-          if (errMsg.includes('API key')) {
-            return { ok: false, error: '🔑 API Key inválida! Clique em API Key no topo e cole novamente a chave do aistudio.google.com/apikey' };
-          }
-          return await callGemini(messages, systemPrompt, maxTokens, attempt + 1);
-        }
-        return { ok: false, error: '🔑 Verifique sua API Key em aistudio.google.com/apikey' };
-      }
-      if (status === 403) {
-        return { ok: false, error: '🔑 API Key sem permissão. Recrie em aistudio.google.com/apikey' };
-      }
-      return await callGemini(messages, systemPrompt, maxTokens, attempt + 1);
+      if (res.status === 401) return { ok: false, error: '🔑 API Key inválida! Cole novamente em 🔑 API Key no topo.' };
+      return await callOpenRouter(messages, systemPrompt, maxTokens, attempt + 1);
     }
     const data = await res.json();
-    // Verificar se foi bloqueado por safety
-    const finishReason = data.candidates?.[0]?.finishReason;
-    if (finishReason === 'SAFETY') {
-      return { ok: false, error: 'Conteúdo bloqueado pelos filtros de segurança. Reformule sua pergunta.' };
-    }
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    if (!text) {
-      return await callGemini(messages, systemPrompt, maxTokens, attempt + 1);
-    }
-    const tokens = (data.usageMetadata?.promptTokenCount || 0) + (data.usageMetadata?.candidatesTokenCount || 0);
+    const text = data.choices?.[0]?.message?.content || '';
+    if (!text) return await callOpenRouter(messages, systemPrompt, maxTokens, attempt + 1);
+    const tokens = (data.usage?.prompt_tokens || 0) + (data.usage?.completion_tokens || 0);
     totalTokens += tokens;
     localStorage.setItem(TOK_KEY, String(totalTokens));
     registerUsage(messages[messages.length-1]?.content || '', text, tokens);
     updateApiStatus();
-    return { ok: true, text, tokens, model: endpoint.split('/models/')[1]?.split(':')[0] || 'gemini' };
+    return { ok: true, text, tokens, model };
   } catch(e) {
-    return await callGemini(messages, systemPrompt, maxTokens, attempt + 1);
-  }
+    return await callOpenRouter(messages, systemPrompt, maxTokens, attempt + 1);
 }
+
 
 async function callAnthropic(messages, systemPrompt, maxTokens = 1500) {
   try {
@@ -2591,7 +2549,8 @@ async function analyzeImage() {
   document.getElementById('anaBtn').disabled = true;
   addMsg('user', '🖼️ [Imagem enviada para análise]');
   addTyping();
-  const isGemini = apiKey.startsWith('AI') || (!apiKey.startsWith('sk-ant'));
+  const isOpenRouter = apiKey.startsWith('sk-or');
+  const isGemini = apiKey.startsWith('AI');
   let r;
   if (isGemini) {
     r = await callGeminiVision(uploadedB64, q);
