@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0049)file:///C:/Users/tanisilva/Downloads/index_3.html -->
+<!-- saved from url=(0049)file:///C:/Users/tanisilva/Downloads/index_4.html -->
 <html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
@@ -563,7 +563,7 @@ input[type=text],input[type=number],input[type=password],textarea{
 </style>
 </head>
 <body>
-<canvas id="bg"></canvas>
+<canvas id="bg" width="1920" height="911"></canvas>
 
 <!-- TELA BLOQUEIO -->
 <div class="blocked-screen" id="blockedScreen">
@@ -606,9 +606,9 @@ input[type=text],input[type=number],input[type=password],textarea{
   <div class="logo" id="headerLogo">OMNISCI</div>
   <span class="mtag m-livre" id="modeTag">● Livre</span>
   <div class="hright">
-    <span id="apiStatusBadge" class="api-status api-no">⚠️ Sem API</span>
+    <span id="apiStatusBadge" class="api-status api-no">⚠️ Key com erro</span>
     <span id="memCount" style="font-size:.54rem;color:var(--gr);padding:3px 7px;border-radius:20px;background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.18)">🧠 0</span>
-    <span id="evo-display" style="font-size:.54rem;color:#00ffcc;padding:3px 7px;border-radius:20px;background:rgba(0,255,204,.07);border:1px solid rgba(0,255,204,.2)">🧠 Nv.1</span>
+    <span id="evo-display" style="font-size:.54rem;color:#00ffcc;padding:3px 7px;border-radius:20px;background:rgba(0,255,204,.07);border:1px solid rgba(0,255,204,.2)">🧠 Nv.1 <span style="color:var(--evo,#00ffcc)">0%</span></span>
     <div class="nick-h" id="nickH">Olá! 👋</div>
     <button class="alert-badge" id="alertBadge" onclick="showSecPanel()">🔴 Alertas</button>
     <button class="hbtn adm-key" onclick="openApiKeyModal()">🔑 API Key</button>
@@ -708,7 +708,7 @@ input[type=text],input[type=number],input[type=password],textarea{
       </div>
       <div class="preview-area" id="previewArea">
         <div class="preview-wrap">
-          <img id="previewImg" src="file:///C:/Users/tanisilva/Downloads/index_3.html" alt="preview">
+          <img id="previewImg" src="file:///C:/Users/tanisilva/Downloads/index_4.html" alt="preview">
           <button class="preview-rm" onclick="removeImg()">✕</button>
         </div>
       </div>
@@ -757,7 +757,7 @@ input[type=text],input[type=number],input[type=password],textarea{
     <div class="adm-section">
       <div class="adm-section-title">🔑 API Key — Conexão com a IA</div>
       <div class="token-bar">
-        <span class="tok">Status: <span id="adm-api-status">—</span></span>
+        <span class="tok">Status: <span id="adm-api-status">✅ Ativa</span></span>
         <span class="tok">Tokens usados: <span id="tok-used">0</span></span>
         <span class="tok">Modelo: <span id="tok-model">claude-sonnet-4-5-20251001</span></span>
       </div>
@@ -870,9 +870,7 @@ input[type=text],input[type=number],input[type=password],textarea{
     <!-- LOGS -->
     <div class="adm-section">
       <div class="adm-section-title">📋 Log de Alterações</div>
-      <div class="adm-logs" id="admLogs">
-        <div class="log-empty">Nenhuma alteração ainda.</div>
-      </div>
+      <div class="adm-logs" id="admLogs"><div class="log-empty">Nenhuma alteração ainda.</div></div>
     </div>
 
     <!-- CONTROLE DE ACESSO -->
@@ -959,7 +957,7 @@ input[type=text],input[type=number],input[type=password],textarea{
     <!-- PROJETO SALVO -->
     <div class="adm-section">
       <div class="adm-section-title">📁 Projeto Salvo (Máx. 1)</div>
-      <div id="proj-display"></div>
+      <div id="proj-display"><div style="font-size:.7rem;color:var(--mu);font-style:italic">Nenhum projeto salvo (máx. 1)</div></div>
       <div style="margin-top:.5rem;display:flex;gap:6px">
         <input type="text" id="proj-nome" placeholder="Nome do projeto..." style="flex:1;background:rgba(0,0,0,.4);border:1px solid rgba(52,211,153,.2);border-radius:8px;padding:6px 10px;color:var(--tx);font-family:&#39;DM Sans&#39;,sans-serif;font-size:.78rem;outline:none">
         <button class="prog-btn pb-test" onclick="salvarProjeto()">💾 Salvar Conversa</button>
@@ -1015,16 +1013,14 @@ input[type=text],input[type=number],input[type=password],textarea{
   <!-- MEMÓRIA -->
   <div class="panel p-mem" id="panel-mem">
     <div class="panel-title pt-mem">🧠 Memórias Salvas</div>
-    <div class="mem-list" id="memList">
-      <div style="font-size:.7rem;color:var(--mu);font-style:italic">Nenhuma ainda!</div>
-    </div>
+    <div class="mem-list" id="memList"><div style="font-size:.7rem;color:var(--mu);font-style:italic">Nenhuma ainda!</div></div>
     <div class="mem-add">
       <input class="mem-inp" id="memManual" type="text" placeholder="Adicionar memória manual...">
       <button class="mem-abtn" onclick="addMemManual()">+ Salvar</button>
     </div>
   </div>
 
-  <div class="msgs" id="msgs"></div>
+  <div class="msgs" id="msgs"><div class="msg ai"><div class="av av-livre">AI</div><div class="bubble ai "><span class="nick-tag ">✨ OMNISCI</span><div style="color:var(--vp);font-weight:900;font-size:1.05em;margin:10px 0 4px">Bem-vindo à OMNISCI ✦</div><br><br>Sua inteligência artificial pessoal — <strong style="color:var(--tx)">100% gratuita</strong>, sempre online.<br><br><div style="color:var(--gold);font-weight:700;font-size:1em;margin:8px 0 3px;border-bottom:1px solid rgba(251,191,36,.2);padding-bottom:3px">✅ Pronto para usar</div><br>Gemini conectado e funcionando!<br><br><div style="color:var(--gold);font-weight:700;font-size:1em;margin:8px 0 3px;border-bottom:1px solid rgba(251,191,36,.2);padding-bottom:3px">O que posso fazer por você</div><br><div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>📚 <strong style="color:var(--tx)">Aulas completas</strong> — qualquer matéria, passo a passo</span></div><br><div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>💖 <strong style="color:var(--tx)">Apoio emocional</strong> — conselhos, sem julgamentos</span></div><br><div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>🎨 <strong style="color:var(--tx)">Criar imagens</strong> — 12 estilos artísticos</span></div><br><div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>💻 <strong style="color:var(--tx)">Programação</strong> — qualquer linguagem de código</span></div><br><div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>🔍 <strong style="color:var(--tx)">Pesquisa profunda</strong> — dados reais e organizados</span></div><br><div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>🧪 <strong style="color:var(--tx)">Simulações científicas</strong> — matemática e física</span></div><br><div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>🚀 <strong style="color:var(--tx)">SI 05 26</strong> — tecnologia de propulsão interestelar</span></div><br><br><hr style="border:none;border-top:1px solid rgba(56,189,248,.1);margin:8px 0"><br>🔐 <em style="color:var(--mu)">Código secreto? Digite para acesso especial.</em><br><br><strong style="color:var(--tx)">Como posso ajudar hoje?</strong><span style="font-size:.5rem;opacity:.25;margin-left:6px;float:right;margin-top:2px">17:53</span></div></div></div>
 
   <div class="ibar" id="ibar">
     <textarea id="inp" rows="1" placeholder="Escreva aqui... ou use o código secreto 😉" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
@@ -1283,8 +1279,8 @@ async function callOpenRouter(messages, systemPrompt, maxTokens = 1500, attempt 
     return { ok: true, text, tokens, model };
   } catch(e) {
     return await callOpenRouter(messages, systemPrompt, maxTokens, attempt + 1);
+  }
 }
-
 
 async function callAnthropic(messages, systemPrompt, maxTokens = 1500) {
   try {
