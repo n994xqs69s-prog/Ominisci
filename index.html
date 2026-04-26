@@ -1587,10 +1587,6 @@ textarea#inp::placeholder{color:#4a6080;font-style:italic}
 
 <!-- BOTÕES RÁPIDOS -->
 <div class="qbtns">
-  <button class="qb" onclick="ask('Qual o preço do dólar agora?')">💵 Dólar</button>
-<button class="qb" onclick="ask('Preço do Bitcoin agora')">₿ Bitcoin</button>
-<button class="qb" onclick="ask('Como está o clima hoje?')">🌦️ Clima</button>
-<button class="qb" onclick="ask('Últimas notícias de economia')">📰 Notícias</button>
   <button class="qb" onclick="setModo('imagem')">🎨 Imagem</button>
   <button class="qb" onclick="ask('Explique a SI 05 26 com todos os detalhes técnicos completos')">🚀 SI 05 26</button>
   <button class="qb" onclick="runSimulation('mercado financeiro')">📈 Mercado</button>
@@ -1890,7 +1886,7 @@ async function callServer(messages, systemPrompt, maxTokens=1500){
   try{
     const res = await fetch(apiKey, {
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{'Content-Type':'text/plain},
       body: JSON.stringify({
         action:'chat',
         messages,
@@ -1931,7 +1927,7 @@ async function callGroq(messages, systemPrompt, maxTokens=1500, model='llama-3.3
     };
     const res = await fetch('https://api.groq.com/openai/v1/chat/completions',{
       method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},
+      headers:{'Content-Type':'text/plain,'Authorization':'Bearer '+apiKey},
       body: JSON.stringify(body)
     });
     if(!res.ok){
@@ -1965,7 +1961,7 @@ async function syncDrive(){
     // Salvar memórias locais no Drive
     const saveRes = await fetch(apiKey,{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{'Content-Type':'text/plain},
       body: JSON.stringify({action:'save_memory', memories})
     });
     const saveData = await saveRes.json();
@@ -1974,7 +1970,7 @@ async function syncDrive(){
       // Carregar memórias do Drive
       const loadRes = await fetch(apiKey,{
         method:'POST',
-        headers:{'Content-Type':'application/json'},
+        headers:{'Content-Type':'text/plain},
         body: JSON.stringify({action:'load_memory'})
       });
       const loadData = await loadRes.json();
@@ -2011,7 +2007,7 @@ async function saveToDriveSilent(){
   try{
     await fetch(apiKey,{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{'Content-Type':'text/plain},
       body: JSON.stringify({action:'save_memory', memories})
     });
     driveOnline = true;
@@ -2023,7 +2019,7 @@ async function checkServerStats(){
   if(!isServerURL(apiKey)){ addMsg('ai','⚠️ Stats disponíveis apenas com Apps Script.','📊 Stats'); return; }
   addTyping();
   try{
-    const res = await fetch(apiKey,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'get_stats'})});
+    const res = await fetch(apiKey,{method:'POST',headers:{'Content-Type':'text/plain},body:JSON.stringify({action:'get_stats'})});
     const d = await res.json();
     removeTyping();
     if(d.ok){
@@ -2040,7 +2036,7 @@ async function testKeepAlive(){
   if(!isServerURL(apiKey)){ addMsg('ai','⏰ KeepAlive disponível apenas com Apps Script.\n\nNo Apps Script, configure um acionador: ⏰ Acionadores → keepAlive → A cada 5 minutos.','⏰ KeepAlive'); return; }
   addTyping();
   try{
-    const res = await fetch(apiKey,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'ping'})});
+    const res = await fetch(apiKey,{method:'POST',headers:{'Content-Type':'text/plain},body:JSON.stringify({action:'ping'})});
     const d = await res.json();
     removeTyping();
     if(d.pong) addMsg('ai','✅ **Servidor respondendo!**\n\nO servidor Apps Script está online e funcionando.\n\n⏰ Para manter sempre ativo: no Apps Script → ⏰ Acionadores → + Adicionar → keepAlive → A cada 5 minutos.','⏰ KeepAlive');
@@ -2050,7 +2046,7 @@ async function testKeepAlive(){
 // Ping keepalive automático a cada 4 minutos
 setInterval(async()=>{
   if(isServerURL(apiKey)){
-    try{ await fetch(apiKey,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'ping'})}); driveOnline=true; }
+    try{ await fetch(apiKey,{method:'POST',headers:{'Content-Type':'text/plain},body:JSON.stringify({action:'ping'})}); driveOnline=true; }
     catch(e){ driveOnline=false; }
     updateApiStatus();
   }
