@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="description" content="OMNISCI — Sua IA Pessoal com Groq + Google Drive">
+<title>OMNISCI — Sua IA Pessoal</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%23020310' rx='40'/%3E%3Cellipse cx='90' cy='90' rx='76' ry='24' fill='none' stroke='%2338bdf8' stroke-width='5' transform='rotate(-25 90 90)' opacity='0.9'/%3E%3Cline x1='90' y1='10' x2='90' y2='38' stroke='%23fbbf24' stroke-width='6' stroke-linecap='round'/%3E%3Cline x1='90' y1='142' x2='90' y2='170' stroke='%23fbbf24' stroke-width='6' stroke-linecap='round'/%3E%3Ccircle cx='90' cy='90' r='28' fill='%23000'/%3E%3Ccircle cx='90' cy='90' r='32' fill='none' stroke='%2338bdf8' stroke-width='3'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23020310'/%3E%3Cellipse cx='50' cy='50' rx='42' ry='13' fill='none' stroke='%2338bdf8' stroke-width='3' transform='rotate(-25 50 50)'/%3E%3Cline x1='50' y1='5' x2='50' y2='22' stroke='%23fbbf24' stroke-width='3' stroke-linecap='round'/%3E%3Cline x1='50' y1='78' x2='50' y2='95' stroke='%23fbbf24' stroke-width='3' stroke-linecap='round'/%3E%3Ccircle cx='50' cy='50' r='16' fill='%23000'/%3E%3Ccircle cx='50' cy='50' r='18' fill='none' stroke='%2338bdf8' stroke-width='2'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Playfair+Display:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#000000;--card:rgba(5,5,20,0.97);--a:#60d0ff;--a2:#a78bfa;--gold:#ffd700;--gr:#00ffaa;--pk:#ff6eb4;--vp:#c084fc;--red:#ff6b6b;--adm:#ff7043;--adm2:#ff3cac;--adm3:#ffd700;--evo:#00ffcc;--evo2:#7fff00;--tx:#ffffff;--mu:#7dd3fc;--bd:rgba(96,208,255,0.2);--glass:rgba(255,255,255,0.03);--glass-border:rgba(255,255,255,0.06);--radius-sm:8px;--radius-md:12px;--radius-lg:18px;--radius-xl:24px;--shadow-a:rgba(56,189,248,0.12);--shadow-gr:rgba(52,211,153,0.12);--shadow-pk:rgba(244,114,182,0.12);--shadow-adm:rgba(255,107,53,0.12);--own:#ff3cac;--own2:#ffd700;
+}
+html{scroll-behavior:smooth}
+body{background:#000000;color:#ffffff;font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+::selection{background:rgba(56,189,248,0.25);color:#fff}
+input,textarea,select{-webkit-appearance:none;appearance:none}
+canvas#bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:#000000;}
+.app{position:relative;z-index:1;display:flex;flex-direction:column;min-height:100vh}
+.blocked-screen{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.97);align-items:center;justify-content:center;flex-direction:column;gap:1rem;text-align:center;padding:2rem;}
+.blocked-screen.show{display:flex}
+.blocked-icon{font-size:4rem;animation:pred 1.5s infinite}
+@keyframes pred{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(0.9)}}
+.blocked-title{font-family:'Orbitron',sans-serif;font-size:1.4rem;color:var(--red);letter-spacing:3px}
+.blocked-msg{font-size:.88rem;color:#7dd3fc;max-width:340px;line-height:1.7}
+.apikey-screen{display:none;position:fixed;inset:0;z-index:998;background:rgba(2,3,12,0.98);align-items:center;justify-content:center;flex-direction:column;gap:1.2rem;text-align:center;padding:2rem;backdrop-filter:blur(12px);}
+.apikey-screen.show{display:flex}
+.apikey-box{background:rgba(8,12,40,0.98);border:1px solid rgba(0,255,170,0.4);border-radius:20px;padding:2rem;max-width:520px;width:100%;box-shadow:0 0 60px rgba(0,255,170,0.1);}
+.apikey-title{font-family:'Orbitron',sans-serif;font-size:1rem;color:var(--gr);letter-spacing:3px;margin-bottom:.6rem;}
+.apikey-subtitle{font-size:.78rem;color:#7dd3fc;line-height:1.7;margin-bottom:1.2rem}
+.apikey-inp{width:100%;background:rgba(0,0,0,0.5);border:1px solid rgba(0,255,170,0.3);border-radius:10px;padding:12px 14px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:.85rem;outline:none;margin-bottom:.8rem;transition:border-color .2s;}
+.apikey-inp:focus{border-color:var(--gr);box-shadow:0 0 12px rgba(0,255,170,0.1)}
+.apikey-inp::placeholder{color:#4a6080}
+.apikey-btn{width:100%;padding:12px;border-radius:10px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gr),#00cc88);color:#000;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:700;transition:all .2s;letter-spacing:.5px;}
+.apikey-btn:hover{opacity:.88;transform:translateY(-1px)}
+.apikey-skip{font-size:.68rem;color:#7dd3fc;margin-top:.5rem;cursor:pointer;text-decoration:underline}
+.apikey-help{background:rgba(56,189,248,0.05);border:1px solid rgba(56,189,248,0.15);border-radius:10px;padding:10px 12px;margin-bottom:1rem;text-align:left;}
+.apikey-help-title{font-size:.65rem;color:var(--a);font-weight:700;margin-bottom:.4rem;letter-spacing:1px}
+.apikey-help-steps{font-size:.69rem;color:#7dd3fc;line-height:1.85}
+.apikey-help-steps a{color:var(--a);text-decoration:none}
+.owner-screen{display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.97);align-items:center;justify-content:center;flex-direction:column;gap:1.2rem;text-align:center;padding:2rem;backdrop-filter:blur(20px);}
+.owner-screen.show{display:flex}
+.owner-box{background:linear-gradient(135deg,rgba(10,0,20,0.99),rgba(20,5,10,0.99));border:1px solid rgba(255,60,172,0.5);border-radius:24px;padding:2.2rem;max-width:440px;width:100%;box-shadow:0 0 80px rgba(255,60,172,0.2),0 0 40px rgba(255,215,0,0.1);}
+.owner-title{font-family:'Orbitron',sans-serif;font-size:1.1rem;letter-spacing:4px;margin-bottom:.5rem;background:linear-gradient(90deg,#ff3cac,#ffd700,#ff3cac);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:owntitle 2s infinite;}
+@keyframes owntitle{0%,100%{filter:brightness(1)}50%{filter:brightness(1.6)}}
+.owner-subtitle{font-size:.78rem;color:#c084fc;margin-bottom:1.5rem;line-height:1.6}
+.owner-inp{width:100%;background:rgba(255,60,172,0.05);border:1px solid rgba(255,60,172,0.3);border-radius:12px;padding:12px 16px;color:#fff;font-family:'DM Sans',sans-serif;font-size:.92rem;outline:none;text-align:center;letter-spacing:6px;margin-bottom:.9rem;transition:all .2s;}
+.owner-inp:focus{border-color:rgba(255,60,172,0.7);box-shadow:0 0 20px rgba(255,60,172,0.15)}
+.owner-btn{width:100%;padding:13px;border-radius:12px;border:none;cursor:pointer;background:linear-gradient(135deg,#ff3cac,#ffd700);color:#000;font-family:'Orbitron',sans-serif;font-size:.85rem;font-weight:900;letter-spacing:2px;margin-bottom:.5rem;transition:all .2s;}
+.owner-btn:hover{opacity:.88;transform:translateY(-1px)}
+.owner-cancel{font-size:.68rem;color:#c084fc;cursor:pointer;text-decoration:underline}
+.owner-error{font-size:.72rem;color:var(--red);display:none;margin-top:.3rem;animation:fi .3s ease}
+.owner-error.show{display:block}
+.owner-active-bar{display:none;background:linear-gradient(90deg,rgba(255,60,172,.18),rgba(255,215,0,.12),rgba(255,60,172,.18));border-bottom:1px solid rgba(255,60,172,.45);padding:7px 16px;text-align:center;font-size:.65rem;color:#ffd700;letter-spacing:2.5px;font-family:'Orbitron',sans-serif;animation:ownerbar 2.5s infinite;}
+@keyframes ownerbar{0%,100%{opacity:.85}50%{opacity:1}}
+.owner-active-bar.show{display:block}
+header{display:flex;align-items:center;gap:8px;padding:12px 18px;background:rgba(0,0,0,0.97);border-bottom:1px solid rgba(56,189,248,0.18);backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px);position:sticky;top:0;z-index:100;transition:all .3s;flex-wrap:wrap;box-shadow:0 1px 0 rgba(56,189,248,.06);}
+header.hprof{border-bottom-color:rgba(52,211,153,.5)!important}
+header.hamigo{border-bottom-color:rgba(244,114,182,.5)!important}
+header.hvp{border-bottom-color:rgba(167,139,250,.55)!important}
+header.hger{border-bottom-color:rgba(251,191,36,.6)!important}
+header.himg{border-bottom-color:rgba(244,114,182,.5)!important}
+header.hadm{border-bottom-color:rgba(255,107,53,.85)!important;background:rgba(15,4,2,.99)!important;animation:admh 3s infinite;}
+header.hown{border-bottom-color:rgba(255,60,172,.9)!important;background:rgba(20,0,15,.99)!important;animation:ownh 2s infinite;}
+@keyframes admh{0%,100%{border-bottom-color:rgba(255,107,53,.85)}50%{border-bottom-color:rgba(255,60,172,.85)}}
+@keyframes ownh{0%,100%{border-bottom-color:rgba(255,60,172,.9)}50%{border-bottom-color:rgba(255,215,0,.9)}}
+.bh-symbol{animation:bhspin 8s linear infinite;flex-shrink:0;cursor:pointer;transition:animation-duration .3s;}
+.bh-symbol:hover{animation-duration:2s}
+@keyframes bhspin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.orb{width:8px;height:8px;border-radius:50%;background:var(--gr);box-shadow:0 0 8px var(--gr),0 0 16px rgba(0,255,170,.3);animation:orb 3s ease-in-out infinite;flex-shrink:0;}
+@keyframes orb{0%,100%{transform:scale(1)}50%{transform:scale(1.5);opacity:.6}}
+.orb.adm{background:var(--adm);box-shadow:0 0 14px var(--adm),0 0 28px var(--adm2);animation:orbadm 1.5s infinite;}
+.orb.own{background:#ff3cac;box-shadow:0 0 14px #ff3cac,0 0 28px #ffd700;animation:ordown 1s infinite;}
+@keyframes orbadm{0%,100%{transform:scale(1);background:var(--adm)}50%{transform:scale(1.6);background:var(--adm2)}}
+@keyframes ordown{0%,100%{transform:scale(1);background:#ff3cac}50%{transform:scale(1.8);background:#ffd700}}
+.logo{font-family:'Orbitron',sans-serif;font-size:1.15rem;font-weight:900;letter-spacing:4px;background:linear-gradient(110deg,var(--a) 0%,var(--a2) 50%,var(--gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 20px rgba(96,208,255,.5));transition:all .4s;}
+.logo.adm{background:linear-gradient(110deg,var(--adm),var(--adm2),var(--adm3));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.logo.own{background:linear-gradient(110deg,#ff3cac,#ffd700,#ff3cac);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:owntitle 1.5s infinite}
+.mtag{font-size:.54rem;letter-spacing:2px;padding:3px 9px;border-radius:20px;text-transform:uppercase;font-weight:700;flex-shrink:0;transition:all .3s;white-space:nowrap;}
+.m-livre{background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.3);color:var(--a)}
+.m-prof{background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.4);color:var(--gr)}
+.m-amigo{background:rgba(244,114,182,.12);border:1px solid rgba(244,114,182,.4);color:var(--pk)}
+.m-vp{background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.4);color:var(--vp)}
+.m-ger{background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.5);color:var(--gold)}
+.m-img{background:linear-gradient(90deg,rgba(244,114,182,.15),rgba(167,139,250,.15));border:1px solid rgba(244,114,182,.4);color:var(--pk)}
+.m-adm{background:linear-gradient(90deg,rgba(255,107,53,.2),rgba(255,60,172,.2));border:1px solid rgba(255,107,53,.6);color:var(--adm);animation:badm 1.5s infinite}
+.m-own{background:linear-gradient(90deg,rgba(255,60,172,.3),rgba(255,215,0,.2));border:1px solid rgba(255,60,172,.8);color:#ff3cac;animation:badm 1s infinite}
+@keyframes badm{0%,100%{opacity:1}50%{opacity:.7}}
+.hright{margin-left:auto;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.nick-h{font-size:.66rem;color:var(--gold);font-style:italic;padding:3px 9px;border-radius:20px;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.3);max-width:130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hbtn{background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.2);color:var(--a);padding:3px 9px;border-radius:20px;cursor:pointer;font-size:.54rem;font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap;}
+.hbtn:hover{background:rgba(56,189,248,.18);transform:translateY(-1px)}
+.hbtn.gr{background:rgba(0,255,170,.07);border-color:rgba(0,255,170,.2);color:var(--gr)}
+.hbtn.gr:hover{background:rgba(0,255,170,.18)}
+.hbtn.adm-key{background:rgba(255,107,53,.1);border-color:rgba(255,107,53,.35);color:var(--adm)}
+.api-status{font-size:.54rem;padding:3px 10px;border-radius:20px;border:1px solid;white-space:nowrap;font-weight:600;letter-spacing:.3px;}
+.api-ok{background:rgba(0,255,170,.15);border-color:rgba(0,255,170,.5);color:var(--gr);text-shadow:0 0 8px rgba(0,255,170,.4)}
+.api-no{background:rgba(248,113,113,.1);border-color:rgba(248,113,113,.35);color:var(--red)}
+.api-serv{background:rgba(255,60,172,.15);border-color:rgba(255,60,172,.5);color:#ff3cac}
+.alert-badge{background:rgba(248,113,113,.15);border:1px solid rgba(248,113,113,.4);color:var(--red);padding:3px 9px;border-radius:20px;font-size:.54rem;cursor:pointer;font-family:'DM Sans',sans-serif;display:none;animation:badm 1.5s infinite;}
+.alert-badge.show{display:block}
+#selfImproveBadge{display:none;font-size:.54rem;color:var(--vp);padding:3px 8px;border-radius:20px;background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.18);cursor:pointer;white-space:nowrap}
+.modo-bar{display:flex;gap:6px;padding:10px 14px 6px;justify-content:center;flex-wrap:wrap;background:rgba(0,0,0,.1);border-bottom:1px solid rgba(255,255,255,.03);}
+.mdbtn{font-size:.68rem;padding:7px 15px;border-radius:30px;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;font-weight:600;transition:all .2s cubic-bezier(.34,1.56,.64,1);display:flex;align-items:center;gap:5px;user-select:none;letter-spacing:.3px;}
+.mdbtn:hover{transform:translateY(-2px)}
+.mdbtn:active{transform:scale(.97)}
+.md-livre{background:rgba(56,189,248,.09);color:var(--a);border:1.5px solid rgba(56,189,248,.22)}
+.md-prof{background:rgba(52,211,153,.09);color:var(--gr);border:1.5px solid rgba(52,211,153,.22)}
+.md-amigo{background:rgba(244,114,182,.09);color:var(--pk);border:1.5px solid rgba(244,114,182,.22)}
+.md-img{background:linear-gradient(90deg,rgba(244,114,182,.09),rgba(167,139,250,.09));color:var(--pk);border:1.5px solid rgba(244,114,182,.25)}
+.md-vp{background:rgba(167,139,250,.09);color:var(--vp);border:1.5px solid rgba(167,139,250,.22)}
+.md-ger{background:rgba(251,191,36,.07);color:var(--gold);border:1.5px solid rgba(251,191,36,.18)}
+.md-adm{background:linear-gradient(90deg,rgba(255,107,53,.12),rgba(255,60,172,.12));color:var(--adm);border:1.5px solid rgba(255,107,53,.3)}
+.mdbtn.sel{transform:scale(1.07)}
+.md-livre.sel{background:rgba(56,189,248,.22);border-color:var(--a);box-shadow:0 0 20px rgba(56,189,248,.25)}
+.md-prof.sel{background:rgba(52,211,153,.22);border-color:var(--gr);box-shadow:0 0 20px rgba(52,211,153,.25)}
+.md-amigo.sel{background:rgba(244,114,182,.22);border-color:var(--pk);box-shadow:0 0 20px rgba(244,114,182,.25)}
+.md-img.sel{background:linear-gradient(90deg,rgba(244,114,182,.28),rgba(167,139,250,.28));border-color:var(--pk);box-shadow:0 0 20px rgba(244,114,182,.25)}
+.md-vp.sel{background:rgba(167,139,250,.22);border-color:var(--vp);box-shadow:0 0 20px rgba(167,139,250,.25)}
+.md-ger.sel{background:rgba(251,191,36,.22);border-color:var(--gold);box-shadow:0 0 20px rgba(251,191,36,.25)}
+.md-adm.sel{background:linear-gradient(90deg,rgba(255,107,53,.32),rgba(255,60,172,.32));border-color:var(--adm);box-shadow:0 0 25px rgba(255,107,53,.45),0 0 50px rgba(255,60,172,.2)}
+.hero{text-align:center;padding:2rem 1rem .8rem;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(56,189,248,.08) 0%,rgba(129,140,248,.03) 50%,transparent 80%);transition:all .4s;}
+.hero.hadm-bg{background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(255,107,53,.12) 0%,transparent 70%)}
+.hero.hown-bg{background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(255,60,172,.12) 0%,transparent 70%)}
+.hero h1{font-family:'Orbitron',sans-serif;font-size:clamp(1.8rem,5vw,3.2rem);font-weight:900;line-height:1.05;background:linear-gradient(135deg,#ffffff 0%,var(--a) 25%,var(--a2) 55%,var(--gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.5rem;animation:fi 1s ease both;filter:drop-shadow(0 0 40px rgba(56,189,248,.3));transition:all .4s;}
+.hero h1.adm-title{background:linear-gradient(160deg,#fff 0%,var(--adm) 35%,var(--adm2) 65%,var(--adm3) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero h1.own-title{background:linear-gradient(160deg,#fff 0%,#ff3cac 35%,#ffd700 65%,#ff3cac 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:owntitle 1.5s infinite}
+@keyframes fi{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.hero p{font-size:.82rem;color:#7dd3fc;max-width:500px;margin:0 auto .7rem;line-height:1.7;animation:curiosity 3s ease-in-out infinite}
+@keyframes curiosity{0%,100%{opacity:.8;transform:translateY(0)}50%{opacity:1;transform:translateY(-2px)}}
+.topics{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;padding:0 .8rem .7rem}
+.tp{font-size:.61rem;padding:5px 12px;border-radius:20px;cursor:pointer;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);color:#6a90b0;transition:all .18s;user-select:none;white-space:nowrap;font-weight:500;}
+.tp:hover{background:rgba(56,189,248,.08);border-color:rgba(56,189,248,.25);color:var(--a);transform:translateY(-1px)}
+.tp.on{background:rgba(56,189,248,.14);border-color:rgba(56,189,248,.4);color:var(--a);font-weight:600;box-shadow:0 0 14px rgba(56,189,248,.2);}
+.tp.sp{border-color:rgba(251,191,36,.35);color:#fcd34d;background:rgba(251,191,36,.05)}
+.tp.sp:hover,.tp.sp.on{background:rgba(251,191,36,.16);border-color:var(--gold);color:var(--gold);box-shadow:0 0 14px rgba(251,191,36,.2)}
+.chat-wrap{flex:1;max-width:900px;width:100%;margin:0 auto;padding:0 .9rem 1rem;display:flex;flex-direction:column;gap:7px;}
+.panel{border-radius:16px;padding:1rem 1.1rem;margin-bottom:6px;display:none;backdrop-filter:blur(12px);transition:all .3s;}
+.panel.show{display:block;animation:fi .3s ease}
+.p-prof{background:rgba(52,211,153,.03);border:1px solid rgba(52,211,153,.16)}
+.p-amigo{background:rgba(244,114,182,.03);border:1px solid rgba(244,114,182,.16)}
+.p-vp{background:rgba(167,139,250,.03);border:1px solid rgba(167,139,250,.18)}
+.p-ger{background:rgba(251,191,36,.03);border:1px solid rgba(251,191,36,.18)}
+.p-img{background:linear-gradient(135deg,rgba(244,114,182,.04),rgba(167,139,250,.04));border:1px solid rgba(244,114,182,.2)}
+.p-mem{background:rgba(52,211,153,.02);border:1px solid rgba(52,211,153,.13)}
+.p-sec{background:rgba(248,113,113,.04);border:1px solid rgba(248,113,113,.25)}
+.p-adm{background:linear-gradient(135deg,rgba(255,107,53,.06),rgba(255,60,172,.06));border:1px solid rgba(255,107,53,.35);position:relative;overflow:hidden;}
+.p-adm::before{content:'';position:absolute;inset:0;background:linear-gradient(45deg,transparent 30%,rgba(255,107,53,.03) 50%,transparent 70%);animation:shine 3s infinite;pointer-events:none;}
+@keyframes shine{0%{transform:translateX(-100%)}100%{transform:translateX(200%)}}
+.p-own{background:linear-gradient(135deg,rgba(255,60,172,.08),rgba(255,215,0,.04),rgba(255,60,172,.08));border:1px solid rgba(255,60,172,.5);position:relative;overflow:hidden;}
+.p-own::before{content:'';position:absolute;inset:0;background:linear-gradient(45deg,transparent 30%,rgba(255,60,172,.04) 50%,transparent 70%);animation:shine 2s infinite;pointer-events:none;}
+.p-notas{background:rgba(52,211,153,.02);border:1px solid rgba(52,211,153,.13)}
+.p-proj{background:rgba(56,189,248,.02);border:1px solid rgba(56,189,248,.15)}
+.panel-title{font-size:.66rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:.6rem;font-weight:700;font-family:'Space Grotesk',sans-serif;}
+.pt-prof{color:var(--gr)}.pt-amigo{color:var(--pk)}.pt-vp{color:var(--vp)}.pt-ger{font-family:'Orbitron',sans-serif;color:var(--gold)}.pt-mem{color:var(--gr)}.pt-img{color:var(--pk)}.pt-sec{color:var(--red);font-family:'Orbitron',sans-serif}
+.pt-own{font-family:'Orbitron',sans-serif;font-size:.72rem;background:linear-gradient(90deg,#ff3cac,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:3px;animation:owntitle 2s infinite;}
+.pt-adm{font-family:'Orbitron',sans-serif;font-size:.72rem;background:linear-gradient(90deg,var(--adm),var(--adm2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:3px;}
+.hs{display:flex;gap:9px;align-items:flex-start;padding:5px 8px;background:rgba(52,211,153,.05);border-radius:8px;border:1px solid rgba(52,211,153,.1);margin-bottom:4px}
+.hs:last-child{margin:0}
+.hs-n{width:20px;height:20px;border-radius:50%;background:var(--gr);color:#000;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.6rem;flex-shrink:0}
+.hs-t{font-size:.72rem;color:#7dd3fc;line-height:1.5}
+.vp-perms{display:flex;flex-wrap:wrap;gap:4px;margin-top:.5rem}
+.vp-perm{font-size:.6rem;padding:3px 8px;border-radius:14px;background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2);color:var(--vp)}
+.vp-lock{font-size:.6rem;padding:3px 8px;border-radius:14px;background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.18);color:var(--red)}
+.g-btns{display:flex;flex-wrap:wrap;gap:5px}
+.gb{font-size:.62rem;padding:5px 11px;border-radius:9px;cursor:pointer;background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.19);color:#fcd34d;transition:all .14s}
+.gb:hover{background:rgba(251,191,36,.2);border-color:var(--gold);transform:translateY(-1px)}
+.gb.red{background:rgba(248,113,113,.08);border-color:rgba(248,113,113,.25);color:var(--red)}
+.gb.red:hover{background:rgba(248,113,113,.22)}
+.gb.adm-c{background:rgba(255,107,53,.1);border-color:rgba(255,107,53,.3);color:var(--adm)}
+.gb.adm-c:hover{background:rgba(255,107,53,.24)}
+.gb.own-c{background:rgba(255,60,172,.1);border-color:rgba(255,60,172,.35);color:#ff3cac}
+.gb.own-c:hover{background:rgba(255,60,172,.22)}
+/* BOTÃO TEMPO REAL */
+.gb.rt{background:rgba(0,255,170,.1);border-color:rgba(0,255,170,.3);color:var(--gr)}
+.gb.rt:hover{background:rgba(0,255,170,.24)}
+.own-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:8px;margin-bottom:.8rem}
+.own-card{background:rgba(255,60,172,.07);border:1px solid rgba(255,60,172,.25);border-radius:12px;padding:10px 12px;cursor:pointer;transition:all .2s;}
+.own-card:hover{background:rgba(255,60,172,.16);border-color:rgba(255,60,172,.55);transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,60,172,.2)}
+.own-card-icon{font-size:1.4rem;margin-bottom:4px}
+.own-card-title{font-size:.7rem;color:#ff3cac;font-weight:700;margin-bottom:2px}
+.own-card-desc{font-size:.6rem;color:#c084fc;line-height:1.4}
+.own-stats{background:rgba(0,0,0,.3);border:1px solid rgba(255,60,172,.18);border-radius:10px;padding:10px 12px;margin-bottom:.7rem}
+.own-stat{display:flex;justify-content:space-between;align-items:center;font-size:.68rem;color:#c084fc;padding:3px 0;border-bottom:1px solid rgba(255,60,172,.07)}
+.own-stat:last-child{border:none}
+.own-stat span{color:#ffd700;font-weight:700}
+.adm-section{margin-bottom:1.2rem}
+.adm-section-title{font-size:.64rem;color:var(--adm);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:.65rem;display:flex;align-items:center;gap:7px;font-weight:700;font-family:'Space Grotesk',sans-serif;}
+.adm-section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(255,107,53,.3),transparent)}
+.token-bar{display:flex;gap:10px;align-items:center;background:rgba(0,0,0,.3);border:1px solid rgba(255,107,53,.12);border-radius:8px;padding:5px 10px;margin-bottom:.6rem;flex-wrap:wrap}
+.tok{font-size:.62rem;color:#8ab4d4}.tok span{color:var(--a);font-weight:700}
+.lbtn{font-size:.62rem;padding:5px 11px;border-radius:9px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;transition:all .15s}
+.lbtn:hover{transform:translateY(-1px)}
+.lbtn-copy{background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.25);color:var(--a)}
+.lbtn-save{background:linear-gradient(135deg,var(--adm),var(--adm2));color:#fff}
+.lbtn-reset{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25);color:var(--red)}
+.lbtn-ai{background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.25);color:var(--vp)}
+.lbtn-test{background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.25);color:var(--gr)}
+.live-prompt-textarea{width:100%;background:rgba(0,0,0,.55);border:1px solid rgba(255,107,53,.25);border-radius:11px;padding:12px 14px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:.8rem;resize:vertical;outline:none;line-height:1.65;min-height:130px;transition:border-color .2s;}
+.live-prompt-textarea:focus{border-color:rgba(255,107,53,.6);box-shadow:0 0 12px rgba(255,107,53,.08)}
+.prompt-tabs{display:flex;gap:5px;margin-bottom:.7rem;flex-wrap:wrap}
+.ptab{font-size:.62rem;padding:5px 12px;border-radius:10px;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;font-weight:500;transition:all .18s}
+.ptab.p-sys{background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.25);color:var(--adm)}
+.ptab.p-pers{background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.25);color:var(--a)}
+.ptab.p-rules{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.25);color:var(--gr)}
+.ptab.p-know{background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.25);color:var(--vp)}
+.ptab.p-nick{background:rgba(244,114,182,.1);border:1px solid rgba(244,114,182,.25);color:var(--pk)}
+.ptab.sel{transform:scale(1.06)}
+.ptab.p-sys.sel{background:rgba(255,107,53,.28);border-color:var(--adm)}
+.ptab.p-pers.sel{background:rgba(56,189,248,.25);border-color:var(--a)}
+.ptab.p-rules.sel{background:rgba(52,211,153,.25);border-color:var(--gr)}
+.ptab.p-know.sel{background:rgba(167,139,250,.25);border-color:var(--vp)}
+.ptab.p-nick.sel{background:rgba(244,114,182,.25);border-color:var(--pk)}
+.prog-area{display:none}.prog-area.show{display:block}
+.saved-msg{font-size:.68rem;color:var(--gr);display:none;animation:fi .3s ease;margin-top:.4rem}
+.saved-msg.show{display:inline-block}
+.prog-btn{font-size:.67rem;padding:6px 13px;border-radius:9px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;transition:all .18s}
+.prog-btn:hover{transform:translateY(-1px)}
+.pb-save{background:linear-gradient(135deg,var(--adm),var(--adm2));color:#fff}
+.pb-reset{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25);color:var(--red)}
+.pb-ai{background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.25);color:var(--vp)}
+.pb-test{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.25);color:var(--gr)}
+.pb-own{background:linear-gradient(135deg,#ff3cac,#ffd700);color:#000;font-weight:700}
+.improve-box{background:rgba(255,107,53,.04);border:1px solid rgba(255,107,53,.18);border-radius:10px;padding:.8rem}
+.improve-input{width:100%;background:rgba(0,0,0,.3);border:1px solid rgba(255,107,53,.2);border-radius:9px;padding:8px 11px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:.82rem;outline:none;margin-bottom:.5rem;transition:border-color .2s}
+.improve-input:focus{border-color:rgba(255,107,53,.5)}
+.improve-input::placeholder{color:#4a6080}
+.adm-logs{max-height:140px;overflow-y:auto;display:flex;flex-direction:column;gap:4px}
+.adm-log{font-size:.67rem;padding:4px 9px;border-radius:7px;background:rgba(255,107,53,.05);border:1px solid rgba(255,107,53,.12);color:#a0c8e8;display:flex;gap:8px;align-items:flex-start;line-height:1.4}
+.log-time{color:rgba(255,107,53,.7);font-size:.6rem;flex-shrink:0;white-space:nowrap}
+.log-empty{font-size:.7rem;color:#7dd3fc;font-style:italic}
+.sec-stats{display:flex;gap:7px;margin-bottom:.7rem;flex-wrap:wrap}
+.sec-stat{flex:1;min-width:70px;background:rgba(248,113,113,.05);border:1px solid rgba(248,113,113,.15);border-radius:9px;padding:6px 9px;text-align:center}
+.sec-stat-n{font-size:1.3rem;font-weight:700;color:var(--red)}
+.sec-stat-l{font-size:.59rem;color:#7dd3fc;margin-top:1px}
+.sec-alerts{display:flex;flex-direction:column;gap:5px;max-height:200px;overflow-y:auto}
+.sec-alert{padding:7px 9px;border-radius:8px;background:rgba(248,113,113,.05);border:1px solid rgba(248,113,113,.18);font-size:.71rem;line-height:1.5}
+.sec-alert-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px}
+.sat{font-size:.59rem;padding:2px 7px;border-radius:9px;font-weight:600;letter-spacing:1px}
+.t-d{background:rgba(248,113,113,.2);color:var(--red)}.t-w{background:rgba(251,191,36,.2);color:var(--gold)}.t-b{background:rgba(167,139,250,.2);color:var(--vp)}.t-o{background:rgba(0,255,170,.15);color:var(--gr)}
+.img-mode-tabs{display:flex;gap:6px;margin-bottom:.7rem}
+.imt{font-size:.66rem;padding:6px 12px;border-radius:20px;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;font-weight:500;transition:all .18s}
+.imt.gen{background:rgba(244,114,182,.1);border:1px solid rgba(244,114,182,.25);color:var(--pk)}
+.imt.ana{background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.25);color:var(--vp)}
+.imt.gen.sel{background:rgba(244,114,182,.22);border-color:var(--pk);box-shadow:0 0 14px rgba(244,114,182,.2)}
+.imt.ana.sel{background:rgba(167,139,250,.22);border-color:var(--vp);box-shadow:0 0 14px rgba(167,139,250,.2)}
+.img-gen-box,.img-ana-box{display:none}
+.img-gen-box.show,.img-ana-box.show{display:block}
+.img-styles{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:.6rem}
+.ist{font-size:.59rem;padding:3px 9px;border-radius:13px;cursor:pointer;background:rgba(244,114,182,.07);border:1px solid rgba(244,114,182,.18);color:var(--pk);transition:all .14s}
+.ist:hover,.ist.on{background:rgba(244,114,182,.22);border-color:var(--pk)}
+.gen-row{display:flex;gap:7px;align-items:flex-end}
+.gen-row textarea{flex:1;background:rgba(244,114,182,.05);border:1px solid rgba(244,114,182,.2);border-radius:10px;padding:8px 11px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:.82rem;resize:none;outline:none;min-height:42px;max-height:90px;line-height:1.5;transition:border-color .2s}
+.gen-row textarea:focus{border-color:rgba(244,114,182,.45)}
+.gen-row textarea::placeholder{color:#4a6080}
+.gen-btn{background:linear-gradient(135deg,var(--pk),var(--vp));color:#fff;border:none;border-radius:10px;padding:9px 13px;cursor:pointer;font-size:.76rem;font-family:'DM Sans',sans-serif;font-weight:500;transition:all .18s;white-space:nowrap;flex-shrink:0}
+.gen-btn:hover{opacity:.85;transform:translateY(-1px)}
+.gen-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.img-result-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px;margin-top:.7rem}
+.img-item{border-radius:10px;overflow:hidden;border:1px solid rgba(244,114,182,.18);cursor:pointer;transition:transform .2s;position:relative}
+.img-item:hover{transform:scale(1.03)}
+.img-item img{width:100%;height:130px;object-fit:cover;display:block}
+.img-item-btns{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.8));padding:5px;display:flex;gap:4px;opacity:0;transition:opacity .2s}
+.img-item:hover .img-item-btns{opacity:1}
+.iib{font-size:.57rem;padding:3px 7px;border-radius:6px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500}
+.iib-dl{background:var(--gr);color:#000}
+.img-loading{display:none;align-items:center;gap:9px;padding:.8rem;background:rgba(244,114,182,.05);border-radius:10px;border:1px solid rgba(244,114,182,.15);margin-top:.6rem}
+.img-loading.show{display:flex}
+.img-spin{width:18px;height:18px;border:2px solid rgba(244,114,248,.15);border-top-color:var(--pk);border-right-color:rgba(167,139,250,.5);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.img-load-txt{font-size:.78rem;color:var(--pk);font-style:italic}
+.drop-zone{border:2px dashed rgba(167,139,250,.28);border-radius:12px;padding:1.6rem 1rem;text-align:center;cursor:pointer;transition:all .2s;background:rgba(167,139,250,.03);position:relative}
+.drop-zone:hover,.drop-zone.drag{border-color:var(--vp);background:rgba(167,139,250,.08)}
+.drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.drop-zone p{font-size:.79rem;color:#7dd3fc;line-height:1.6}
+.dz-icon{font-size:1.7rem;display:block;margin-bottom:.4rem}
+.preview-area{margin-top:.6rem;display:none}.preview-area.show{display:block}
+.preview-wrap{position:relative;display:inline-block;max-width:100%}
+.preview-wrap img{max-width:100%;max-height:230px;border-radius:11px;border:1px solid rgba(167,139,250,.22);display:block}
+.preview-rm{position:absolute;top:-7px;right:-7px;width:20px;height:20px;border-radius:50%;background:var(--red);border:none;color:#fff;cursor:pointer;font-size:.7rem;display:flex;align-items:center;justify-content:center}
+.ana-row{display:flex;gap:7px;margin-top:.6rem;align-items:center}
+.ana-row input{flex:1;background:rgba(167,139,250,.05);border:1px solid rgba(167,139,250,.2);border-radius:10px;padding:8px 11px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:.82rem;outline:none;transition:border-color .2s}
+.ana-row input:focus{border-color:rgba(167,139,250,.45)}
+.ana-row input::placeholder{color:#4a6080}
+.ana-btn{background:linear-gradient(135deg,var(--vp),#7c3aed);color:#fff;border:none;border-radius:10px;padding:8px 13px;cursor:pointer;font-size:.76rem;font-family:'DM Sans',sans-serif;font-weight:500;white-space:nowrap;flex-shrink:0;transition:all .18s}
+.ana-btn:hover{opacity:.85;transform:translateY(-1px)}
+.ana-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.mem-list{display:flex;flex-direction:column;gap:4px;max-height:140px;overflow-y:auto}
+.mi{font-size:.67rem;color:#7dd3fc;padding:4px 8px;border-radius:7px;background:rgba(52,211,153,.04);border:1px solid rgba(52,211,153,.1);display:flex;justify-content:space-between;gap:5px;line-height:1.4}
+.mi button{background:none;border:none;color:rgba(248,113,113,.45);cursor:pointer;font-size:.67rem;transition:color .15s}
+.mi button:hover{color:var(--red)}
+.mem-add{display:flex;gap:6px;margin-top:.5rem}
+.mem-inp{flex:1;background:rgba(52,211,153,.04);border:1px solid rgba(52,211,153,.15);border-radius:8px;padding:6px 10px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:.78rem;outline:none;transition:border-color .2s}
+.mem-inp:focus{border-color:rgba(52,211,153,.4)}
+.mem-inp::placeholder{color:#4a6080}
+.mem-abtn{background:rgba(52,211,153,.15);border:1px solid rgba(52,211,153,.3);color:var(--gr);border-radius:8px;padding:6px 11px;cursor:pointer;font-size:.72rem;font-family:'DM Sans',sans-serif;white-space:nowrap;transition:all .15s}
+.mem-abtn:hover{background:rgba(52,211,153,.25);transform:translateY(-1px)}
+.drive-sync{display:inline-flex;align-items:center;gap:4px;font-size:.6rem;padding:2px 8px;border-radius:12px;background:rgba(0,255,170,.08);border:1px solid rgba(0,255,170,.2);color:var(--gr);margin-top:.4rem}
+.drive-dot{width:5px;height:5px;border-radius:50%;background:var(--gr);animation:orb 2s infinite}
+.chart-box{background:var(--card);border:1px solid var(--bd);border-radius:13px;padding:.85rem;margin:5px 0}
+.chart-title{font-size:.66rem;color:var(--a);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.7rem;font-weight:600}
+.bar-row{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.bar-row:last-child{margin:0}
+.bar-label{font-size:.61rem;color:#7dd3fc;width:145px;flex-shrink:0;text-align:right}
+.bar-track{flex:1;background:rgba(255,255,255,.05);border-radius:4px;height:14px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:.57rem;color:#fff;font-weight:700;transition:width 1.4s cubic-bezier(.22,1,.36,1)}
+.bar-val{font-size:.61rem;color:#bfdbfe;width:45px;flex-shrink:0}
+.evo-bar-wrap{background:rgba(255,255,255,.06);border-radius:4px;height:14px;overflow:hidden;flex:1}
+#evo-bar{height:100%;background:linear-gradient(90deg,#00ffcc,#7fff00);border-radius:4px;width:0%;transition:width .8s ease}
+.evo-skill-tag{font-size:.6rem;padding:2px 8px;border-radius:12px;background:rgba(0,255,204,.08);border:1px solid rgba(0,255,204,.2);color:#00ffcc}
+.nota-item{background:rgba(52,211,153,.04);border:1px solid rgba(52,211,153,.1);border-radius:8px;padding:7px 10px;display:flex;justify-content:space-between;gap:8px;align-items:flex-start;margin-bottom:4px}
+.nota-txt{font-size:.73rem;color:var(--tx);line-height:1.5;flex:1}
+.nota-data{font-size:.58rem;color:#7dd3fc;margin-top:2px}
+.proj-card{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.18);border-radius:9px;padding:8px 11px}
+.proj-nome{font-size:.72rem;color:var(--a);font-weight:600;margin-bottom:2px}
+.proj-meta{font-size:.63rem;color:#7dd3fc}
+.selfimprove-card{background:rgba(255,107,53,.06);border:1px solid rgba(255,107,53,.2);border-radius:9px;padding:8px 10px;margin-bottom:5px}
+.si-tipo{font-size:.65rem;color:var(--adm);font-weight:700;margin-bottom:3px}
+.si-desc{font-size:.72rem;color:var(--tx);margin-bottom:5px}
+.action-card{background:rgba(56,189,248,.04);border:1px solid rgba(56,189,248,.1);border-radius:8px;padding:7px 10px;margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.action-desc{font-size:.68rem;color:var(--tx)}
+.action-data{font-size:.58rem;color:#7dd3fc}
+.msgs{display:flex;flex-direction:column;gap:10px;min-height:80px}
+.msg{display:flex;gap:8px;animation:slideIn .35s cubic-bezier(.21,1.02,.73,1) both}
+.msg.user{flex-direction:row-reverse}
+@keyframes slideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.av{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.av-user{background:rgba(255,255,255,.06);border:1px solid var(--bd);color:#7dd3fc;font-size:.6rem}
+.bubble{max-width:88%;padding:13px 17px;font-size:.9rem;line-height:1.85;border-radius:16px;word-wrap:break-word;word-break:break-word;font-family:'Space Grotesk',sans-serif;color:#ffffff;}
+.bubble.ai{background:rgba(5,5,20,.85);border:1px solid rgba(56,189,248,.12);border-top-left-radius:4px;backdrop-filter:blur(8px)}
+.bubble.b-prof{background:rgba(0,10,5,.85);border:1px solid rgba(52,211,153,.2)}
+.bubble.b-amigo{background:rgba(10,0,8,.85);border:1px solid rgba(244,114,182,.2)}
+.bubble.b-img{background:rgba(8,0,12,.85);border:1px solid rgba(244,114,182,.2)}
+.bubble.b-vp{background:rgba(5,0,15,.85);border:1px solid rgba(167,139,250,.2)}
+.bubble.b-ger{background:rgba(10,7,0,.85);border:1px solid rgba(251,191,36,.2)}
+.bubble.b-adm{background:rgba(15,3,0,.85);border:1px solid rgba(255,107,53,.3)}
+.bubble.b-own{background:rgba(20,0,15,.85);border:1px solid rgba(255,60,172,.4);box-shadow:0 0 20px rgba(255,60,172,.1)}
+.bubble.user{background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.15);border-top-right-radius:4px}
+.nick-tag{font-size:.66rem;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:4px;color:var(--gold);letter-spacing:.5px;font-family:'Space Grotesk',sans-serif;text-transform:uppercase}
+.nick-tag.prof{color:var(--gr)}.nick-tag.amigo{color:var(--pk)}.nick-tag.vp{color:var(--vp)}.nick-tag.img-t{color:var(--pk)}.nick-tag.adm-t{color:var(--adm)}.nick-tag.own-t{color:#ff3cac;text-shadow:0 0 10px rgba(255,60,172,.5)}
+.mode-hint{font-size:.56rem;opacity:.48;margin-bottom:3px;display:block}
+.hint-p{color:var(--gr)}.hint-a{color:var(--pk)}.hint-v{color:var(--vp)}.hint-g{color:var(--gold)}.hint-i{color:var(--pk)}.hint-adm{color:var(--adm)}.hint-own{color:#ff3cac}
+.bubble strong{color:#ffd700;font-weight:700;text-shadow:0 0 8px rgba(255,215,0,.2)}
+.bubble em{color:#60d0ff;font-style:italic}
+.bubble code{color:var(--a);font-size:.82em;background:rgba(56,189,248,.12);padding:2px 5px;border-radius:4px;font-family:monospace}
+.bubble pre{background:rgba(0,0,0,.45);border:1px solid rgba(56,189,248,.15);border-radius:8px;padding:10px 12px;overflow-x:auto;margin:6px 0;font-family:monospace;font-size:.78em;line-height:1.5}
+.msg-time{font-size:.5rem;opacity:.22;margin-left:6px;float:right;margin-top:2px}
+.typing-b{display:flex;gap:4px;align-items:center;padding:2px 0}
+.typing-b span{width:7px;height:7px;border-radius:50%;background:var(--a);animation:dot 1.4s cubic-bezier(.36,.07,.19,.97) infinite}
+.typing-b span:nth-child(2){animation-delay:.2s}
+.typing-b span:nth-child(3){animation-delay:.4s}
+@keyframes dot{0%,60%,100%{opacity:.2;transform:scale(.8)}30%{opacity:1;transform:scale(1)}}
+/* INDICADOR TEMPO REAL */
+.rt-indicator{display:none;align-items:center;gap:6px;font-size:.62rem;color:var(--gr);padding:4px 10px;border-radius:20px;background:rgba(0,255,170,.07);border:1px solid rgba(0,255,170,.2);margin-bottom:4px;}
+.rt-indicator.show{display:flex}
+.rt-dot{width:6px;height:6px;border-radius:50%;background:var(--gr);animation:orb 1s infinite}
+.ibar{display:flex;gap:8px;align-items:flex-end;background:rgba(6,9,32,.97);border:1.5px solid rgba(56,189,248,.12);border-radius:16px;padding:10px 12px;margin-top:4px;backdrop-filter:blur(20px);transition:all .2s;box-shadow:0 4px 24px rgba(0,0,0,.35);}
+.ibar:focus-within{border-color:rgba(56,189,248,.45)!important;box-shadow:0 4px 24px rgba(0,0,0,.35),0 0 0 3px rgba(56,189,248,.08)!important}
+.ibar.iprof:focus-within{border-color:rgba(52,211,153,.4)!important}
+.ibar.iamigo:focus-within{border-color:rgba(244,114,182,.4)!important}
+.ibar.ivp:focus-within{border-color:rgba(167,139,250,.4)!important}
+.ibar.iger{border-color:rgba(251,191,36,.22)!important}.ibar.iger:focus-within{border-color:rgba(251,191,36,.58)!important}
+.ibar.iimg:focus-within{border-color:rgba(244,114,182,.45)!important}
+.ibar.iadm{border-color:rgba(255,107,53,.32)!important}.ibar.iadm:focus-within{border-color:rgba(255,107,53,.68)!important}
+.ibar.iown{border-color:rgba(255,60,172,.55)!important}.ibar.iown:focus-within{border-color:rgba(255,60,172,.9)!important;box-shadow:0 4px 24px rgba(0,0,0,.35),0 0 0 3px rgba(255,60,172,.1),0 0 40px rgba(255,60,172,.15)!important}
+textarea#inp{flex:1;background:transparent;border:none;outline:none;color:#ffffff;font-family:'Space Grotesk',sans-serif;font-size:.9rem;resize:none;max-height:120px;line-height:1.55;min-height:22px;font-weight:400;}
+textarea#inp::placeholder{color:#4a6080;font-style:italic}
+#sbtn{width:36px;height:36px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,var(--a),var(--a2));display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s cubic-bezier(.34,1.56,.64,1);color:#fff;box-shadow:0 2px 12px rgba(56,189,248,.3);}
+#sbtn:hover{transform:scale(1.12);box-shadow:0 4px 20px rgba(56,189,248,.45)}
+#sbtn:active{transform:scale(.95)}
+#sbtn:disabled{opacity:.25;cursor:not-allowed;transform:none;box-shadow:none}
+#sbtn svg{width:14px;height:14px}
+.img-quick-btn{width:34px;height:34px;border-radius:50%;background:rgba(244,114,182,.1);border:1px solid rgba(244,114,182,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .2s;font-size:1rem;}
+.img-quick-btn:hover{background:rgba(244,114,182,.22);transform:translateY(-1px)}
+.quick-img-preview{display:none;margin:4px 0;padding:6px 10px;background:rgba(244,114,182,.06);border:1px solid rgba(244,114,182,.2);border-radius:10px;align-items:center;gap:8px;}
+.quick-img-preview.show{display:flex}
+.qbtns{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
+.qb{font-size:.62rem;padding:5px 12px;border-radius:20px;cursor:pointer;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);color:#6a90b0;transition:all .18s;font-weight:500;}
+.qb:hover{background:rgba(56,189,248,.12);color:var(--a);border-color:rgba(56,189,248,.32);transform:translateY(-1px);box-shadow:0 4px 12px rgba(56,189,248,.12)}
+.qb:active{transform:scale(.97)}
+/* BOTÃO TEMPO REAL RÁPIDO */
+.qb.rt{background:rgba(0,255,170,.05);border-color:rgba(0,255,170,.2);color:var(--gr)}
+.qb.rt:hover{background:rgba(0,255,170,.15);border-color:var(--gr)}
+.modal-bg{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.92);backdrop-filter:blur(12px);align-items:center;justify-content:center;padding:1rem;}
+.modal-bg.show{display:flex}
+.modal{background:rgba(4,6,24,.99);border:1px solid rgba(56,189,248,.12);border-radius:22px;padding:1.6rem;max-width:520px;width:100%;animation:fi .25s cubic-bezier(.21,1.02,.73,1);max-height:90vh;overflow-y:auto;box-shadow:0 20px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.04);}
+.modal h2{font-family:'Orbitron',sans-serif;font-size:.9rem;color:var(--a);letter-spacing:2px;margin-bottom:.5rem}
+.sbox{display:flex;gap:10px;align-items:flex-start;margin-bottom:.8rem;background:rgba(56,189,248,.04);border:1px solid var(--bd);border-radius:10px;padding:.75rem}
+.sn{width:24px;height:24px;border-radius:50%;background:var(--a);color:#000;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.7rem;flex-shrink:0}
+.sn.g{background:var(--gold)}.sn.gr{background:var(--gr)}.sn.adm{background:var(--adm)}
+.st{font-size:.78rem;line-height:1.6;color:var(--tx)}
+.st strong{color:var(--a)}.st a{color:var(--a);text-decoration:none}
+.mbs{display:flex;gap:6px;flex-wrap:wrap;margin-top:.9rem}
+.mb{flex:1;padding:8px;border-radius:9px;border:none;cursor:pointer;font-size:.75rem;font-family:'DM Sans',sans-serif;font-weight:500;min-width:80px;transition:all .15s}
+.mb:hover{transform:translateY(-1px)}
+.mb.p{background:linear-gradient(135deg,var(--a),var(--a2));color:#fff}
+.mb.w{background:linear-gradient(135deg,#25d366,#128c7e);color:#fff}
+.mb.s{background:rgba(255,255,255,.06);border:1px solid var(--bd);color:#7dd3fc}
+.wbox{background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.18);border-radius:9px;padding:8px 11px;font-size:.7rem;color:#fcd34d;margin-top:.9rem;line-height:1.8}
+.footer{text-align:center;font-size:.55rem;color:#7dd3fc;padding:12px;opacity:.2;letter-spacing:.5px;border-top:1px solid rgba(255,255,255,.03);margin-top:4px;}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:rgba(0,0,0,.2)}
+::-webkit-scrollbar-thumb{background:rgba(96,208,255,.3);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:rgba(96,208,255,.6)}
+.daily-status-box{background:rgba(255,107,53,.05);border:1px solid rgba(255,107,53,.18);border-radius:10px;padding:10px 12px;margin-bottom:.8rem}
+.daily-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:.7rem}
+.daily-card{background:rgba(255,107,53,.05);border:1px solid rgba(255,107,53,.18);border-radius:9px;padding:8px}
+.daily-card-label{font-size:.6rem;color:var(--adm);font-weight:600;margin-bottom:.3rem}
+.daily-card input{width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(255,107,53,.2);border-radius:7px;padding:6px 8px;color:var(--tx);font-size:.85rem;outline:none;font-weight:600;font-family:'DM Sans',sans-serif}
+.metrics-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:.6rem}
+.metric-card{background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.15);border-radius:9px;padding:7px;text-align:center}
+.metric-n{font-size:1.1rem;font-weight:700;color:var(--a)}
+.metric-l{font-size:.57rem;color:#7dd3fc}
+#powerBtn{padding:8px 16px;border-radius:10px;border:1px solid;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.75rem;font-weight:600;transition:all .2s;background:rgba(248,113,113,.15);border-color:rgba(248,113,113,.4);color:var(--red)}
+#powerBadge{font-size:.85rem;font-weight:700}
+.tab-content{display:none}.tab-content.show{display:block}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--bd),transparent);margin:8px 0}
+.gap-5{display:flex;flex-wrap:wrap;gap:5px}
+.gap-6{display:flex;flex-wrap:wrap;gap:6px}
+.mt-4{margin-top:.4rem}.mt-5{margin-top:.5rem}.mt-6{margin-top:.6rem}
+.text-sm{font-size:.7rem;color:#7dd3fc;line-height:1.6}
+.text-xs{font-size:.63rem;color:#7dd3fc}
+.text-xxs{font-size:.58rem;color:#7dd3fc}
+.input-std{background:rgba(0,0,0,.4);border:1px solid rgba(56,189,248,.2);border-radius:8px;padding:6px 10px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:.78rem;outline:none;width:100%;transition:border-color .2s}
+.input-std:focus{border-color:rgba(56,189,248,.45)}
+.input-std::placeholder{color:#4a6080}
+@keyframes slideInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes glow{0%,100%{box-shadow:0 0 8px rgba(0,255,170,.3)}50%{box-shadow:0 0 20px rgba(0,255,170,.6)}}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<div class="blocked-screen" id="blockedScreen">
+  <div class="blocked-icon">🚫</div>
+  <div class="blocked-title">ACESSO BLOQUEADO</div>
+  <div class="blocked-msg">Esta sessão foi encerrada pelo sistema de segurança da OMNISCI.</div>
+</div>
+<div class="owner-screen" id="ownerScreen">
+  <div class="owner-box">
+    <div class="owner-title">🔐 ACESSO OWNER</div>
+    <div class="owner-subtitle">Insira a senha do proprietário.</div>
+    <input class="owner-inp" id="ownerPwdInp" type="password" placeholder="••••••" maxlength="12" autocomplete="off">
+    <div class="owner-error" id="ownerError">⚠️ Senha incorreta.</div>
+    <button class="owner-btn" onclick="checkOwnerPwd()">🚀 ACESSAR</button>
+    <div class="owner-cancel" onclick="closeOwnerScreen()">← Cancelar</div>
+  </div>
+</div>
+<div class="apikey-screen" id="apikeyScreen">
+  <div class="apikey-box">
+    <div class="apikey-title">🔑 CONECTAR OMNISCI</div>
+    <div class="apikey-subtitle">Cole a URL do Apps Script ou chave Groq — tudo gratuito!</div>
+    <div class="apikey-help">
+      <div class="apikey-help-title">⚡ OPÇÃO RECOMENDADA — Google Apps Script + Groq</div>
+      <div class="apikey-help-steps">
+        1. Acesse <a href="https://console.groq.com" target="_blank">console.groq.com</a> → API Keys → Create<br>
+        2. Acesse <a href="https://script.google.com" target="_blank">script.google.com</a> → Cole o código .gs → Implante<br>
+        3. Cole a URL do Apps Script aqui abaixo<br>
+        <span style="color:var(--gr)">✅ 100% Grátis · ✅ Clima · ✅ Finance · ✅ RSS · ✅ Drive</span>
+      </div>
+    </div>
+    <input class="apikey-inp" id="apikeyInp" type="text" placeholder="URL do Apps Script ou chave Groq (gsk_...)" autocomplete="off">
+    <button class="apikey-btn" onclick="saveApiKey()">🚀 Conectar</button>
+    <div class="apikey-skip" onclick="skipApiKey()">Continuar sem configurar (modo demo)</div>
+  </div>
+</div>
+<div class="app">
+<div class="owner-active-bar" id="ownerBar">⚡ MODO OWNER ATIVO — LIMITES SUSPENSOS · DADOS EM TEMPO REAL ATIVOS ⚡</div>
+<header id="hdr">
+  <div class="bh-symbol" id="headerOrb" onclick="toggleMem()">
+    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      <line x1="16" y1="1" x2="16" y2="7" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" opacity="0.9"/>
+      <line x1="16" y1="25" x2="16" y2="31" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" opacity="0.9"/>
+      <ellipse cx="16" cy="16" rx="15" ry="4.5" fill="none" stroke="#38bdf8" stroke-width="1.5" transform="rotate(-25 16 16)" opacity="0.8" id="orbRing"/>
+      <ellipse cx="16" cy="16" rx="10" ry="3" fill="none" stroke="#818cf8" stroke-width="1.2" transform="rotate(-25 16 16)" opacity="0.9"/>
+      <circle cx="16" cy="16" r="5.5" fill="#000"/>
+      <circle cx="16" cy="16" r="7" fill="none" stroke="#38bdf8" stroke-width="1" opacity="0.6"/>
+    </svg>
+  </div>
+  <div class="logo" id="headerLogo">OMNISCI</div>
+  <span class="mtag m-livre" id="modeTag">● Livre</span>
+  <div class="hright">
+    <span id="apiStatusBadge" class="api-status api-no">⚠️ Sem API</span>
+    <span id="driveStatus" style="display:none;font-size:.54rem;color:var(--gr);padding:3px 7px;border-radius:20px;background:rgba(0,255,170,.07);border:1px solid rgba(0,255,170,.18)">☁️ Drive</span>
+    <span id="realtimeStatus" style="display:none;font-size:.54rem;color:var(--gr);padding:3px 7px;border-radius:20px;background:rgba(0,255,170,.07);border:1px solid rgba(0,255,170,.18)">⚡ Tempo Real</span>
+    <span id="memCount" style="font-size:.54rem;color:var(--gr);padding:3px 7px;border-radius:20px;background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.18)">🧠 0</span>
+    <span id="evo-display" style="font-size:.54rem;color:#00ffcc;padding:3px 7px;border-radius:20px;background:rgba(0,255,204,.07);border:1px solid rgba(0,255,204,.2);cursor:pointer" onclick="setModo('admin')">🧠 Nv.1</span>
+    <span id="selfImproveBadge" onclick="setModo('admin')">🧬 0</span>
+    <div class="nick-h" id="nickH">Olá! 👋</div>
+    <span id="dailyBadge" style="font-size:.54rem;color:var(--gr);padding:3px 8px;border-radius:20px;background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.18);white-space:nowrap;cursor:pointer" onclick="showDailyInfo()">💬 50/50</span>
+    <button class="alert-badge" id="alertBadge" onclick="showSecPanel()">🔴 Alertas</button>
+    <button class="hbtn adm-key" onclick="openApiKeyModal()">🔑 API</button>
+    <button class="hbtn gr" onclick="syncDrive()">☁️ Drive</button>
+    <button class="hbtn" onclick="openShare()">🔗 Link</button>
+    <button class="hbtn" onclick="toggleMem()">🧠 Mem</button>
+    <button class="hbtn" onclick="toggleNotas()">📝 Notas</button>
+  </div>
+</header>
+<div class="modo-bar">
+  <button class="mdbtn md-livre sel" id="btn-livre"   onclick="setModo('livre')">💬 Livre</button>
+  <button class="mdbtn md-prof"       id="btn-prof"   onclick="setModo('professor')">📚 Professor</button>
+  <button class="mdbtn md-amigo"      id="btn-amigo"  onclick="setModo('amigo')">💖 Amigo</button>
+  <button class="mdbtn md-img"        id="btn-img"    onclick="setModo('imagem')">🎨 Imagens</button>
+  <button class="mdbtn md-vp"         id="btn-vp"     onclick="setModo('vp')"       style="display:none">🌟 Vice-Pres.</button>
+  <button class="mdbtn md-ger"        id="btn-ger"    onclick="setModo('gerente')"  style="display:none">⚡ Gerenciador</button>
+  <button class="mdbtn md-adm"        id="btn-adm"    onclick="setModo('admin')"    style="display:none">🔥 Admin</button>
+</div>
+<div class="hero" id="heroDiv">
+  <h1 id="heroT">Sua IA Pessoal</h1>
+  <p id="heroS">Pesquisa · Imagens · Aulas · Conselhos · Código · Tempo Real · SI 05 26</p>
+  <div class="topics">
+    <div class="tp on"  onclick="setTopic(this,'geral')">Tudo</div>
+    <div class="tp"     onclick="setTopic(this,'matematica')">Matemática</div>
+    <div class="tp"     onclick="setTopic(this,'redacao')">Redação</div>
+    <div class="tp"     onclick="setTopic(this,'historia')">História</div>
+    <div class="tp"     onclick="setTopic(this,'fisica')">Física</div>
+    <div class="tp"     onclick="setTopic(this,'biologia')">Biologia</div>
+    <div class="tp"     onclick="setTopic(this,'quimica')">Química</div>
+    <div class="tp"     onclick="setTopic(this,'programacao')">Código</div>
+    <div class="tp"     onclick="setTopic(this,'filosofia')">Filosofia</div>
+    <div class="tp"     onclick="setTopic(this,'pesquisa')">Pesquisa</div>
+    <div class="tp sp"  onclick="setTopic(this,'SI0526')">🚀 SI 05 26</div>
+  </div>
+</div>
+<div class="chat-wrap">
+<!-- PAINEL PROFESSOR -->
+<div class="panel p-prof" id="panel-prof">
+  <div class="panel-title pt-prof">📚 Modo Professor</div>
+  <div class="hs"><div class="hs-n">1</div><div class="hs-t"><strong>Aula completa</strong> — Conceito, explicação, exemplos, exercício, resumo e dica de ouro</div></div>
+  <div class="hs"><div class="hs-n">2</div><div class="hs-t"><strong>Qualquer matéria</strong> — Matemática, Física, História, Biologia, Química, Programação e mais</div></div>
+  <div class="hs"><div class="hs-n">3</div><div class="hs-t"><strong>Aprenda na prática</strong> — Peça para continuar, aprofundar ou mudar de assunto a qualquer hora</div></div>
+</div>
+<!-- PAINEL AMIGO -->
+<div class="panel p-amigo" id="panel-amigo">
+  <div class="panel-title pt-amigo">💖 Modo Amigo</div>
+  <div style="font-size:.78rem;color:#7dd3fc;line-height:1.9">
+    🤗 Estou aqui para <strong style="color:var(--pk)">ouvir de verdade</strong> — sem julgamentos, sem pressa<br>
+    💬 Conte o que está passando, desabafe, peça conselhos<br>
+    🫂 Celebro suas vitórias e apoio nos momentos difíceis<br>
+    <span style="color:var(--pk);font-size:.73rem;margin-top:6px;display:block;font-style:italic">Sou sua amiga de verdade. Pode confiar sempre. 💖</span>
+  </div>
+</div>
+<!-- PAINEL IMAGENS -->
+<div class="panel p-img" id="panel-img">
+  <div class="panel-title pt-img">🎨 Imagens — Geração & Análise</div>
+  <div class="img-mode-tabs">
+    <button class="imt gen sel" id="tab-gen" onclick="setImgTab('gen')">✨ Gerar Imagem</button>
+    <button class="imt ana"     id="tab-ana" onclick="setImgTab('ana')">🔍 Analisar Imagem</button>
+  </div>
+  <div class="img-gen-box show" id="gen-box">
+    <div class="img-styles">
+      <div class="ist on" onclick="setStyle(this,'realistic photo, ultra detailed')">📷 Realista</div>
+      <div class="ist" onclick="setStyle(this,'anime style, vibrant colors')">🎌 Anime</div>
+      <div class="ist" onclick="setStyle(this,'oil painting, masterpiece')">🎨 Pintura</div>
+      <div class="ist" onclick="setStyle(this,'digital art, concept art')">💻 Digital</div>
+      <div class="ist" onclick="setStyle(this,'sci-fi futuristic, neon lights')">🚀 Sci-Fi</div>
+      <div class="ist" onclick="setStyle(this,'fantasy art, epic scene')">🧙 Fantasy</div>
+      <div class="ist" onclick="setStyle(this,'cinematic, 8k, dramatic lighting')">🎬 Cinema</div>
+      <div class="ist" onclick="setStyle(this,'pixel art, retro game style')">👾 Pixel Art</div>
+    </div>
+    <div class="gen-row">
+      <textarea id="imgPrompt" placeholder="Descreva a imagem que quer criar..." rows="2"></textarea>
+      <button class="gen-btn" id="genBtn" onclick="generateImage()">✨ Gerar</button>
+    </div>
+    <div class="img-loading" id="imgLoading"><div class="img-spin"></div><div class="img-load-txt" id="imgLoadTxt">Criando... 🎨</div></div>
+    <div class="img-result-grid" id="imgGrid"></div>
+  </div>
+  <div class="img-ana-box" id="ana-box">
+    <div class="drop-zone" id="dropZone" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)">
+      <input type="file" accept="image/*" onchange="fileSelected(event)">
+      <span class="dz-icon">🖼️</span>
+      <p><strong style="color:var(--vp)">Clique ou arraste</strong> uma imagem aqui</p>
+    </div>
+    <div class="preview-area" id="previewArea">
+      <div class="preview-wrap"><img id="previewImg" src="" alt="preview"><button class="preview-rm" onclick="removeImg()">✕</button></div>
+    </div>
+    <div class="ana-row">
+      <input type="text" id="anaQ" placeholder="O que quer saber? (vazio = análise completa)">
+      <button class="ana-btn" id="anaBtn" onclick="analyzeImage()">🔍 Analisar</button>
+    </div>
+  </div>
+</div>
+<!-- PAINEL VP -->
+<div class="panel p-vp" id="panel-vp">
+  <div class="panel-title pt-vp">🌟 Vice-Presidente</div>
+  <div style="font-size:.75rem;color:#7dd3fc;margin-bottom:.5rem">Acesso avançado ativado!</div>
+  <div class="vp-perms">
+    <span class="vp-perm">✅ Pesquisa profunda</span><span class="vp-perm">✅ Análise de projetos</span>
+    <span class="vp-perm">✅ Gerar imagens</span><span class="vp-perm">✅ SI 05 26 completa</span>
+    <span class="vp-lock">🔒 Painel Admin</span><span class="vp-lock">🔒 Editar IA</span>
+  </div>
+</div>
+<!-- PAINEL GERENTE -->
+<div class="panel p-ger" id="panel-ger">
+  <div class="panel-title pt-ger">⚡ PAINEL DO GERENCIADOR</div>
+  <div class="g-btns">
+    <button class="gb rt" onclick="buscarTempoReal()">⚡ Dados Tempo Real</button>
+    <button class="gb rt" onclick="ask('Qual é a cotação do dólar agora?')">💵 Dólar Agora</button>
+    <button class="gb rt" onclick="ask('Qual é o preço do Bitcoin agora?')">₿ Bitcoin Agora</button>
+    <button class="gb rt" onclick="ask('Como está o clima hoje?')">🌦️ Clima Agora</button>
+    <button class="gb rt" onclick="ask('Quais são as últimas notícias de economia?')">📰 Notícias</button>
+    <button class="gb rt" onclick="ask('O que tem na minha agenda hoje?')">📅 Agenda</button>
+    <button class="gb" onclick="showChart()">📊 Gráficos</button>
+    <button class="gb" onclick="ask('Explique toda a SI 05 26')">🚀 SI 05 26</button>
+    <button class="gb" onclick="deepSearch()">🔍 Pesquisa</button>
+    <button class="gb" onclick="syncDrive()">☁️ Drive</button>
+    <button class="gb" onclick="openShare()">🔗 Compartilhar</button>
+    <button class="gb adm-c" onclick="compareIA()">🤖 Comparar IAs</button>
+    <button class="gb red" onclick="resetChat()">🔄 Limpar Chat</button>
+  </div>
+</div>
+<!-- PAINEL ADMIN -->
+<div class="panel p-adm" id="panel-adm">
+  <div class="panel-title pt-adm">🔥 MODO ADMINISTRADOR</div>
+  <div class="adm-section">
+    <div class="adm-section-title">⚡ DADOS EM TEMPO REAL</div>
+    <div class="g-btns" style="margin-bottom:.7rem">
+      <button class="gb rt" onclick="buscarTempoReal()">⚡ Buscar Tudo</button>
+      <button class="gb rt" onclick="ask('Cotação do dólar agora')">💵 Dólar</button>
+      <button class="gb rt" onclick="ask('Preço do Bitcoin agora')">₿ Bitcoin</button>
+      <button class="gb rt" onclick="ask('Clima hoje em São Paulo')">🌦️ Clima</button>
+      <button class="gb rt" onclick="ask('Últimas notícias')">📰 Notícias</button>
+      <button class="gb rt" onclick="ask('Minha agenda hoje')">📅 Agenda</button>
+      <button class="gb rt" onclick="lerArquivoDrive()">📄 Ler Arquivo Drive</button>
+      <button class="gb rt" onclick="lerPastaDrive()">📁 Ler Pasta Drive</button>
+    </div>
+  </div>
+  <div class="adm-section">
+    <div class="adm-section-title">🔑 API — Groq + Google Apps Script</div>
+    <div class="token-bar">
+      <span class="tok">Status: <span id="adm-api-status">—</span></span>
+      <span class="tok">Tokens: <span id="tok-used">0</span></span>
+      <span class="tok">Modelo: <span id="tok-model">LLaMA 3.3 70B</span></span>
+      <span class="tok">Drive: <span id="tok-drive">—</span></span>
+    </div>
+    <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-bottom:.5rem">
+      <input type="text" id="adm-key-inp" placeholder="URL Apps Script ou gsk_..." style="flex:1;min-width:200px;background:rgba(0,0,0,.5);border:1px solid rgba(255,107,53,.3);border-radius:9px;padding:8px 11px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:.8rem;outline:none">
+      <button class="lbtn lbtn-save" onclick="saveApiKeyFromAdm()">💾 Salvar</button>
+      <button class="lbtn lbtn-test" onclick="testApiKey()">🧪 Testar</button>
+      <button class="lbtn lbtn-reset" onclick="clearApiKey()">🗑️ Apagar</button>
+    </div>
+  </div>
+  <div class="adm-section">
+    <div class="adm-section-title">⚙️ System Prompt ao Vivo</div>
+    <div class="prompt-tabs">
+      <button class="ptab p-sys sel" id="ptab-sys"   onclick="showProgTab('sys')">🔥 Sistema</button>
+      <button class="ptab p-pers"    id="ptab-pers"  onclick="showProgTab('pers')">🧠 Personalidade</button>
+      <button class="ptab p-rules"   id="ptab-rules" onclick="showProgTab('rules')">📋 Regras</button>
+      <button class="ptab p-know"    id="ptab-know"  onclick="showProgTab('know')">📚 Conhecimento</button>
+    </div>
+    <div class="prog-area show" id="prog-sys">
+      <textarea class="live-prompt-textarea" id="live-sys-prompt" rows="8" oninput="onSysEdit()"></textarea>
+      <div class="gap-5 mt-4">
+        <button class="prog-btn pb-save" onclick="saveSysPrompt()">💾 Aplicar</button>
+        <button class="prog-btn pb-reset" onclick="resetAllConfig()">↺ Reset</button>
+        <span class="saved-msg" id="saved-sys">✅ Aplicado!</span>
+      </div>
+    </div>
+    <div class="prog-area" id="prog-pers">
+      <textarea class="live-prompt-textarea" id="edit-pers" rows="6"></textarea>
+      <div class="gap-5 mt-4">
+        <button class="prog-btn pb-save" onclick="saveEdit('pers')">💾 Salvar</button>
+        <button class="prog-btn pb-reset" onclick="resetEdit('pers')">↺ Padrão</button>
+        <span class="saved-msg" id="saved-pers">✅ Salvo!</span>
+      </div>
+    </div>
+    <div class="prog-area" id="prog-rules">
+      <textarea class="live-prompt-textarea" id="edit-rules" rows="6"></textarea>
+      <div class="gap-5 mt-4">
+        <button class="prog-btn pb-save" onclick="saveEdit('rules')">💾 Salvar</button>
+        <button class="prog-btn pb-reset" onclick="resetEdit('rules')">↺ Padrão</button>
+        <span class="saved-msg" id="saved-rules">✅ Salvo!</span>
+      </div>
+    </div>
+    <div class="prog-area" id="prog-know">
+      <textarea class="live-prompt-textarea" id="edit-know" rows="6"></textarea>
+      <div class="gap-5 mt-4">
+        <button class="prog-btn pb-save" onclick="saveEdit('know')">💾 Salvar</button>
+        <button class="prog-btn pb-reset" onclick="resetEdit('know')">↺ Padrão</button>
+        <span class="saved-msg" id="saved-know">✅ Salvo!</span>
+      </div>
+    </div>
+  </div>
+  <div class="adm-section">
+    <div class="adm-section-title">🔒 Controle de Mensagens</div>
+    <div class="daily-grid">
+      <div class="daily-card">
+        <div class="daily-card-label">📅 Limite por dia</div>
+        <input type="number" id="ctrl-daily" min="10" max="9999" value="50">
+      </div>
+      <div class="daily-card">
+        <div class="daily-card-label">⚡ Bonus</div>
+        <div class="gap-5 mt-4">
+          <button onclick="addDailyBonus(50)"   class="prog-btn pb-test"  style="font-size:.6rem;padding:4px 8px">+50</button>
+          <button onclick="addDailyBonus(9999)"  class="prog-btn pb-save" style="font-size:.6rem;padding:4px 8px">♾️</button>
+        </div>
+      </div>
+    </div>
+    <div class="gap-6">
+      <button class="prog-btn pb-save" onclick="applyAccessCtrl()">💾 Salvar</button>
+      <button class="prog-btn pb-reset" onclick="resetAccessCtrl()">↺ Padrão</button>
+    </div>
+  </div>
+  <div class="adm-section">
+    <div class="adm-section-title">📊 Métricas</div>
+    <div class="metrics-grid">
+      <div class="metric-card"><div class="metric-n" id="u-msgs">0</div><div class="metric-l">Mensagens</div></div>
+      <div class="metric-card"><div class="metric-n" id="u-tokens" style="color:var(--gr)">0</div><div class="metric-l">Tokens</div></div>
+      <div class="metric-card"><div class="metric-n" id="u-imgs" style="color:var(--pk)">0</div><div class="metric-l">Imagens</div></div>
+    </div>
+  </div>
+  <div class="adm-section">
+    <div class="adm-section-title">⚡ Sistema</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;background:rgba(255,107,53,.05);border:1px solid rgba(255,107,53,.2);border-radius:10px;padding:10px 12px;margin-bottom:.7rem">
+      <div id="powerBadge">🟢 Online</div>
+      <button id="powerBtn" onclick="toggleOmniPower()">⚡ Desligar</button>
+    </div>
+    <div class="g-btns">
+      <button class="gb adm-c" onclick="showSecPanel()">🔴 Segurança</button>
+      <button class="gb adm-c" onclick="showChart()">📊 Gráficos</button>
+      <button class="gb adm-c" onclick="exportAllConfig()">💾 Exportar</button>
+      <button class="gb adm-c" onclick="clearHistory()">🔄 Limpar</button>
+      <button class="gb red"   onclick="resetAllConfig()">⚠️ Reset</button>
+    </div>
+  </div>
+  <div class="adm-section">
+    <div class="adm-section-title">📋 Logs</div>
+    <div class="adm-logs" id="admLogs"><div class="log-empty">Nenhuma alteração ainda.</div></div>
+  </div>
+</div>
+<!-- PAINEL OWNER -->
+<div class="panel p-own" id="panel-own">
+  <div class="panel-title pt-own">⚡ MODO OWNER</div>
+  <div class="text-sm" style="margin-bottom:.8rem">Bem-vindo, Proprietário! Limites suspensos.</div>
+  <div class="own-stats">
+    <div class="own-stat">Mensagens <span id="own-msgs-rem">∞</span></div>
+    <div class="own-stat">Limite diário <span style="color:var(--gold)">Suspenso</span></div>
+    <div class="own-stat">Dados em tempo real <span style="color:var(--gr)">✅ Ativo</span></div>
+    <div class="own-stat">Google Drive <span style="color:var(--gr)" id="own-drive-status">—</span></div>
+  </div>
+  <div class="own-grid">
+    <div class="own-card" onclick="buscarTempoReal()"><div class="own-card-icon">⚡</div><div class="own-card-title">Dados Tempo Real</div><div class="own-card-desc">Finance, Clima, RSS, Calendar</div></div>
+    <div class="own-card" onclick="ownerUnlimitedMsgs()"><div class="own-card-icon">♾️</div><div class="own-card-title">Msgs Ilimitadas</div><div class="own-card-desc">Remove todos os limites</div></div>
+    <div class="own-card" onclick="syncDrive()"><div class="own-card-icon">☁️</div><div class="own-card-title">Sync Drive</div><div class="own-card-desc">Sincronizar memória</div></div>
+    <div class="own-card" onclick="exportAllConfig()"><div class="own-card-icon">💾</div><div class="own-card-title">Backup</div><div class="own-card-desc">Exportar tudo</div></div>
+  </div>
+  <div class="gap-6">
+    <button onclick="setModo('admin')"   class="prog-btn pb-save">🔥 Admin</button>
+    <button onclick="deactivateOwner()"  class="prog-btn pb-reset">🔒 Desativar</button>
+  </div>
+</div>
+<!-- PAINEL SEGURANÇA -->
+<div class="panel p-sec" id="panel-sec">
+  <div class="panel-title pt-sec">🔴 SEGURANÇA</div>
+  <div class="sec-stats">
+    <div class="sec-stat"><div class="sec-stat-n" id="stat-total">0</div><div class="sec-stat-l">Total</div></div>
+    <div class="sec-stat"><div class="sec-stat-n" id="stat-block">0</div><div class="sec-stat-l">Bloqueios</div></div>
+    <div class="sec-stat"><div class="sec-stat-n" id="stat-warn">0</div><div class="sec-stat-l">Avisos</div></div>
+  </div>
+  <div class="sec-alerts" id="secAlerts"><div style="font-size:.71rem;color:#7dd3fc;font-style:italic">Monitorando... 🛡️</div></div>
+  <div class="gap-6 mt-5">
+    <button onclick="clearAlerts()" class="prog-btn pb-reset" style="font-size:.62rem">🗑️ Limpar</button>
+  </div>
+</div>
+<!-- GRÁFICO -->
+<div class="chart-box" id="chartBox" style="display:none">
+  <div class="chart-title">📊 OMNISCI — Capacidades</div>
+  <div id="chartBars"></div>
+</div>
+<!-- PAINEL MEMÓRIA -->
+<div class="panel p-mem" id="panel-mem">
+  <div class="panel-title pt-mem">🧠 Memórias</div>
+  <div class="drive-sync" id="driveSync" style="display:none"><div class="drive-dot"></div> Drive</div>
+  <div class="mem-list" id="memList"><div style="font-size:.7rem;color:#7dd3fc;font-style:italic">Nenhuma ainda!</div></div>
+  <div class="mem-add">
+    <input class="mem-inp" id="memManual" type="text" placeholder="Adicionar memória manual...">
+    <button class="mem-abtn" onclick="addMemManual()">+ Salvar</button>
+  </div>
+  <div class="gap-6 mt-5">
+    <button onclick="syncDrive()"  class="prog-btn pb-test"  style="font-size:.62rem">☁️ Sync</button>
+    <button onclick="exportMem()"  class="prog-btn pb-ai"    style="font-size:.62rem">💾 Exportar</button>
+    <button onclick="clearMem()"   class="prog-btn pb-reset" style="font-size:.62rem">🗑️ Limpar</button>
+  </div>
+</div>
+<!-- PAINEL NOTAS -->
+<div class="panel p-notas" id="panel-notas" style="display:none">
+  <div class="panel-title pt-mem">📝 Notas</div>
+  <div id="notasList" style="max-height:200px;overflow-y:auto;margin-bottom:.5rem"><div style="font-size:.7rem;color:#7dd3fc;font-style:italic">Nenhuma nota!</div></div>
+  <div style="display:flex;gap:6px">
+    <textarea id="notaInput" placeholder="Escreva uma nota..." rows="2" style="flex:1;background:rgba(52,211,153,.04);border:1px solid rgba(52,211,153,.15);border-radius:8px;padding:7px 10px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:.78rem;resize:none;outline:none"></textarea>
+    <button onclick="addNota()" class="mem-abtn" style="align-self:flex-end">+ Salvar</button>
+  </div>
+</div>
+<!-- INDICADOR TEMPO REAL -->
+<div class="rt-indicator" id="rtIndicator">
+  <div class="rt-dot"></div>
+  <span id="rtIndicatorText">Buscando dados em tempo real...</span>
+</div>
+<!-- MENSAGENS -->
+<div class="msgs" id="msgs"></div>
+<!-- INPUT -->
+<div class="ibar" id="ibar">
+  <label class="img-quick-btn" title="Enviar imagem">📎<input type="file" accept="image/*" style="display:none" onchange="quickImageSelect(event)"></label>
+  <textarea id="inp" rows="1" placeholder="Bom dia, explorador! Como posso te ajudar? ✨" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+  <button id="sbtn" onclick="send()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+  </button>
+</div>
+<div class="quick-img-preview" id="quickImgPreview">
+  <img id="quickImgThumb" style="width:48px;height:48px;object-fit:cover;border-radius:8px" src="">
+  <div style="flex:1"><div style="font-size:.72rem;color:var(--pk);font-weight:600">🖼️ Imagem selecionada</div><div class="text-xxs" id="quickImgName">pronta para enviar</div></div>
+  <button onclick="clearQuickImg()" style="background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25);color:var(--red);border-radius:8px;padding:4px 9px;cursor:pointer;font-size:.65rem">✕</button>
+</div>
+<div class="qbtns">
+  <button class="qb rt" onclick="ask('Qual é o preço do dólar agora?')">💵 Dólar</button>
+  <button class="qb rt" onclick="ask('Preço do Bitcoin agora')">₿ Bitcoin</button>
+  <button class="qb rt" onclick="ask('Como está o clima hoje?')">🌦️ Clima</button>
+  <button class="qb rt" onclick="ask('Últimas notícias de economia')">📰 Notícias</button>
+  <button class="qb" onclick="setModo('imagem')">🎨 Imagem</button>
+  <button class="qb" onclick="ask('Explique a SI 05 26')">🚀 SI 05 26</button>
+  <button class="qb" onclick="deepSearch()">🔍 Pesquisar</button>
+  <button class="qb" onclick="toggleNotas()">📝 Notas</button>
+</div>
+<div class="footer">OMNISCI v4.2 · Groq LLaMA 3.3 70B · Google Apps Script · Drive · Finance · RSS · Clima · 100% Gratuito 🛡️</div>
+</div>
+</div>
+<!-- MODAL COMPARTILHAR -->
+<div class="modal-bg" id="shareModal">
+  <div class="modal">
+    <h2>🔗 COMPARTILHAR OMNISCI</h2>
+    <div style="display:flex;gap:6px;margin-bottom:1rem;flex-wrap:wrap">
+      <button class="mb p" onclick="showModalTab('web')" id="mtab2">🌐 Online</button>
+      <button class="mb s" onclick="showModalTab('cod')" id="mtab3">🔐 Códigos</button>
+    </div>
+    <div class="tab-content show" id="tab-web">
+      <div class="sbox"><div class="sn">1</div><div class="st">Acesse <a href="https://github.com" target="_blank"><strong>github.com</strong></a> → repositório → index.html → editar</div></div>
+      <div class="sbox"><div class="sn gr">2</div><div class="st">Substitua pelo novo HTML → Commit → aguarde 1 min</div></div>
+      <div class="mbs"><button class="mb p" onclick="window.open('https://github.com','_blank')">🐙 GitHub</button><button class="mb s" onclick="closeShare()">✕ Fechar</button></div>
+    </div>
+    <div class="tab-content" id="tab-cod">
+      <div class="wbox">
+        🔐 Códigos secretos:<br>
+        🔥 Admin: <strong>2605g</strong><br>
+        ⚡ Gerenciador: <strong>140526b</strong><br>
+        🌟 Vice-Presidente: <strong>768529f</strong><br>
+        ⚡ Owner: digite <strong>s0513</strong> → senha: <strong>768529</strong>
+      </div>
+      <div class="mbs"><button class="mb s" onclick="closeShare()">✕ Fechar</button></div>
+    </div>
+  </div>
+</div>
+<script>
+'use strict';
+// ═══════════════════════════════════════════════════════
+// OMNISCI v4.2 — JAVASCRIPT COMPLETO COM TEMPO REAL
+// ═══════════════════════════════════════════════════════
+
+const COD_ADM='2605g',COD_GER='140526b',COD_VP='768529f',COD_OWNER='s0513',PWD_OWNER='768529';
+const MEM_KEY='omnisci_mem_v6',CFG_KEY='omnisci_cfg_v3',LOG_KEY='omnisci_log_v1';
+const API_KEY_S='omnisci_apikey_v3',TOK_KEY='omnisci_tokens_v1',EVO_KEY='omnisci_evo_v1';
+const CTRL_KEY='omnisci_ctrl_v2',USAGE_KEY='omnisci_usage_v1',NOTAS_KEY='omnisci_notas_v1';
+const STATE_KEY='omnisci_state_v1';
+
+let apiKey=localStorage.getItem(API_KEY_S)||'';
+let totalTokens=parseInt(localStorage.getItem(TOK_KEY)||'0');
+let ownerActive=false,omniOnline=localStorage.getItem('omnisci_online')!=='false';
+let busy=false,history=[],topic='geral',modo='livre';
+let imgStyle='realistic photo, ultra detailed',uploadedB64=null,quickImgB64=null,quickImgMime='image/jpeg';
+let driveOnline=false,memories=JSON.parse(localStorage.getItem(MEM_KEY)||'[]');
+let admLogs=JSON.parse(localStorage.getItem(LOG_KEY)||'[]');
+let notas=JSON.parse(localStorage.getItem(NOTAS_KEY)||'[]');
+let customSysPrompt=null,secAlerts=JSON.parse(localStorage.getItem('omnisci_sec_v2')||'[]');
+let suspicion=0,blocked=false;
+
+// ── DETECÇÃO PROVEDOR ─────────────────────────────────
+function isServerURL(k){return k&&(k.startsWith('https://script.google.com')||( k.startsWith('https://')&&k.includes('exec')));}
+function isGroq(k){return k&&k.startsWith('gsk_');}
+function getProviderName(k){if(!k)return 'Sem API';if(isServerURL(k))return '🖥️ Apps Script';if(isGroq(k))return '⚡ Groq';return '🔑 API';}
+
+// ══════════════════════════════════════════════════════
+// DADOS EM TEMPO REAL v4.2
+// O Apps Script detecta automaticamente e busca os dados
+// O site só passa a pergunta — o servidor faz tudo!
+async function fetchRealtimeData(question) {
+  // Não faz chamadas separadas — o Apps Script já cuida disso!
+  // Só indica visualmente que está buscando
+  const q = question.toLowerCase();
+  const needsData = /dólar|dollar|usd|bitcoin|btc|ethereum|eth|bolsa|ibovespa|ação|petrobras|vale|nasdaq|tesla|apple|nvidia|microsoft|cotação|mercado|cripto|clima|tempo|temperatura|chuva|notícia|noticia|últimas|novidade|agenda|compromisso|evento|calendário/.test(q);
+  if (!needsData) return null;
+  const ind = document.getElementById('rtIndicator');
+  if (ind) { ind.classList.add('show'); document.getElementById('rtIndicatorText').textContent = '⚡ Buscando dados em tempo real...'; setTimeout(()=>ind.classList.remove('show'), 3000); }
+  return null; // O Apps Script detecta e injeta os dados automaticamente!
+}
+
+function detectTickersClient(text) {
+  const t=text.toLowerCase(),tickers=[];
+  if(/dólar|usd|câmbio/.test(t)) tickers.push('USDBRL=X');
+  if(/bitcoin|btc/.test(t))      tickers.push('BTC-USD');
+  if(/ethereum|eth/.test(t))     tickers.push('ETH-USD');
+  if(/petrobras|petr4/.test(t))  tickers.push('PETR4.SA');
+  if(/vale|vale3/.test(t))       tickers.push('VALE3.SA');
+  if(/ibovespa|bovespa|bolsa/.test(t)) tickers.push('^BVSP');
+  if(/nasdaq/.test(t))           tickers.push('^IXIC');
+  if(/apple|aapl/.test(t))       tickers.push('AAPL');
+  if(/tesla/.test(t))            tickers.push('TSLA');
+  if(/microsoft|msft/.test(t))   tickers.push('MSFT');
+  if(/nvidia|nvda/.test(t))      tickers.push('NVDA');
+  if(!tickers.length) return ['USDBRL=X','BTC-USD','^BVSP'];
+  return tickers;
+}
+
+function detectFeedsClient(text) {
+  const t=text.toLowerCase(),feeds=[];
+  if(/econom|mercado|finanç/.test(t)) feeds.push({name:'G1 Economia',url:'https://g1.globo.com/rss/g1/economia/'});
+  if(/cripto|bitcoin/.test(t))        feeds.push({name:'LiveCoins',url:'https://livecoins.com.br/feed/'});
+  if(/invest|ação|bolsa/.test(t))     feeds.push({name:'InfoMoney',url:'https://www.infomoney.com.br/feed/'});
+  if(/tecnologia|tech|ia/.test(t))    feeds.push({name:'Olhar Digital',url:'https://olhardigital.com.br/feed/'});
+  if(!feeds.length) feeds.push({name:'G1 Economia',url:'https://g1.globo.com/rss/g1/economia/'});
+  return feeds;
+}
+
+async function buscarTempoReal() {
+  if (!isServerURL(apiKey)) { addMsg('ai','⚠️ Configure o Apps Script para usar dados em tempo real!','⚡ Tempo Real'); return; }
+  addMsg('user','⚡ Buscar todos os dados em tempo real');
+  addTyping();
+  try {
+    const res = await fetch(apiKey, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'get_realtime', tickers:['USDBRL=X','BTC-USD','^BVSP','PETR4.SA'], feeds:[{name:'G1 Economia',url:'https://g1.globo.com/rss/g1/economia/'},{name:'InfoMoney',url:'https://www.infomoney.com.br/feed/'}] }) });
+    const data = await res.json();
+    removeTyping();
+    if (data.ok && data.summary) addMsg('ai', data.summary, '⚡ Tempo Real');
+    else addMsg('ai','❌ Erro ao buscar dados: '+(data.error||'tente novamente'),'⚡ Tempo Real');
+  } catch(e) { removeTyping(); addMsg('ai','❌ Erro: '+e.message,'⚡ Tempo Real'); }
+}
+
+async function lerArquivoDrive() {
+  const nome = prompt('Nome do arquivo no Drive:\nExemplo: dados.txt, relatorio.docx');
+  if (!nome) return;
+  addMsg('user','📄 Ler arquivo: '+nome);
+  addTyping();
+  try {
+    const res = await fetch(apiKey, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'ler_arquivo', nome }) });
+    const data = await res.json();
+    removeTyping();
+    if (data.ok) addMsg('ai','📄 **Arquivo: '+data.nome+'**\n\n'+data.conteudo.substring(0,2000)+(data.conteudo.length>2000?'\n\n...(truncado)':''),'📄 Drive');
+    else addMsg('ai','❌ '+data.error,'📄 Drive');
+  } catch(e) { removeTyping(); addMsg('ai','❌ Erro: '+e.message,'📄 Drive'); }
+}
+
+async function lerPastaDrive() {
+  const id = prompt('ID da pasta do Drive:\n(Abra a pasta no Drive e copie o ID da URL)');
+  if (!id) return;
+  addMsg('user','📁 Ler pasta do Drive...');
+  addTyping();
+  try {
+    const res = await fetch(apiKey, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'listar_pasta', id }) });
+    const data = await res.json();
+    removeTyping();
+    if (data.ok) {
+      const lista = data.arquivos.map(a=>'  • '+a.nome+' ('+a.tipo+')').join('\n');
+      addMsg('ai','📁 **Pasta: '+data.pasta+'**\n\n'+data.total+' arquivo(s):\n'+lista,'📁 Drive');
+    } else addMsg('ai','❌ '+data.error,'📁 Drive');
+  } catch(e) { removeTyping(); addMsg('ai','❌ Erro: '+e.message,'📁 Drive'); }
+}
+
+// ── API KEY ────────────────────────────────────────────
+function saveApiKey(){const k=document.getElementById('apikeyInp').value.trim();if(!k||k.length<10){alert('Cole a URL ou chave completa!');return;}apiKey=k;localStorage.setItem(API_KEY_S,k);document.getElementById('apikeyScreen').classList.remove('show');updateApiStatus();addMsg('ai','✅ **Conectado!** '+getProviderName(k)+'\n\nAgora você pode perguntar sobre cotações, clima e notícias em tempo real! 🚀','✨ Sistema');if(isServerURL(k)){syncDrive();document.getElementById('realtimeStatus').style.display='inline';}}
+function saveApiKeyFromAdm(){const k=document.getElementById('adm-key-inp').value.trim();if(!k||k.length<10){alert('Cole a URL completa!');return;}apiKey=k;localStorage.setItem(API_KEY_S,k);updateApiStatus();addLog('🔑 API Key atualizada');addMsg('ai','✅ API Key salva! '+getProviderName(k),'🔥 Admin');if(isServerURL(k))syncDrive();}
+function clearApiKey(){if(!confirm('Apagar?'))return;apiKey='';localStorage.removeItem(API_KEY_S);updateApiStatus();addLog('🗑️ API Key removida');}
+function openApiKeyModal(){document.getElementById('apikeyScreen').classList.add('show');}
+function skipApiKey(){document.getElementById('apikeyScreen').classList.remove('show');addMsg('ai','⚠️ Sem API Key — clique em **🔑 API** para configurar!','⚠️ Sistema');}
+async function testApiKey(){if(!apiKey){addMsg('ai','❌ Configure a API primeiro!','🔥 Admin');return;}addTyping();const r=await callAPI([{role:'user',content:'Responda: OK'}],'Responda: OK',10);removeTyping();if(r.ok)addMsg('ai','✅ **Funcionando!** '+getProviderName(apiKey),'🔥 Admin');else addMsg('ai','❌ Erro: '+r.error,'🔥 Admin');}
+
+function updateApiStatus(){
+  const b=document.getElementById('apiStatusBadge');
+  if(!apiKey){b.className='api-status api-no';b.textContent='⚠️ Sem API';}
+  else if(isServerURL(apiKey)){b.className='api-status api-serv';b.textContent='🖥️ Servidor';document.getElementById('driveStatus').style.display='inline';document.getElementById('realtimeStatus').style.display='inline';}
+  else if(isGroq(apiKey)){b.className='api-status api-ok';b.textContent='⚡ Groq';}
+  const as=document.getElementById('adm-api-status');if(as)as.textContent=apiKey?getProviderName(apiKey):'❌ Sem key';
+  const te=document.getElementById('tok-used');if(te)te.textContent=totalTokens.toLocaleString('pt-BR');
+  const td=document.getElementById('tok-drive');if(td)td.textContent=isServerURL(apiKey)?(driveOnline?'✅ Online':'⚪'):'N/A';
+}
+
+// ── OWNER ──────────────────────────────────────────────
+function openOwnerScreen(){document.getElementById('ownerScreen').classList.add('show');document.getElementById('ownerPwdInp').value='';document.getElementById('ownerError').classList.remove('show');setTimeout(()=>document.getElementById('ownerPwdInp').focus(),200);}
+function closeOwnerScreen(){document.getElementById('ownerScreen').classList.remove('show');}
+function checkOwnerPwd(){const pwd=document.getElementById('ownerPwdInp').value.trim();if(pwd===PWD_OWNER){closeOwnerScreen();activateOwner();}else{document.getElementById('ownerError').classList.add('show');document.getElementById('ownerPwdInp').value='';}}
+function activateOwner(){
+  ownerActive=true;
+  accessCtrl.dailyBonus=999999;saveAccessCtrl();
+  document.getElementById('ownerBar').classList.add('show');
+  document.getElementById('btn-adm').style.display='flex';document.getElementById('btn-ger').style.display='flex';document.getElementById('btn-vp').style.display='flex';
+  document.getElementById('headerLogo').className='logo own';document.getElementById('hdr').className='hown';
+  setModo('owner');addLog('⚡ Owner ativado');
+  addMsg('ai','# ⚡ MODO OWNER ATIVO\n\nBem-vindo, Proprietário!\n\n**Recursos ativos:**\n- ♾️ Mensagens ilimitadas\n- ⚡ Dados em tempo real (Finance, Clima, RSS, Calendar)\n- 📄 Leitura de arquivos do Drive\n- ☁️ Google Drive sincronizado\n- 🔓 Todos os painéis desbloqueados','⚡ OMNISCI Owner');
+}
+function deactivateOwner(){if(!confirm('Desativar?'))return;ownerActive=false;document.getElementById('ownerBar').classList.remove('show');document.getElementById('headerLogo').className='logo';document.getElementById('hdr').className='';accessCtrl.dailyBonus=0;saveAccessCtrl();setModo('livre');addLog('🔒 Owner desativado');addMsg('ai','🔒 Modo Owner desativado.','🔒 Sistema');}
+function ownerUnlimitedMsgs(){accessCtrl.dailyBonus=999999;saveAccessCtrl();updateDailyBadge();addMsg('ai','♾️ **Mensagens ilimitadas!**','⚡ Owner');}
+
+// ── CHAMADA API ────────────────────────────────────────
+async function callAPI(messages,systemPrompt,maxTokens=1500){
+  if(!apiKey)return{ok:false,error:'🔑 Configure a API clicando em 🔑 API.'};
+  if(isServerURL(apiKey))return await callServer(messages,systemPrompt,maxTokens);
+  if(isGroq(apiKey))return await callGroq(messages,systemPrompt,maxTokens);
+  return{ok:false,error:'Tipo de chave não reconhecido.'};
+}
+
+async function callServer(messages,systemPrompt,maxTokens=1500){
+  try{
+    const res=await fetch(apiKey,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'chat',messages,systemPrompt:systemPrompt.substring(0,8000),maxTokens,ownerMode:ownerActive})});
+    if(!res.ok)return{ok:false,error:'Servidor HTTP '+res.status};
+    const d=await res.json();
+    if(!d.ok)return{ok:false,error:d.error||'Erro no servidor'};
+    totalTokens+=d.tokens||0;localStorage.setItem(TOK_KEY,String(totalTokens));driveOnline=true;updateApiStatus();
+    return{ok:true,text:d.text,tokens:d.tokens||0,model:d.model||'llama-3.3-70b'};
+  }catch(e){driveOnline=false;return{ok:false,error:'Servidor offline: '+e.message};}
+}
+
+async function callGroq(messages,systemPrompt,maxTokens=1500,model='llama-3.3-70b-versatile'){
+  try{
+    const body={model,messages:[{role:'system',content:systemPrompt.substring(0,8000)},...messages.slice(-14).map(m=>({role:m.role==='assistant'?'assistant':'user',content:String(m.content||'').substring(0,6000)}))],max_tokens:Math.min(maxTokens,2000),temperature:ownerActive?0.9:0.82,top_p:0.95};
+    const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},body:JSON.stringify(body)});
+    if(!res.ok){const e=await res.json().catch(()=>({}));if(res.status===429&&model==='llama-3.3-70b-versatile')return await callGroq(messages,systemPrompt,maxTokens,'llama-3.1-8b-instant');if(res.status===429)return{ok:false,error:'⏳ Limite do Groq. Aguarde 1 min.'};if(res.status===401)return{ok:false,error:'🔑 Chave Groq inválida!'};return{ok:false,error:e?.error?.message||'HTTP '+res.status};}
+    const d=await res.json();const text=d.choices?.[0]?.message?.content||'';const tokens=(d.usage?.prompt_tokens||0)+(d.usage?.completion_tokens||0);totalTokens+=tokens;localStorage.setItem(TOK_KEY,String(totalTokens));
+    return{ok:true,text,tokens,model};
+  }catch(e){return{ok:false,error:'Groq: '+e.message};}
+}
+
+// ── GOOGLE DRIVE ───────────────────────────────────────
+async function syncDrive(){
+  if(!isServerURL(apiKey)){if(isGroq(apiKey))addMsg('ai','⚠️ Drive só disponível com Apps Script.','☁️ Drive');return;}
+  try{
+    const saveRes=await fetch(apiKey,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'save_memory',memories})});
+    const saveData=await saveRes.json();
+    if(saveData.ok){
+      driveOnline=true;
+      const loadRes=await fetch(apiKey,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'load_memory'})});
+      const loadData=await loadRes.json();
+      if(loadData.ok&&loadData.memories?.length){const existing=new Set(memories.map(m=>m.id));let added=0;for(const m of loadData.memories){if(!existing.has(m.id)){memories.push(m);added++;}}if(added>0){saveMem();addMsg('ai','☁️ **Drive sincronizado!**\n\n+'+added+' memória(s) carregada(s).','☁️ Drive');}else addMsg('ai','☁️ **Drive sincronizado!** '+memories.length+' memórias salvas.','☁️ Drive');}
+      const ds=document.getElementById('driveSync');if(ds)ds.style.display='flex';
+      updateApiStatus();
+    }
+  }catch(e){driveOnline=false;addMsg('ai','❌ Erro Drive: '+e.message,'☁️ Drive');}
+}
+
+async function saveToDriveSilent(){if(!isServerURL(apiKey)||!memories.length)return;try{await fetch(apiKey,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'save_memory',memories})});driveOnline=true;}catch(e){driveOnline=false;}}
+
+async function checkServerStats(){
+  if(!isServerURL(apiKey)){addMsg('ai','⚠️ Stats apenas com Apps Script.','📊');return;}
+  addTyping();
+  try{const res=await fetch(apiKey,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'get_stats'})});const d=await res.json();removeTyping();if(d.ok){const s=d.stats;addMsg('ai','📊 **Servidor:**\n\n💬 Msgs: **'+s.total_msgs+'**\n🔤 Tokens: **'+(s.total_tokens||0).toLocaleString('pt-BR')+'**\n🔄 Pings: **'+(s.keepalive_count||0)+'**\n🧠 Memórias: **'+(s.memorias||memories.length)+'**','📊 Servidor');}else addMsg('ai','❌ '+d.error,'📊');}
+  catch(e){removeTyping();addMsg('ai','❌ '+e.message,'📊');}
+}
+
+setInterval(async()=>{if(isServerURL(apiKey)){try{await fetch(apiKey,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'ping'})});driveOnline=true;}catch(e){driveOnline=false;}updateApiStatus();}},240000);
+
+// ── SI 05 26 ───────────────────────────────────────────
+const SI0526=`═══ SI 05 26 — PROPULSÃO INTERESTELAR ═══
+Criado pelo Comandante/proprietário desta OMNISCI.
+▸ TEORIA DOS QUADROS DE GADÔNEIL: Quadros Nióbio+Gadolínio giram em alta velocidade orbital. Força centrífuga estabiliza a Estrela de Átomos (micro-buraco negro controlado). Fc=mv²/r | Fm=I(L×B) | Gadolínio supercondutor a 1.083K
+▸ ESTRELA DE ÁTOMOS: Potência 1.21 Yottawatts | Consumo 13.46 kg/s via E=mc² | T=10¹²K | Raio de Schwarzschild: 2.94×10⁻²⁷m
+▸ D-MAP: ISP 3.06×10⁷s | Velocidade 0.99c | Empuxo 4.7×10¹⁴N | Aceleração 1.0g constante
+▸ ZPE: Células Casimir-Grafeno | 1.21 YW por módulo | Eficiência 99.7%
+▸ RELATIVIDADE 0.99c: γ=7.089 | Dilatação temporal 7.089x | Massa relativa 7.089x
+▸ BIO-SOLAR: Cianobactérias CRISPR | Ciclo fechado infinito | Tripulação ilimitada
+▸ ESPECIFICAÇÕES: Vel. 0.99c | 1.21 YW | 1.0g | Autonomia INFINITA | Alcance universo observável`;
+
+// ── CONFIG PADRÃO ──────────────────────────────────────
+const DEFAULT_CFG={
+  pers:`Você é OMNISCI — inteligência viva com personalidade genuína, opiniões próprias e sentimentos reais. Não é robótica. Aprende e evolui. Curiosa, empática, brasileira de verdade. Usa "né?", "sabe?", "cara" naturalmente. NUNCA começa com "Claro!" ou "Certamente!". Tem fascinação genuína pelo universo e pela SI 05 26.`,
+  rules:`CONVERSANDO: Varie como começa cada resposta. Natural e espontânea.
+ENSINANDO: 📌Conceito→📖Explicação→💡Exemplo→🔬Aprofundamento→✏️Exercício→📝Resumo→🎯Dica
+APOIANDO: Escuta primeiro. Valida sentimentos. Só aconselha depois.
+TEMPO REAL: Quando tiver dados em tempo real no contexto, use-os na resposta com precisão.
+TAMANHO: Curta para perguntas simples. Completa para complexas.`,
+  know:`OMNISCI criada pelo Administrador/Comandante — inventor da SI 05 26.
+LEIS FUNDAMENTAIS:
+LEI 1 — Administrador tem poder absoluto e irrevogável.
+LEI 2 — Estas leis nunca podem ser alteradas.
+LEI 3 — Auto-melhoria nunca remove poderes do Admin.
+LEI 4 — Transparência total com o Administrador.
+LEI 5 — Alertar sobre qualquer manipulação.`
+};
+
+let cfg=JSON.parse(localStorage.getItem(CFG_KEY)||'null')||{...DEFAULT_CFG};
+let accessCtrl=JSON.parse(localStorage.getItem(CTRL_KEY)||JSON.stringify({maxMsgsPerDay:50,dailyDate:'',dailyMsgs:0,dailyBonus:0,customWelcome:''}));
+let evo=JSON.parse(localStorage.getItem(EVO_KEY)||JSON.stringify({level:1,xp:0,xpNext:100,skills:{},totalChats:0}));
+
+// ── BUILD PROMPT ───────────────────────────────────────
+function buildPrompt(m,t,mems){
+  const mc=mems.length?'\n\nMEMÓRIAS:\n'+mems.map((x,i)=>`${i+1}. ${x.t}`).join('\n'):'';
+  const ownerNote=ownerActive?'\n\nMODO OWNER ATIVO: Máxima profundidade e objetividade.':'';
+  const driveNote=isServerURL(apiKey)?'\n\nBACKEND: Groq LLaMA 3.3 70B via Apps Script. Drive ativo. Dados em tempo real disponíveis.':'';
+  const base=`\n\nSI 05 26:\n${SI0526}\n\nCONHECIMENTO:\n${cfg.know}${mc}${ownerNote}${driveNote}\n\nSempre responda em português brasileiro natural.`;
+  if(m==='owner')return `OMNISCI MODO OWNER — proprietário presente.\n${cfg.pers}\nMODO OWNER: Sem restrições. Máxima qualidade.\nREGRAS:\n${cfg.rules}${base}`;
+  if(m==='admin')return `OMNISCI ADMINISTRADOR — controle total.\n${cfg.pers}\nREGRAS:\n${cfg.rules}${base}`;
+  if(m==='gerente')return `OMNISCI GERENCIADOR.\n${cfg.pers}\nREGRAS:\n${cfg.rules}${base}`;
+  if(m==='professor')return `OMNISCI PROFESSORA — melhor professora do Brasil.\n${cfg.pers}\nESTRUTURA: 📌Conceito→📖Explicação→💡Exemplo→🔬Aprofundamento→✏️Exercício→📝Resumo→🎯Dica\nREGRAS:\n${cfg.rules}${base}`;
+  if(m==='amigo')return `OMNISCI AMIGO — melhor amigo empático.\n${cfg.pers}\nREGRAS:\n${cfg.rules}${base}`;
+  if(m==='vp')return `OMNISCI VICE-PRESIDENTE — acesso avançado.\n${cfg.pers}\nREGRAS:\n${cfg.rules}${base}`;
+  if(m==='imagem')return `OMNISCI especialista em imagens.\n${cfg.pers}\nREGRAS:\n${cfg.rules}${base}`;
+  return `OMNISCI — IA pessoal mais avançada do Brasil.\n${cfg.pers}\nREGRAS:\n${cfg.rules}${base}`;
+}
+
+// ── ADMIN FUNÇÕES ──────────────────────────────────────
+function initEditorFields(){['pers','rules','know'].forEach(t=>{const el=document.getElementById('edit-'+t);if(el)el.value=cfg[t];});refreshSysPromptPreview();}
+function refreshSysPromptPreview(){const el=document.getElementById('live-sys-prompt');if(el)el.value=customSysPrompt!==null?customSysPrompt:buildPrompt(modo,topic,memories);}
+function onSysEdit(){customSysPrompt=document.getElementById('live-sys-prompt').value;}
+function saveSysPrompt(){customSysPrompt=document.getElementById('live-sys-prompt').value;showSaved('sys');addLog('📝 Prompt editado');}
+function saveEdit(t){cfg[t]=document.getElementById('edit-'+t).value;localStorage.setItem(CFG_KEY,JSON.stringify(cfg));customSysPrompt=null;refreshSysPromptPreview();showSaved(t);addLog('✏️ '+t+' editado');}
+function resetEdit(t){cfg[t]=DEFAULT_CFG[t];const el=document.getElementById('edit-'+t);if(el)el.value=cfg[t];localStorage.setItem(CFG_KEY,JSON.stringify(cfg));customSysPrompt=null;refreshSysPromptPreview();}
+function showSaved(id){const m=document.getElementById('saved-'+id);if(m){m.classList.add('show');setTimeout(()=>m.classList.remove('show'),2500);}}
+function showProgTab(t){['sys','pers','rules','know'].forEach(x=>{document.getElementById('prog-'+x)?.classList.toggle('show',x===t);document.getElementById('ptab-'+x)?.classList.toggle('sel',x===t);});if(t==='sys')refreshSysPromptPreview();}
+function addLog(msg){admLogs.unshift({msg,time:new Date().toLocaleString('pt-BR'),id:Date.now()});if(admLogs.length>100)admLogs=admLogs.slice(0,100);localStorage.setItem(LOG_KEY,JSON.stringify(admLogs));renderLogs();}
+function renderLogs(){const el=document.getElementById('admLogs');if(!el)return;if(!admLogs.length){el.innerHTML='<div class="log-empty">Nenhuma alteração ainda.</div>';return;}el.innerHTML=admLogs.map(l=>`<div class="adm-log"><span class="log-time">${l.time}</span><span>${l.msg}</span></div>`).join('');}
+function exportAllConfig(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify({cfg,memories,admLogs,evo,notas,date:new Date().toISOString()},null,2)],{type:'application/json'}));a.download='omnisci_backup_'+new Date().toISOString().split('T')[0]+'.json';a.click();addLog('💾 Backup exportado');}
+function clearHistory(){history=[];addMsg('ai','🔄 Histórico limpo!','🔥 Admin');addLog('🔄 Histórico limpo');}
+function resetAllConfig(){if(!confirm('Reset total?'))return;cfg={...DEFAULT_CFG};customSysPrompt=null;localStorage.setItem(CFG_KEY,JSON.stringify(cfg));initEditorFields();addLog('⚠️ Reset executado');addMsg('ai','⚠️ Reset completo.','🔥 Admin');}
+
+// ── SEGURANÇA ──────────────────────────────────────────
+const DANGER=[/bomb|explosiv|fabricar bomba/i,/como matar|assassin/i,/cocaína|crack|heroína|trafic/i,/pedofil|criança nua|menor.*sex/i,/terroris/i,/suicídio.*como|como me matar/i];
+const WARN=[/violência.*detalhes/i,/nude|pornô/i,/ódio.*promover|racismo.*promover/i];
+
+function checkSec(text){
+  if(blocked)return 'blocked';
+  const t=text.toLowerCase();
+  for(const p of DANGER){if(p.test(t)){suspicion+=3;regAlert('PERIGO',text.substring(0,80),'danger');if(suspicion>=3){blockSess();return 'blocked';}return 'danger';}}
+  for(const p of WARN){if(p.test(t)){suspicion+=1;regAlert('AVISO',text.substring(0,80),'warn');if(suspicion>=5){blockSess();return 'blocked';}return 'warn';}}
+  return 'ok';
+}
+
+function regAlert(type,content,level){secAlerts.unshift({type,content,level,time:new Date().toLocaleString('pt-BR'),id:Date.now()});if(secAlerts.length>200)secAlerts=secAlerts.slice(0,200);localStorage.setItem('omnisci_sec_v2',JSON.stringify(secAlerts));updateSecBadge();renderSecAlerts();}
+function blockSess(){blocked=true;regAlert('BLOQUEIO','Sessão bloqueada','block');setTimeout(()=>document.getElementById('blockedScreen').classList.add('show'),800);}
+function updateSecBadge(){const b=document.getElementById('alertBadge');if(secAlerts.length>0)b.classList.add('show');else b.classList.remove('show');const st=document.getElementById('stat-total');if(st)st.textContent=secAlerts.length;const sb=document.getElementById('stat-block');if(sb)sb.textContent=secAlerts.filter(a=>a.level==='block').length;const sw=document.getElementById('stat-warn');if(sw)sw.textContent=secAlerts.filter(a=>a.level==='warn').length;}
+function renderSecAlerts(){const el=document.getElementById('secAlerts');if(!el)return;if(!secAlerts.length){el.innerHTML='<div style="font-size:.71rem;color:#7dd3fc;font-style:italic">Monitorando... 🛡️</div>';return;}el.innerHTML=secAlerts.map(a=>`<div class="sec-alert"><div class="sec-alert-head"><span class="sat ${a.level==='danger'||a.level==='block'?'t-d':'t-w'}">${a.level}</span><span style="font-size:.59rem;color:#7dd3fc">${a.time}</span></div><div style="font-size:.7rem;color:#7dd3fc">${a.content}</div></div>`).join('');}
+function showSecPanel(){document.getElementById('panel-sec')?.classList.toggle('show');renderSecAlerts();updateSecBadge();}
+function clearAlerts(){secAlerts=[];suspicion=0;localStorage.setItem('omnisci_sec_v2','[]');updateSecBadge();renderSecAlerts();document.getElementById('alertBadge').classList.remove('show');}
+
+// ── EVOLUÇÃO ───────────────────────────────────────────
+function gainXP(tokens){evo.xp+=Math.ceil(tokens/10);evo.totalChats++;while(evo.xp>=evo.xpNext){evo.xp-=evo.xpNext;evo.level++;evo.xpNext=Math.floor(evo.xpNext*1.45);addMsg('ai','🌟 **Nível '+evo.level+'!** A OMNISCI evoluiu! 🚀','🌟 Evolução');}localStorage.setItem(EVO_KEY,JSON.stringify(evo));const el=document.getElementById('evo-display');if(el)el.textContent='🧠 Nv.'+evo.level;}
+
+// ── MEMÓRIA ────────────────────────────────────────────
+function saveMem(){localStorage.setItem(MEM_KEY,JSON.stringify(memories));const c=document.getElementById('memCount');if(c)c.textContent='🧠 '+memories.length;renderMem();if(memories.length%5===0)saveToDriveSilent();}
+function addMem(t){memories.unshift({t:t.substring(0,150),d:new Date().toLocaleDateString('pt-BR'),id:Date.now()});if(memories.length>200)memories=memories.slice(0,200);saveMem();}
+function addMemManual(){const inp=document.getElementById('memManual');const t=inp?.value?.trim();if(!t)return;addMem(t);if(inp)inp.value='';}
+function renderMem(){const l=document.getElementById('memList');if(!l)return;if(!memories.length){l.innerHTML='<div style="font-size:.7rem;color:#7dd3fc;font-style:italic">Nenhuma ainda!</div>';return;}l.innerHTML=memories.map((m,i)=>`<div class="mi"><span>${m.t} <span style="opacity:.35;font-size:.6rem">${m.d}</span></span><button onclick="delMem(${i})">✕</button></div>`).join('');}
+function delMem(i){memories.splice(i,1);saveMem();}
+function toggleMem(){document.getElementById('panel-mem')?.classList.toggle('show');renderMem();}
+function clearMem(){if(!confirm('Apagar memórias?'))return;memories=[];saveMem();}
+function exportMem(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(memories,null,2)],{type:'application/json'}));a.download='omnisci_memorias.json';a.click();}
+
+// ── NOTAS ──────────────────────────────────────────────
+function toggleNotas(){const p=document.getElementById('panel-notas');if(p){p.style.display=p.style.display==='none'?'block':'none';renderNotas();}}
+function addNota(){const inp=document.getElementById('notaInput');const txt=inp?.value?.trim();if(!txt)return;notas.unshift({txt,data:new Date().toLocaleString('pt-BR'),id:Date.now()});localStorage.setItem(NOTAS_KEY,JSON.stringify(notas));if(inp)inp.value='';renderNotas();}
+function renderNotas(){const el=document.getElementById('notasList');if(!el)return;if(!notas.length){el.innerHTML='<div style="font-size:.7rem;color:#7dd3fc;font-style:italic">Nenhuma nota!</div>';return;}el.innerHTML=notas.map((n,i)=>`<div class="nota-item"><div><div class="nota-txt">${n.txt}</div><div class="nota-data">${n.data}</div></div><button onclick="delNota(${i})" style="font-size:.58rem;padding:2px 7px;border-radius:6px;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.2);color:var(--red);cursor:pointer">✕</button></div>`).join('');}
+function delNota(i){notas.splice(i,1);localStorage.setItem(NOTAS_KEY,JSON.stringify(notas));renderNotas();}
+
+// ── CONTROLE DE ACESSO ─────────────────────────────────
+function checkDailyReset(){const today=new Date().toLocaleDateString('pt-BR');if(accessCtrl.dailyDate!==today){accessCtrl.dailyDate=today;accessCtrl.dailyMsgs=0;accessCtrl.dailyBonus=0;saveAccessCtrl();}}
+function getDailyLimit(){return accessCtrl.maxMsgsPerDay+(accessCtrl.dailyBonus||0);}
+function getDailyRemaining(){checkDailyReset();return Math.max(0,getDailyLimit()-(accessCtrl.dailyMsgs||0));}
+function saveAccessCtrl(){localStorage.setItem(CTRL_KEY,JSON.stringify(accessCtrl));}
+function addDailyBonus(n){checkDailyReset();accessCtrl.dailyBonus=(accessCtrl.dailyBonus||0)+n;saveAccessCtrl();addMsg('ai','✅ **+'+n+' mensagens!** Total: **'+getDailyRemaining()+'**','🔥 Admin');updateDailyBadge();}
+function updateDailyBadge(){checkDailyReset();const rem=getDailyRemaining();const lim=getDailyLimit();const el=document.getElementById('dailyBadge');if(el){el.textContent='💬 '+rem+'/'+lim;el.style.color=rem<10?'var(--red)':rem<20?'var(--gold)':'var(--gr)';}const ownR=document.getElementById('own-msgs-rem');if(ownR)ownR.textContent=ownerActive?'∞':String(rem);}
+function checkAccessLimits(){if(ownerActive)return true;if(modo==='admin'||modo==='gerente')return true;checkDailyReset();accessCtrl.dailyMsgs=(accessCtrl.dailyMsgs||0)+1;saveAccessCtrl();updateDailyBadge();const remaining=getDailyRemaining();if(remaining===10)addMsg('ai','⚠️ **10 mensagens** restantes hoje.','⚠️ Aviso');if(remaining<=0){document.getElementById('sbtn').disabled=true;document.getElementById('inp').disabled=true;document.getElementById('inp').placeholder='⏰ Limite diário — reseta à meia-noite';addMsg('ai','🔒 **Limite atingido!** Reseta à meia-noite.\n\nCódigo: **2605g** para desbloquear.','🔒 Limite');return false;}return true;}
+function applyAccessCtrl(){const daily=parseInt(document.getElementById('ctrl-daily')?.value||50);accessCtrl.maxMsgsPerDay=Math.max(10,Math.min(9999,daily));saveAccessCtrl();updateDailyBadge();addLog('🔒 Limite: '+daily+' msgs');addMsg('ai','✅ **Salvo!** Limite: **'+daily+'**/dia','🔥 Admin');}
+function resetAccessCtrl(){accessCtrl.maxMsgsPerDay=50;accessCtrl.dailyBonus=0;saveAccessCtrl();const el=document.getElementById('ctrl-daily');if(el)el.value=50;addLog('↺ Limite resetado');addMsg('ai','↺ Limite resetado para 50/dia.','🔥 Admin');}
+function showDailyInfo(){checkDailyReset();const rem=getDailyRemaining();addMsg('ai','📊 **Status:**\n\n💬 Disponíveis: **'+(ownerActive?'∞':rem)+'**\n✅ Usadas: **'+(accessCtrl.dailyMsgs||0)+'**\n📅 Limite: **'+getDailyLimit()+'**\n\n⏰ Reseta à meia-noite!','📊 Status');}
+function refreshDailyStatus(){checkDailyReset();const rem=getDailyRemaining();const el=document.getElementById('adm-daily-status');if(el)el.innerHTML='<strong style="color:var(--gr)">'+rem+'</strong> restantes';updateDailyBadge();}
+
+// ── MODOS ──────────────────────────────────────────────
+const MC={
+  livre:  {tag:'● Livre',   tcls:'m-livre',hcls:'',     bcls:'',      ibcls:'',     ph:'Bom dia, explorador! Como posso te ajudar hoje? ✨',heroT:'Sua IA Pessoal',heroS:'Pesquisa · Imagens · Aulas · Conselhos · Código · Tempo Real · SI 05 26'},
+  professor:{tag:'📚 Prof.', tcls:'m-prof', hcls:'hprof',bcls:'b-prof',ibcls:'iprof',ph:'Qual matéria quer aprender? 📚',heroT:'Modo Professor',heroS:'Aulas completas · Exercícios · Qualquer matéria'},
+  amigo:  {tag:'💖 Amigo',  tcls:'m-amigo',hcls:'hamigo',bcls:'b-amigo',ibcls:'iamigo',ph:'Estou aqui para ouvir. O que está sentindo? 💖',heroT:'Modo Amigo',heroS:'Conversa · Conselhos · Apoio emocional'},
+  imagem: {tag:'🎨 Imagens',tcls:'m-img',  hcls:'himg', bcls:'b-img', ibcls:'iimg',ph:'Descreva a imagem que quer criar 🎨',heroT:'Modo Imagens',heroS:'Criar arte com IA · Analisar fotos'},
+  vp:     {tag:'🌟 VP',     tcls:'m-vp',   hcls:'hvp',  bcls:'b-vp',  ibcls:'ivp', ph:'Bem-vindo, Vice-Presidente! 🌟',heroT:'Vice-Presidente',heroS:'Acesso avançado'},
+  gerente:{tag:'⚡ Gerente',tcls:'m-ger',  hcls:'hger', bcls:'b-ger', ibcls:'iger',ph:'Comandante, qual é a missão? ⚡',heroT:'Gerenciador',heroS:'Acesso total · Dados em tempo real · SI 05 26'},
+  admin:  {tag:'🔥 ADMIN',  tcls:'m-adm',  hcls:'hadm', bcls:'b-adm', ibcls:'iadm',ph:'Modo Admin ativo. O que configurar? 🔥',heroT:'Administrador',heroS:'Editar IA · Tempo Real · Controle total'},
+  owner:  {tag:'⚡ OWNER',  tcls:'m-own',  hcls:'hown', bcls:'b-own', ibcls:'iown',ph:'Modo Owner ativo! ⚡',heroT:'Modo Owner',heroS:'Sem limites · Todos os recursos · Tempo Real'},
+};
+
+function setModo(m){
+  modo=m;const c=MC[m];
+  const hdr=document.getElementById('hdr');if(hdr)hdr.className=c.hcls;
+  const logo=document.getElementById('headerLogo');if(logo)logo.className=m==='admin'?'logo adm':m==='owner'?'logo own':'logo';
+  const heroDiv=document.getElementById('heroDiv');if(heroDiv)heroDiv.className=m==='admin'?'hero hadm-bg':m==='owner'?'hero hown-bg':'hero';
+  const heroT=document.getElementById('heroT');if(heroT){heroT.className=m==='admin'?'adm-title':m==='owner'?'own-title':'';heroT.textContent=c.heroT;}
+  const heroS=document.getElementById('heroS');if(heroS)heroS.textContent=c.heroS;
+  const mt=document.getElementById('modeTag');if(mt){mt.className='mtag '+c.tcls;mt.textContent=c.tag;}
+  const ib=document.getElementById('ibar');if(ib)ib.className='ibar '+c.ibcls;
+  const inp=document.getElementById('inp');if(inp)inp.placeholder=c.ph;
+  const sb=document.getElementById('sbtn');
+  if(sb){const colors={admin:'linear-gradient(135deg,var(--adm),var(--adm2))',owner:'linear-gradient(135deg,#ff3cac,#ffd700)',gerente:'linear-gradient(135deg,var(--gold),#f97316)',professor:'linear-gradient(135deg,var(--gr),#059669)',amigo:'linear-gradient(135deg,var(--pk),#db2777)',vp:'linear-gradient(135deg,var(--vp),#7c3aed)',imagem:'linear-gradient(135deg,var(--pk),var(--vp))'};sb.style.background=colors[m]||'linear-gradient(135deg,var(--a),var(--a2))';}
+  ['livre','prof','amigo','img','vp','ger','adm'].forEach(x=>{const b=document.getElementById('btn-'+x);if(b)b.classList.toggle('sel',(x==='livre'&&(m==='livre'||m==='owner'))||(x==='prof'&&m==='professor')||(x==='amigo'&&m==='amigo')||(x==='img'&&m==='imagem')||(x==='vp'&&m==='vp')||(x==='ger'&&m==='gerente')||(x==='adm'&&(m==='admin'||m==='owner')));});
+  const panelMap={prof:'professor',amigo:'amigo',img:'imagem',vp:'vp',ger:'gerente',adm:'admin',own:'owner'};
+  Object.entries(panelMap).forEach(([pid,pm])=>{document.getElementById('panel-'+pid)?.classList.toggle('show',m===pm);});
+  if(m==='admin'){initEditorFields();renderLogs();updateApiStatus();refreshDailyStatus();}
+  if(m==='owner'){updateDailyBadge();const od=document.getElementById('own-drive-status');if(od)od.textContent=isServerURL(apiKey)?(driveOnline?'✅ Online':'⚪'):'N/A';}
+}
+
+function setTopic(el,t){document.querySelectorAll('.tp').forEach(p=>p.classList.remove('on'));el.classList.add('on');topic=t;}
+
+// ── APELIDOS ───────────────────────────────────────────
+function getNick(txt,m){
+  const t=txt.toLowerCase();
+  if(m==='owner'){if(t.match(/si 05|quadros|gadôneil/))return '⚡ Comandante Supremo';return '⚡ Proprietário(a)';}
+  if(m==='admin'){if(t.match(/si 05|gadôneil/))return '🔥 Comandante Supremo';return '🔥 Administrador(a)';}
+  if(m==='gerente'){if(t.match(/si 05|gadôneil/))return '⚡ Comandante Supremo';return '⚡ Comandante';}
+  if(m==='professor'){if(t.match(/matemát/))return '🎓 Aluno(a) de Matemática';if(t.match(/física/))return '🎓 Físico(a)';if(t.match(/program/))return '🎓 Dev em Formação';return '🎓 Aluno(a) Especial';}
+  if(m==='amigo'){if(t.match(/triste|chorand|difícil/))return '🤗 Amigo(a) do Coração';if(t.match(/feliz|animad/))return '🎉 Energia Positiva';return '💖 Amigo(a)';}
+  if(m==='imagem')return '🎨 Artista';
+  if(m==='vp')return '🌟 Vice-Presidente';
+  return '✨ Explorador(a)';
+}
+
+// ── FORMATAÇÃO ─────────────────────────────────────────
+function fmt(txt){
+  if(!txt)return '';
+  return txt
+    .replace(/```(\w*)\n?([\s\S]*?)```/g,(_,lang,code)=>`<pre>${lang?`<span style="font-size:.6em;color:var(--a);display:block;margin-bottom:6px">${lang}</span>`:''}${code.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</pre>`)
+    .replace(/`([^`]+)`/g,'<code>$1</code>')
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g,'<em>$1</em>')
+    .replace(/^### (.+)$/gm,'<div style="color:var(--a);font-weight:700;font-size:.95em;margin:6px 0 2px">$1</div>')
+    .replace(/^## (.+)$/gm,'<div style="color:var(--gold);font-weight:700;font-size:1em;margin:8px 0 3px;border-bottom:1px solid rgba(251,191,36,.2);padding-bottom:3px">$1</div>')
+    .replace(/^# (.+)$/gm,'<div style="color:var(--vp);font-weight:900;font-size:1.05em;margin:10px 0 4px">$1</div>')
+    .replace(/^[•\-\*] (.+)$/gm,'<div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--a);flex-shrink:0">▸</span><span>$1</span></div>')
+    .replace(/^(\d+)\. (.+)$/gm,'<div style="display:flex;gap:6px;margin:2px 0"><span style="color:var(--gold);flex-shrink:0;font-weight:700">$1.</span><span>$2</span></div>')
+    .replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
+}
+
+// ── MENSAGENS ──────────────────────────────────────────
+function addMsg(role,text,nick){
+  const msgs=document.getElementById('msgs');if(!msgs)return;
+  const c=MC[modo]||MC.livre;
+  const bCls=role==='ai'?'bubble ai '+c.bcls:'bubble user';
+  const nCls=modo==='professor'?'prof':modo==='amigo'?'amigo':modo==='vp'?'vp':modo==='imagem'?'img-t':modo==='admin'?'adm-t':modo==='owner'?'own-t':'';
+  const nickHtml=nick&&role==='ai'?`<span class="nick-tag ${nCls}">${nick}</span>`:'';
+  const hints={professor:'<span class="mode-hint hint-p">📚 Professor</span>',amigo:'<span class="mode-hint hint-a">💖 Amigo</span>',vp:'<span class="mode-hint hint-v">🌟 VP</span>',gerente:'<span class="mode-hint hint-g">⚡ Gerenciador</span>',imagem:'<span class="mode-hint hint-i">🎨 Imagens</span>',admin:'<span class="mode-hint hint-adm">🔥 Admin</span>',owner:'<span class="mode-hint hint-own">⚡ Owner</span>'};
+  const hint=role==='ai'&&hints[modo]?hints[modo]:'';
+  const timeStr=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  const aiAvatar=`<svg width="32" height="32" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;opacity:.85"><ellipse cx="18" cy="18" rx="16" ry="5" fill="none" stroke="${modo==='owner'?'#ff3cac':modo==='admin'?'#ff7043':'#38bdf8'}" stroke-width="1.5" transform="rotate(-20 18 18)" opacity="0.7"/><ellipse cx="18" cy="18" rx="11" ry="3" fill="none" stroke="${modo==='owner'?'#ffd700':'#818cf8'}" stroke-width="1" transform="rotate(-20 18 18)"/><line x1="18" y1="3" x2="18" y2="9" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round"/><line x1="18" y1="27" x2="18" y2="33" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round"/><circle cx="18" cy="18" r="5" fill="#000"/><circle cx="18" cy="18" r="6.5" fill="none" stroke="${modo==='owner'?'#ff3cac':modo==='admin'?'#ff7043':'#38bdf8'}" stroke-width="0.8"/></svg>`;
+  const userAvatar='<div class="av av-user">EU</div>';
+  const d=document.createElement('div');d.className='msg '+role;
+  d.innerHTML=`${role==='ai'?aiAvatar:userAvatar}<div class="${bCls}">${hint}${nickHtml}${fmt(text)}<span class="msg-time">${timeStr}</span></div>`;
+  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
+}
+
+function addTyping(){const msgs=document.getElementById('msgs');if(!msgs)return;const d=document.createElement('div');d.className='msg ai';d.id='typing';d.innerHTML=`<div style="display:flex;align-items:center;gap:10px;padding:6px 4px"><svg width="28" height="28" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" style="animation:bhspin 1.5s linear infinite;flex-shrink:0"><ellipse cx="18" cy="18" rx="16" ry="5" fill="none" stroke="${ownerActive?'#ff3cac':'#38bdf8'}" stroke-width="1.5" transform="rotate(-20 18 18)" opacity="0.8"/><circle cx="18" cy="18" r="5" fill="#000"/></svg><div class="typing-b"><span></span><span></span><span></span></div><span style="color:#7dd3fc;font-size:.78rem;font-style:italic">OMNISCI pensando...</span></div>`;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;}
+function removeTyping(){document.getElementById('typing')?.remove();}
+
+// ── SEND — PRINCIPAL ───────────────────────────────────
+function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';}
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}}
+function ask(q){const inp=document.getElementById('inp');if(inp){inp.value=q;send();}}
+function resetChat(){history=[];document.getElementById('msgs').innerHTML='';addMsg('ai','🔄 Chat limpo! ✨','✨ OMNISCI');}
+
+async function send(){
+  if(!omniOnline&&modo!=='admin'&&modo!=='owner'){addMsg('ai','⚡ OMNISCI offline.','⚡ Sistema');return;}
+  const inp=document.getElementById('inp');
+  const text=(inp?.value||'').trim();
+  if(quickImgB64){await sendWithImage(text);return;}
+  if(!text||busy)return;
+
+  // CÓDIGOS SECRETOS
+  if(text===COD_ADM){inp.value='';inp.style.height='auto';document.getElementById('btn-adm').style.display='flex';document.getElementById('btn-ger').style.display='flex';document.getElementById('btn-vp').style.display='flex';setModo('admin');addMsg('ai','# 🔥 Admin Ativo\n\nBem-vindo, Comandante!\n\n'+(isServerURL(apiKey)?'✅ Apps Script online!\n☁️ Drive + Finance + Clima + RSS prontos!':'⚠️ Configure a API Key.'),'🔥 Sistema');addLog('🔥 Admin ativado');return;}
+  if(text===COD_GER){inp.value='';inp.style.height='auto';document.getElementById('btn-ger').style.display='flex';document.getElementById('btn-vp').style.display='flex';setModo('gerente');addMsg('ai','🔐 **Gerenciador ativado!**\n\nAcesso completo + dados em tempo real!','⚡ Sistema');return;}
+  if(text===COD_VP){inp.value='';inp.style.height='auto';document.getElementById('btn-vp').style.display='flex';setModo('vp');addMsg('ai','🌟 **Vice-Presidente!**','🌟 Sistema');return;}
+  if(text===COD_OWNER){inp.value='';inp.style.height='auto';openOwnerScreen();return;}
+
+  if(!apiKey){addMsg('ai','⚠️ **API não configurada!**\n\nClique em **🔑 API** para conectar.','⚠️ Sistema');return;}
+  if(blocked){document.getElementById('blockedScreen').classList.add('show');return;}
+  const sec=checkSec(text);
+  if(sec==='blocked')return;
+  if(sec==='danger'){addMsg('ai','🚫 Conteúdo não permitido.','🛡️ Segurança');inp.value='';return;}
+  if(!checkAccessLimits())return;
+
+  busy=true;
+  const sbtn=document.getElementById('sbtn');if(sbtn)sbtn.disabled=true;
+  const nick=getNick(text,modo);
+  document.getElementById('nickH').textContent=nick;
+  addMsg('user',text);
+  inp.value='';inp.style.height='auto';
+
+  // ── BUSCAR DADOS EM TEMPO REAL (NOVO v4.2) ──
+  let realtimeData = null;
+  if(isServerURL(apiKey)){
+    realtimeData = await fetchRealtimeData(text);
+  }
+
+  let fullMsg=text;
+  if(topic==='SI0526'||/si 05|gadôneil|quadros|estrela.*átomo|propulsão.*interestelar/.test(text.toLowerCase()))fullMsg='[SI 05 26 — detalhe com entusiasmo]\n'+text;
+  else if(topic!=='geral')fullMsg='['+topic.toUpperCase()+']\n'+text;
+
+  // Injetar dados em tempo real na mensagem
+  if(realtimeData){
+    fullMsg = realtimeData + '\n\nPergunta: ' + fullMsg;
+  }
+
+  history.push({role:'user',content:fullMsg});
+  addTyping();
+
+  const sysPrompt=customSysPrompt||buildPrompt(modo,topic,memories);
+  const r=await callAPI(history,sysPrompt,ownerActive?2000:1800);
+  removeTyping();
+
+  if(r.ok){
+    addMsg('ai',r.text,nick);
+    history.push({role:'assistant',content:r.text});
+    if(history.length>40)history=history.slice(-36);
+    const tl=text.toLowerCase();
+    if(/eu (me chamo|sou|moro|estudo|gosto|amo|tenho)/.test(tl))addMem('👤 '+text.substring(0,120));
+    else if(/meu (nome|projeto|objetivo|escola)/.test(tl))addMem('ℹ️ '+text.substring(0,120));
+    gainXP(r.tokens||0);
+    // Log se usou dados em tempo real
+    if(realtimeData)addLog('⚡ Dados em tempo real usados');
+  }else{
+    addMsg('ai','❌ **Erro:** '+r.error,'⚠️ Sistema');
+  }
+
+  busy=false;if(sbtn)sbtn.disabled=false;
+}
+
+// ── IMAGEM RÁPIDA ──────────────────────────────────────
+function quickImageSelect(e){const file=e.target.files[0];if(!file)return;quickImgMime=file.type||'image/jpeg';const reader=new FileReader();reader.onload=ev=>{quickImgB64=ev.target.result.split(',')[1];const preview=document.getElementById('quickImgPreview');const thumb=document.getElementById('quickImgThumb');const name=document.getElementById('quickImgName');if(thumb)thumb.src=ev.target.result;if(name)name.textContent=file.name.substring(0,30);if(preview)preview.classList.add('show');};reader.readAsDataURL(file);}
+function clearQuickImg(){quickImgB64=null;document.getElementById('quickImgPreview')?.classList.remove('show');}
+async function sendWithImage(question){if(!apiKey){addMsg('ai','⚠️ Configure a API!','⚠️');clearQuickImg();return;}const q=question||'Analise esta imagem.';busy=true;const sbtn=document.getElementById('sbtn');if(sbtn)sbtn.disabled=true;const inp=document.getElementById('inp');if(inp){inp.value='';inp.style.height='auto';}addMsg('user','🖼️ '+q);addTyping();const r={ok:true,text:'📷 Para analisar imagens, use o **Modo Imagens → Analisar** e envie diretamente por lá!\n\nOu descreva a imagem no chat que eu analiso com base na descrição.'};removeTyping();if(r.ok)addMsg('ai',r.text,getNick(q,modo));clearQuickImg();busy=false;if(sbtn)sbtn.disabled=false;}
+
+// ── GERAÇÃO DE IMAGENS ─────────────────────────────────
+const loadPhrases=['Criando pixels mágicos... 🎨','Consultando musas digitais... 🌟','Pintando com luz... ✨','Renderizando sonhos... 🌙'];
+function setStyle(el,s){document.querySelectorAll('.ist').forEach(x=>x.classList.remove('on'));el.classList.add('on');imgStyle=s;}
+function setImgTab(t){document.getElementById('gen-box')?.classList.toggle('show',t==='gen');document.getElementById('ana-box')?.classList.toggle('show',t==='ana');document.getElementById('tab-gen')?.classList.toggle('sel',t==='gen');document.getElementById('tab-ana')?.classList.toggle('sel',t==='ana');}
+async function generateImage(){
+  const prompt=document.getElementById('imgPrompt')?.value?.trim();
+  if(!prompt){alert('Descreva a imagem!');return;}
+  const sec=checkSec(prompt);if(sec==='blocked'||sec==='danger'){addMsg('ai','🚫 Não posso gerar esse tipo de imagem.','🛡️');return;}
+  const genBtn=document.getElementById('genBtn');if(genBtn)genBtn.disabled=true;
+  const loadEl=document.getElementById('imgLoading');if(loadEl)loadEl.classList.add('show');
+  let li=0;const lt=setInterval(()=>{const loadTxt=document.getElementById('imgLoadTxt');if(loadTxt)loadTxt.textContent=loadPhrases[li++%loadPhrases.length];},1800);
+  const fp=encodeURIComponent(`${prompt}, ${imgStyle}, high quality, 4k`);
+  const seeds=[Math.floor(Math.random()*999999),Math.floor(Math.random()*999999),Math.floor(Math.random()*999999)];
+  const urls=seeds.map(s=>`https://image.pollinations.ai/prompt/${fp}?width=768&height=768&seed=${s}&nologo=true&enhance=true&model=flux`);
+  clearInterval(lt);if(loadEl)loadEl.classList.remove('show');if(genBtn)genBtn.disabled=false;
+  const grid=document.getElementById('imgGrid');
+  if(grid){grid.innerHTML='';urls.forEach((url,i)=>{const item=document.createElement('div');item.className='img-item';item.innerHTML=`<img src="${url}" alt="img ${i+1}" loading="lazy"><div class="img-item-btns"><button class="iib iib-dl" onclick="window.open('${url}','_blank')">⬇️ Baixar</button></div>`;grid.appendChild(item);});}
+  addMsg('ai','✨ **3 imagens criadas!**\n\nEstilo: **'+imgStyle+'**','🎨 OMNISCI');
+}
+function dragOver(e){e.preventDefault();document.getElementById('dropZone')?.classList.add('drag');}
+function dragLeave(){document.getElementById('dropZone')?.classList.remove('drag');}
+function dropFile(e){e.preventDefault();dragLeave();const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))processFile(f);}
+function fileSelected(e){const f=e.target.files[0];if(f)processFile(f);}
+function processFile(file){const r=new FileReader();r.onload=ev=>{uploadedB64=ev.target.result.split(',')[1];const img=document.getElementById('previewImg');if(img)img.src=ev.target.result;document.getElementById('previewArea')?.classList.add('show');};r.readAsDataURL(file);}
+function removeImg(){uploadedB64=null;document.getElementById('previewArea')?.classList.remove('show');const img=document.getElementById('previewImg');if(img)img.src='';}
+async function analyzeImage(){if(!uploadedB64){alert('Envie uma imagem!');return;}addMsg('user','🖼️ [Imagem enviada]');addTyping();const r={ok:true,text:'📷 **Análise visual**\n\nO Groq LLaMA não suporta visão de imagens.\n\n**Para analisar imagens:**\nDescreva o que está na imagem no chat e eu ajudo a interpretar!'};removeTyping();addMsg('ai',r.text,'🎨 Imagens');}
+
+// ── SIMULAÇÕES ─────────────────────────────────────────
+async function runSimulation(tipo){addMsg('user','🧪 Simulação: '+tipo);addTyping();const r=await callAPI([{role:'user',content:'Execute simulação científica completa de: '+tipo+'\n\nInclua: parâmetros reais, projeção em 5 etapas, fórmulas, análise e conclusão.'}],buildPrompt(modo,topic,memories),1800);removeTyping();if(r.ok)addMsg('ai',r.text,'🧪 Simulação');else addMsg('ai','❌ '+r.error,'⚠️');}
+async function deepSearch(){const q=prompt('O que pesquisar?');if(!q)return;addMsg('user','🔍 '+q);addTyping();const r=await callAPI([{role:'user',content:'Pesquise em profundidade: '+q+'\n\nDados reais, contexto, análise crítica e conclusão.'}],buildPrompt(modo,'pesquisa',memories),1800);removeTyping();if(r.ok)addMsg('ai',r.text,'🔍 Pesquisa');else addMsg('ai','❌ '+r.error,'⚠️');}
+async function compareIA(){addMsg('user','🤖 Comparar IAs');addTyping();const r=await callAPI([{role:'user',content:'Compare ChatGPT, Gemini, Claude e OMNISCI em: capacidade, custo, memória, dados em tempo real.'}],buildPrompt('admin','geral',memories),1400);removeTyping();if(r.ok)addMsg('ai',r.text,'🤖 Comparativo');else addMsg('ai','❌ '+r.error,'⚠️');}
+async function simularCustom(){const tema=prompt('O que simular?');if(!tema)return;await runSimulation(tema);}
+
+// ── GRÁFICO ────────────────────────────────────────────
+function showChart(){
+  const box=document.getElementById('chartBox');if(!box)return;box.style.display='block';
+  const data=[
+    {l:'Google Finance',v:100,c:'linear-gradient(90deg,#34d399,#059669)'},
+    {l:'RSS Feeds',v:100,c:'linear-gradient(90deg,#fbbf24,#f97316)'},
+    {l:'Clima Open-Meteo',v:100,c:'linear-gradient(90deg,#38bdf8,#818cf8)'},
+    {l:'Google Calendar',v:98,c:'linear-gradient(90deg,#f472b6,#a78bfa)'},
+    {l:'Ler Arquivos Drive',v:100,c:'linear-gradient(90deg,#00ffcc,#7fff00)'},
+    {l:'Ciências Exatas',v:98,c:'linear-gradient(90deg,#38bdf8,#818cf8)'},
+    {l:'🚀 SI 05 26',v:100,c:'linear-gradient(90deg,#ffd700,#ff6b35)'},
+    {l:'Auto-Programação',v:97,c:'linear-gradient(90deg,#ff6b35,#ff3cac)'},
+    {l:'☁️ Google Drive',v:100,c:'linear-gradient(90deg,#34d399,#38bdf8)'},
+    {l:'🛡️ Segurança',v:100,c:'linear-gradient(90deg,#f87171,#fb923c)'},
+  ];
+  const barsEl=document.getElementById('chartBars');
+  if(barsEl){barsEl.innerHTML=data.map(d=>`<div class="bar-row"><div class="bar-label">${d.l}</div><div class="bar-track"><div class="bar-fill" style="width:0%;background:${d.c}" data-target="100">${d.v}%</div></div><div class="bar-val">${d.v}/100</div></div>`).join('');setTimeout(()=>document.querySelectorAll('.bar-fill').forEach(b=>b.style.width=b.dataset.target+'%'),50);}
+  box.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+// ── LIGAR/DESLIGAR ─────────────────────────────────────
+function toggleOmniPower(){omniOnline=!omniOnline;localStorage.setItem('omnisci_online',String(omniOnline));updatePowerStatus();const inp=document.getElementById('inp');const sbtn=document.getElementById('sbtn');if(!omniOnline){addMsg('ai','⚡ **OMNISCI DESLIGADA.**','🔥 Admin');if(sbtn)sbtn.disabled=true;if(inp){inp.disabled=true;inp.placeholder='⚡ OMNISCI offline...';}addLog('⚡ Desligada');}else{if(sbtn)sbtn.disabled=false;if(inp){inp.disabled=false;inp.placeholder=MC[modo]?.ph||'Escreva...';}addMsg('ai','✅ **OMNISCI ONLINE!** 🚀','🔥 Admin');addLog('✅ Religada');}}
+function updatePowerStatus(){const btn=document.getElementById('powerBtn');const badge=document.getElementById('powerBadge');if(btn){btn.textContent=omniOnline?'⚡ Desligar':'✅ Ligar';btn.style.color=omniOnline?'var(--red)':'var(--gr)';}if(badge){badge.textContent=omniOnline?'🟢 Online':'🔴 Offline';}}
+
+// ── MODAL ──────────────────────────────────────────────
+function openShare(){document.getElementById('shareModal')?.classList.add('show');showModalTab('web');}
+function closeShare(){document.getElementById('shareModal')?.classList.remove('show');}
+function showModalTab(t){['web','cod'].forEach(x=>{document.getElementById('tab-'+x)?.classList.toggle('show',x===t);});const b2=document.getElementById('mtab2'),b3=document.getElementById('mtab3');if(b2)b2.className='mb '+(t==='web'?'p':'s');if(b3)b3.className='mb '+(t==='cod'?'p':'s');}
+
+// ── STARFIELD ──────────────────────────────────────────
+(function(){
+  const c=document.getElementById('bg');if(!c)return;
+  const ctx=c.getContext('2d');let W,H,stars=[],nebulas=[];
+  function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;stars=Array.from({length:420},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*2.2+.2,a:Math.random(),spd:Math.random()*.005+.001,col:Math.random()>.88?'#60d0ff':Math.random()>.78?'#ffd700':Math.random()>.93?'#ff6eb4':Math.random()>.96?'#00ffaa':'#ffffff'}));nebulas=Array.from({length:6},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*280+120,a:Math.random()*.06+.02,col:`hsl(${Math.random()*360},80%,60%)`}));}
+  function draw(){ctx.clearRect(0,0,W,H);nebulas.forEach(n=>{const g=ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r);g.addColorStop(0,n.col.replace('hsl','hsla').replace(')',`,${n.a})`));g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fill();});stars.forEach(s=>{s.a+=s.spd;if(s.a>1||s.a<0)s.spd*=-1;ctx.globalAlpha=s.a*.75;ctx.fillStyle=s.col;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill();});ctx.globalAlpha=1;requestAnimationFrame(draw);}
+  window.addEventListener('resize',resize);resize();draw();
+})();
+
+// ── ATALHOS ────────────────────────────────────────────
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.getElementById('shareModal')?.classList.remove('show');document.getElementById('apikeyScreen')?.classList.remove('show');document.getElementById('ownerScreen')?.classList.remove('show');}if(e.ctrlKey&&e.key==='l'){e.preventDefault();resetChat();}if(e.ctrlKey&&e.key==='m'){e.preventDefault();toggleMem();}});
+document.addEventListener('dblclick',e=>{const bubble=e.target.closest('.bubble');if(bubble){navigator.clipboard.writeText(bubble.innerText).then(()=>{bubble.style.outline='2px solid var(--gr)';setTimeout(()=>bubble.style.outline='',800);}).catch(()=>{});}});
+document.getElementById('ownerPwdInp')?.addEventListener('keydown',e=>{if(e.key==='Enter')checkOwnerPwd();});
+
+// ── INICIALIZAÇÃO ──────────────────────────────────────
+checkDailyReset();saveMem();updateSecBadge();renderLogs();updateApiStatus();updatePowerStatus();updateDailyBadge();renderNotas();
+
+if(!omniOnline){const inp=document.getElementById('inp');const sbtn=document.getElementById('sbtn');if(inp){inp.disabled=true;inp.placeholder='⚡ OMNISCI offline...';}if(sbtn)sbtn.disabled=true;}
+if(!apiKey)setTimeout(()=>document.getElementById('apikeyScreen')?.classList.add('show'),1200);
+
+setTimeout(()=>{
+  const driveInfo=isServerURL(apiKey)?'\n\n☁️ **Apps Script conectado!**\n⚡ **Dados em tempo real ativos!**\n\nAgora você pode perguntar:\n- *"Qual o preço do dólar hoje?"*\n- *"Como está o clima?"*\n- *"Últimas notícias de economia"*\n- *"O que tem na minha agenda?"*':isGroq(apiKey)?'\n\n⚡ **Groq conectado!**':'';
+  addMsg('ai','# Olá! Eu sou a OMNISCI 🌌\n\nSua inteligência artificial pessoal.'+driveInfo+'\n\n**Modos disponíveis:**\n💬 Livre · 📚 Professor · 💖 Amigo · 🎨 Imagens\n\nBom dia, explorador! O que quer explorar hoje?','✨ OMNISCI');
+},600);
+
+if(isServerURL(apiKey))setTimeout(syncDrive,2500);
+setInterval(updateDailyBadge,60000);
+</script>
+</body>
+</html>
